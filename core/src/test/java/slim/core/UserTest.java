@@ -6,7 +6,6 @@
 package slim.core;
 
 import slim.core.model.User;
-import java.util.List;
 import junit.framework.Assert;
 import static org.hamcrest.CoreMatchers.*;
 import org.junit.Test;
@@ -20,7 +19,7 @@ import org.junit.Before;
  */
 public class UserTest extends BaseTest {
 
-    private String mTestUserID;
+    private long mTestUserID;
 
     @Before
     public void setupUser() {
@@ -30,10 +29,9 @@ public class UserTest extends BaseTest {
         String nickName = getRandomName();
         String userName = getRandomName();
         String userLastname = getRandomName();
-        String userBirthday = getRandomDateString();
         String userAbout = getRandomName();
-        User user = new User(nickName, userName, userLastname, userBirthday, userAbout);
-        mSlimDatabase.saveUser(user);
+        User createdUser = mSlimService.createUser(nickName, userName, userLastname, 0, userAbout, "www.test.de");
+        mTestUserID = createdUser.getID();
     }
 
     @Test
@@ -42,25 +40,25 @@ public class UserTest extends BaseTest {
         /**
          * Nutzer erzeugen
          */
-        String id = getRandomUUIDString();
         String nickName = getRandomName();
         String userName = getRandomName();
         String userLastname = getRandomName();
-        String userBirthday = getRandomDateString();
+        long userBirthday = 0;
         String userAbout = getRandomName();
-        User user = new User(nickName, userName, userLastname, userBirthday, userAbout);
-        boolean success = mSlimDatabase.saveUser(user);
-        assertThat(success, is(true));
+        String imageUrl = "www.test.de";
+        User createdUser = mSlimService.createUser(nickName, nickName, userName, userBirthday, userAbout, imageUrl);
+        assertThat(createdUser, notNullValue());
 
         /**
          * Gespeicherten Nutzer laden & vergleichen
          */
-        User fetchedUser = mSlimDatabase.getUserById(user.getID());
-        assertThat(fetchedUser.getmNickName(), is(equalTo(user.getmNickName())));
-        assertThat(fetchedUser.getmFirstName(), is(equalTo(user.getmFirstName())));
-        assertThat(fetchedUser.getmLastName(), is(equalTo(user.getmLastName())));
-        assertThat(fetchedUser.getmAbout(), is(equalTo(user.getmAbout())));
-        assertThat(fetchedUser.getmBirthday(), is(equalTo(user.getmBirthday())));
+        User fetchedUser = mSlimService.getUserById(createdUser.getID());
+        assertThat(fetchedUser.getmNickName(), is(equalTo(createdUser.getmNickName())));
+        assertThat(fetchedUser.getmFirstName(), is(equalTo(createdUser.getmFirstName())));
+        assertThat(fetchedUser.getmLastName(), is(equalTo(createdUser.getmLastName())));
+        assertThat(fetchedUser.getmAbout(), is(equalTo(createdUser.getmAbout())));
+        assertThat(fetchedUser.getmBirthday(), is((createdUser.getmBirthday())));
+        assertThat(fetchedUser.getmImageUrl(), is(equalTo(createdUser.getmImageUrl())));
     }
 
     public void updateUserTest() {

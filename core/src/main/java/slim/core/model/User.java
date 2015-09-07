@@ -5,8 +5,8 @@
  */
 package slim.core.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -16,46 +16,50 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Robert
  */
 @XmlRootElement(name = "user")
-@Entity
+@DatabaseTable(tableName = "users")
 public class User {
-    
+
     @XmlAttribute(name = "id")
-    @Column(name = "id")
+    @DatabaseField(generatedId = true)
     private int mID;
     @XmlElement(name = "nickname")
-    @Column(name = "nickname")
+    @DatabaseField
     private String mNickName;
     @XmlElement(name = "firstname")
-    @Column(name = "firstname")
+    @DatabaseField
     private String mFirstName;
     @XmlElement(name = "lastname")
-    @Column(name = "lastname")
+    @DatabaseField
     private String mLastName;
     @XmlElement(name = "birthday")
-    @Column(name = "birthday")
-    private String mBirthday;
+    @DatabaseField
+    private long mBirthday;
     @XmlElement(name = "about")
-    @Column(name = "about")
+    @DatabaseField
     private String mAbout;
     @XmlElement(name = "imageUrl")
-    @Column(name = "imageUrl")
+    @DatabaseField
     private String mImageUrl;
-    
-    public User(){
+
+    @DatabaseField(foreign = true, foreignAutoRefresh = true, columnName = "guestlist_id")
+    private GuestList mGuestList;
+
+    public User() {
     }
-    
-    //TODO id must not be null
-    public User(String nickName, String firstName, String lastName, String birthday, String about){
+
+    public User(String nickName, String firstName, String lastName, long birthday, String about, String imageUrl) {
         mNickName = nickName;
         mFirstName = firstName;
         mLastName = lastName;
         mBirthday = birthday;
         mAbout = about;
+        mImageUrl = imageUrl;
     }
 
-    public int getID(){
+    public int getID() {
         return mID;
     }
+
     /**
      * @return the mNickName
      */
@@ -80,7 +84,7 @@ public class User {
     /**
      * @return the mBirthday
      */
-    public String getmBirthday() {
+    public long getmBirthday() {
         return mBirthday;
     }
 

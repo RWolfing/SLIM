@@ -5,12 +5,20 @@
  */
 package slim.core.model;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 /**
  *
  * @author Robert
  */
+@DatabaseTable(tableName = "locations")
 public class Location {
+    @DatabaseField(generatedId = true)
+    private int mID;
+    @DatabaseField
     private long mLattitude;
+    @DatabaseField
     private long mLongitude;
     
     public Location(){

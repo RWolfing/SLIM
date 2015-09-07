@@ -16,17 +16,8 @@ import org.junit.Test;
  * @author Robert
  */
 public class EventTest extends BaseTest{
-    
-    @Test
+   
     public void createValidEvent(){
-        
-        /**
-         * Event erzeugen
-         */
-        
-        Event event = createRandomEvent(mSlimService);
-        
-        List<Event> eventList = mSlimService.getEvents();
-        assertThat(eventList, hasItem(event));
+    //TODO
     }
 }

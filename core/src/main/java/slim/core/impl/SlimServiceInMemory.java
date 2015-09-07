@@ -5,10 +5,10 @@
  */
 package slim.core.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import slim.core.model.Event;
 import slim.core.SlimService;
+import slim.core.model.Location;
 import slim.core.model.User;
 
 /**
@@ -17,52 +17,57 @@ import slim.core.model.User;
  */
 public class SlimServiceInMemory implements SlimService {
 
-    private DatabaseHelper mDataBaseHelper = new DatabaseHelper();
-    private List<User> mUserList = new ArrayList();
-    private List<Event> mEventList = new ArrayList();
+    private DatabaseHelper mDataBaseHelper;
 
-    @Override
-    public void createEvent(Event event) {
-        if (event != null) {
-            mDataBaseHelper.saveEvent(event);
-        }
+    public SlimServiceInMemory() {
+        mDataBaseHelper = new DatabaseHelper();
     }
 
     @Override
-    public void deleteEvent(String id) {
-        return;
+    public Event createEvent(String name, long lattitude, long longitude, long eventBegin, long eventEnd, String description, User organizer) {
+        Location location = new Location(lattitude, longitude);
+        Event event = new Event(name, location, eventBegin, eventEnd, description, organizer);
+        return mDataBaseHelper.createEvent(event);
     }
 
     @Override
-    public void createUser(User user) {
-        if (user != null) {
-            mUserList.add(user);
-        }
+    public void deleteEvent(int id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void deleteUser(String id) {
-        return;
-    }
-
-    @Override
-    public List<User> getUsers() {
-        return mUserList;
+    public Event getEventById(int id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public List<Event> getEvents() {
-        return mEventList;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public User getUserById(String id) {
-        return null;
+    public User createUser(String nickname, String firstName, String lastName, long birthday, String about, String imageUrl) {
+        User user = new User(nickname, firstName, lastName, birthday, about, imageUrl);
+        return mDataBaseHelper.createUser(user);
     }
 
     @Override
-    public Event getEventById(String id) {
-        return null;
+    public void deleteUser(int id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public User getUserById(int id) {
+        return mDataBaseHelper.getUserById(id);
+    }
+
+    @Override
+    public List<User> getUsers() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
+    public void setDatabase(DatabaseHelper mSlimDatabase){
+        mDataBaseHelper = mSlimDatabase;
+    }
 }

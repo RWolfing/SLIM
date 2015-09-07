@@ -13,14 +13,16 @@ import java.util.List;
  *
  * @author Robert
  */
-public interface DatabaseService {
+public interface SlimDBService {
     
     User getUserById(int id);
+    User createUser(User user);
     boolean saveUser(User user);
     boolean deleteUserById(int id);
     List<User> getAllUsers();
     
     Event getEventById(int id);
+    Event createEvent(Event event);
     boolean saveEvent(Event event);
     boolean deleteEventById(String id);
     List<Event> getAllEvents();

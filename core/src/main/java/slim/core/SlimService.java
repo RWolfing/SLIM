@@ -8,6 +8,7 @@ package slim.core;
 import slim.core.model.User;
 import slim.core.model.Event;
 import java.util.List;
+import slim.core.impl.DatabaseHelper;
 
 /**
  *
@@ -15,19 +16,21 @@ import java.util.List;
  */
 public interface SlimService {
 
-    void createEvent(Event event);
+    Event createEvent(String name, long lattitude, long longitude, long eventBegin, long eventEnd, String description, User organizer);
 
-    void deleteEvent(String id);
+    void deleteEvent(int id);
 
-    Event getEventById(String id);
+    Event getEventById(int id);
 
     List<Event> getEvents();
 
-    void createUser(User user);
+    User createUser(String nickname, String firstName, String lastName, long birthday, String about, String imageUrl);
 
-    void deleteUser(String id);
+    void deleteUser(int id);
 
-    User getUserById(String id);
+    User getUserById(int id);
 
     List<User> getUsers();
+
+    void setDatabase(DatabaseHelper mSlimDatabase);
 }

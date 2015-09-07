@@ -5,42 +5,43 @@
  */
 package slim.core.model;
 
-import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
 /**
  *
  * @author Robert
  */
-@Entity
+@DatabaseTable(tableName = "events")
 public class Event {
-    @Column(name = "id")
+
+    @DatabaseField(generatedId = true)
     private int mID;
-    @Column(name = "name")
+    @DatabaseField
     private String mName;
-    @Column(name = "location")
+    @DatabaseField(foreign = true)
     private Location mLocation;
-    @Column(name = "event_begin")
-    private String mEventBegin;
-    @Column(name = "event_end")
-    private String mEventEnd;
-    @Column(name = "description")
+    @DatabaseField
+    private long mEventBegin;
+    @DatabaseField
+    private long mEventEnd;
+    @DatabaseField
     private String mDescription;
-    private List<User> mGuestList;
-    @Column(name = "organizer")
+    @DatabaseField(foreign = true)
+    private GuestList mGuestList;
+    @DatabaseField(foreign = true)
     private User mOrganizer;
-    
-    public Event(){
+
+    public Event() {
     }
-    
-    public Event(String name, Location location, String eventBegin, String eventEnd, String description, List<User> guestList, User organizer){
+
+    public Event(String name, Location location, long eventBegin, long eventEnd, String description, User organizer) {
         mName = name;
         mLocation = location;
         mEventBegin = eventBegin;
         mEventEnd = eventEnd;
         mDescription = description;
-        mGuestList = guestList;
+        mGuestList = new GuestList();
         mOrganizer = organizer;
     }
 
@@ -68,14 +69,14 @@ public class Event {
     /**
      * @return the mEventBegin
      */
-    public String getmEventBegin() {
+    public long getmEventBegin() {
         return mEventBegin;
     }
 
     /**
      * @return the mEventEnd
      */
-    public String getmEventEnd() {
+    public long getmEventEnd() {
         return mEventEnd;
     }
 
@@ -89,7 +90,7 @@ public class Event {
     /**
      * @return the mGuestList
      */
-    public List<User> getmGuestList() {
+    public GuestList getmGuestList() {
         return mGuestList;
     }
 

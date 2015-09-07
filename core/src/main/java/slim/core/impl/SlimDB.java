@@ -5,15 +5,20 @@
  */
 package slim.core.impl;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.dao.DaoManager;
+import com.j256.ormlite.jdbc.JdbcConnectionSource;
+import com.j256.ormlite.support.ConnectionSource;
+import com.j256.ormlite.table.TableUtils;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import slim.core.DatabaseConnection;
+import slim.core.utils.Constants;
+import slim.core.model.Event;
+import slim.core.model.GuestList;
+import slim.core.model.Location;
+import slim.core.model.User;
 
 /**
  *
@@ -21,88 +26,61 @@ import slim.core.DatabaseConnection;
  */
 public class SlimDB implements DatabaseConnection {
 
-    protected Connection mConnection;
-    protected Statement mStatement;
-    protected PreparedStatement mPreparedStatement;
-    protected ResultSet mResultSet;
+    private final String mDatabaseName;
 
-     /**
-     * *** TABLES ***********
-     */
-    public static final String USER_TABLE_NAME = "user";
-    public static final String EVENT_TABLE_NAME = "event";
+    protected ConnectionSource mConnectionSource;
 
-    /**
-     * *** USER TABLE FIELDS ***
-     */
-    public static final String FIELD_USER_ID = "id";
-    public static final String FIELD_USER_NICKNAME = "nickname";
-    public static final String FIELD_USER_FIRSTNAME = "firstname";
-    public static final String FIELD_USER_LASTNAME = "lastname";
-    public static final String FIELD_USER_BIRTHDAY = "birthday";
-    public static final String FIELD_USER_ABOUT = "about";
-
-    /**
-     * *** EVENT TABLE FIELDS ***
-     */
-    public static final String FIELD_EVENT_ID = "id";
-    public static final String FIELD_EVENT_NAME = "name";
-    public static final String FIELD_EVENT_LATTITUDE = "lattitude";
-    public static final String FIELD_EVENT_LONGITUDE = "longitude";
-    public static final String FIELD_EVENT_BEGIN = "eventbegin";
-    public static final String FIELD_EVENT_END = "eventend";
-    public static final String FIELD_EVENT_DESCRIPTION = "description";
-    public static final String FIELD_EVENT_ORGANIZER = "organizer";
+    protected Dao<Event, Integer> mEventDao;
+    protected Dao<GuestList, Integer> mGuestListDao;
+    protected Dao<Location, Integer> mLocationDao;
+    protected Dao<User, Integer> mUserDao;
 
     public SlimDB() {
-
+        mDatabaseName = Constants.DB_NAME;
     }
 
-    public void setStatement(Connection connection, Statement statement) {
-        mConnection = connection;
-        mStatement = statement;
+    public SlimDB(String databaseName) {
+        mDatabaseName = databaseName;
     }
 
     @Override
     public boolean open() {
-        String slimDB = System.getProperty("user.dir") + "/slim.db";
+        String slimDB = System.getProperty("user.dir") + "/" + mDatabaseName;
         String sJdbc = "jdbc:sqlite";
         String sDbUrl = sJdbc + ":" + slimDB;
 
         try {
-            Class.forName("org.sqlite.JDBC");
-            mConnection = DriverManager.getConnection(sDbUrl);
-
-            if (mConnection != null) {
-                mStatement = mConnection.createStatement();
-                return true;
-            }
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(SlimDB.class.getName()).log(Level.SEVERE, "Class *org.sqlite.JDBC' not found!", ex);
+            mConnectionSource = new JdbcConnectionSource(sDbUrl);
+            setupDatabase(mConnectionSource);
+            return true;
         } catch (SQLException ex) {
-            Logger.getLogger(SlimDB.class.getName()).log(Level.SEVERE, "SQL Exception while opening connection!", ex);
+            Logger.getLogger(SlimDB.class.getName()).log(Level.SEVERE, "Could not open database connection!", ex);
         }
         return false;
     }
 
+    private void setupDatabase(ConnectionSource connectionSource) throws SQLException {
+        mEventDao = DaoManager.createDao(connectionSource, Event.class);
+        mGuestListDao = DaoManager.createDao(connectionSource, GuestList.class);
+        mLocationDao = DaoManager.createDao(connectionSource, Location.class);
+        mUserDao = DaoManager.createDao(connectionSource, User.class);
+
+        TableUtils.createTableIfNotExists(connectionSource, Event.class);
+        TableUtils.createTableIfNotExists(connectionSource, GuestList.class);
+        TableUtils.createTableIfNotExists(connectionSource, Location.class);
+        TableUtils.createTableIfNotExists(connectionSource, User.class);
+    }
+
     @Override
     public boolean close() {
-        try {
-            if (mStatement != null) {
-                mStatement.close();
+        if (mConnectionSource != null) {
+            try {
+                mConnectionSource.close();
+                return true;
+            } catch (SQLException ex) {
+                Logger.getLogger(SlimDB.class.getName()).log(Level.SEVERE, "Could not close database connection!", ex);
+                return false;
             }
-            if(mPreparedStatement != null){
-                mPreparedStatement.close();
-            }
-            if(mResultSet != null){
-                mResultSet.close();
-            }
-            if(mConnection != null){
-                mConnection.close();
-            }
-            return true;
-        } catch (SQLException ex) {
-            Logger.getLogger(SlimDB.class.getName()).log(Level.SEVERE, "Error while trying to close DB connection!", ex);
         }
         return false;
     }
