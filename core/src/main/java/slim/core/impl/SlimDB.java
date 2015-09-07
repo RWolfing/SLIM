@@ -45,6 +45,11 @@ public class SlimDB implements DatabaseConnection {
 
     @Override
     public boolean open() {
+        //Check if the connection is valid & open, if so return right away
+        if(mConnectionSource != null && mConnectionSource.isOpen()){
+            return true;
+        }
+        //Else setup the connection
         String slimDB = System.getProperty("user.dir") + "/" + mDatabaseName;
         String sJdbc = "jdbc:sqlite";
         String sDbUrl = sJdbc + ":" + slimDB;

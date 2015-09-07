@@ -8,7 +8,7 @@ package slim.core;
 import slim.core.model.User;
 import slim.core.model.Event;
 import java.util.List;
-import slim.core.impl.DatabaseHelper;
+import slim.core.impl.SlimDBServiceImpl;
 
 /**
  *
@@ -32,5 +32,5 @@ public interface SlimService {
 
     List<User> getUsers();
 
-    void setDatabase(DatabaseHelper mSlimDatabase);
+    void setDatabase(SlimDBServiceImpl mSlimDatabase);
 }

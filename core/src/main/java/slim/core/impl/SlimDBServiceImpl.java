@@ -17,13 +17,13 @@ import slim.core.model.User;
  *
  * @author Robert
  */
-public class DatabaseHelper extends SlimDB implements SlimDBService {
+public class SlimDBServiceImpl extends SlimDB implements SlimDBService {
 
-    public DatabaseHelper() {
+    public SlimDBServiceImpl() {
         super();
     }
 
-    public DatabaseHelper(String databaseName) {
+    public SlimDBServiceImpl(String databaseName) {
         super(databaseName);
     }
 
@@ -32,7 +32,7 @@ public class DatabaseHelper extends SlimDB implements SlimDBService {
         try {
             return mUserDao.queryForId(id);
         } catch (SQLException ex) {
-            Logger.getLogger(DatabaseHelper.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SlimDBServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
@@ -46,7 +46,7 @@ public class DatabaseHelper extends SlimDB implements SlimDBService {
             mUserDao.create(user);
             return user;
         } catch (SQLException ex) {
-            Logger.getLogger(DatabaseHelper.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SlimDBServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             close();
         }
@@ -64,7 +64,7 @@ public class DatabaseHelper extends SlimDB implements SlimDBService {
             mUserDao.createOrUpdate(user);
             success = true;
         } catch (SQLException ex) {
-            Logger.getLogger(DatabaseHelper.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SlimDBServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
             success = false;
         } finally {
             close();
@@ -107,7 +107,7 @@ public class DatabaseHelper extends SlimDB implements SlimDBService {
             mEventDao.create(event);
             return event;
         } catch (SQLException ex) {
-            Logger.getLogger(DatabaseHelper.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SlimDBServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             close();
         }
@@ -125,7 +125,7 @@ public class DatabaseHelper extends SlimDB implements SlimDBService {
             mEventDao.createOrUpdate(event);
             success = true;
         } catch (SQLException ex) {
-            Logger.getLogger(DatabaseHelper.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SlimDBServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
             success = false;
         } finally {
             close();

@@ -13,7 +13,7 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.math.RandomUtils;
 import org.junit.After;
 import org.junit.Before;
-import slim.core.impl.DatabaseHelper;
+import slim.core.impl.SlimDBServiceImpl;
 import slim.core.utils.Constants;
 
 /**
@@ -24,7 +24,7 @@ public abstract class BaseTest {
 
     private static final String CLASS_NAME = BaseTest.class.getName();
     SlimService mSlimService;
-    DatabaseHelper mSlimDatabase;
+    SlimDBServiceImpl mSlimDatabase;
 
     /**
      * Prepare the initial setup before testing
@@ -32,7 +32,7 @@ public abstract class BaseTest {
     @Before
     public void buildService() {
         mSlimService = new SlimServiceInMemory();
-        mSlimDatabase = new DatabaseHelper(Constants.MOCK_DB_NAME);
+        mSlimDatabase = new SlimDBServiceImpl(Constants.MOCK_DB_NAME);
         mSlimService.setDatabase(mSlimDatabase);
     }
 

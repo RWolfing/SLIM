@@ -17,10 +17,10 @@ import slim.core.model.User;
  */
 public class SlimServiceInMemory implements SlimService {
 
-    private DatabaseHelper mDataBaseHelper;
+    private SlimDBServiceImpl mDataBaseHelper;
 
     public SlimServiceInMemory() {
-        mDataBaseHelper = new DatabaseHelper();
+        mDataBaseHelper = new SlimDBServiceImpl();
     }
 
     @Override
@@ -67,7 +67,7 @@ public class SlimServiceInMemory implements SlimService {
     }
     
     @Override
-    public void setDatabase(DatabaseHelper mSlimDatabase){
+    public void setDatabase(SlimDBServiceImpl mSlimDatabase){
         mDataBaseHelper = mSlimDatabase;
     }
 }
