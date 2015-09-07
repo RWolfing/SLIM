@@ -29,10 +29,15 @@ public class SlimDBServiceImpl extends SlimDB implements SlimDBService {
 
     @Override
     public User getUserById(int id) {
+        if (!open()) {
+            return null;
+        }
         try {
             return mUserDao.queryForId(id);
         } catch (SQLException ex) {
             Logger.getLogger(SlimDBServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            close();
         }
         return null;
     }
@@ -64,7 +69,7 @@ public class SlimDBServiceImpl extends SlimDB implements SlimDBService {
             mUserDao.createOrUpdate(user);
             success = true;
         } catch (SQLException ex) {
-            Logger.getLogger(SlimDBServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SlimDBServiceImpl.class.getName()).log(Level.SEVERE, "Could not save user " + user.getmID(), ex);
             success = false;
         } finally {
             close();
@@ -73,28 +78,85 @@ public class SlimDBServiceImpl extends SlimDB implements SlimDBService {
     }
 
     @Override
-    public boolean deleteEventById(String id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean deleteEventById(int id) {
+        if(!open()){
+            return false;
+        }
+        
+        boolean success = false;
+        try {
+            mEventDao.deleteById(id);
+        } catch (SQLException ex) {
+            Logger.getLogger(SlimDBServiceImpl.class.getName()).log(Level.SEVERE, "Could not delete event by the id " + id, ex);
+        } finally {
+            close();
+        }
+        return success;
     }
 
     @Override
     public List<User> getAllUsers() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(!open()){
+            return null;
+        }
+        
+        try {
+            return mUserDao.queryForAll();
+        } catch (SQLException ex) {
+            Logger.getLogger(SlimDBServiceImpl.class.getName()).log(Level.SEVERE, "Could not retrieve a list of all users!", ex);
+        } finally {
+            close();
+        }
+        return null;
     }
 
     @Override
     public List<Event> getAllEvents() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(!open()){
+            return null;
+        }
+        
+        try {
+            return mEventDao.queryForAll();
+        } catch (SQLException ex) {
+            Logger.getLogger(SlimDBServiceImpl.class.getName()).log(Level.SEVERE, "Could not retrieve a list of all events!", ex);
+        } finally {
+            close();
+        }
+        return null;
     }
 
     @Override
     public boolean deleteUserById(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       if(!open()){
+            return false;
+        }
+        
+        try {
+            mUserDao.deleteById(id);
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(SlimDBServiceImpl.class.getName()).log(Level.SEVERE, "Could not delete user with id " + id, ex);
+        } finally {
+            close();
+        }
+        return false;
     }
 
     @Override
     public Event getEventById(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(!open()){
+            return null;
+        }
+        
+        try {
+            return mEventDao.queryForId(id);
+        } catch (SQLException ex) {
+            Logger.getLogger(SlimDBServiceImpl.class.getName()).log(Level.SEVERE, "Could not retrieve event with id " + id, ex);
+        } finally {
+            close();
+        }
+        return null;
     }
 
     @Override

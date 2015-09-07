@@ -56,43 +56,48 @@ public class User {
         mImageUrl = imageUrl;
     }
 
-    public int getID() {
+    public int getmID() {
         return mID;
     }
 
-    /**
-     * @return the mNickName
-     */
     public String getmNickName() {
         return mNickName;
     }
 
-    /**
-     * @return the mFirstName
-     */
+    public void setmNickName(String mNickName) {
+        this.mNickName = mNickName;
+    }
+
     public String getmFirstName() {
         return mFirstName;
     }
 
-    /**
-     * @return the mLastName
-     */
+    public void setmFirstName(String mFirstName) {
+        this.mFirstName = mFirstName;
+    }
+
     public String getmLastName() {
         return mLastName;
     }
 
-    /**
-     * @return the mBirthday
-     */
+    public void setmLastName(String mLastName) {
+        this.mLastName = mLastName;
+    }
+
     public long getmBirthday() {
         return mBirthday;
     }
 
-    /**
-     * @return the mAbout
-     */
+    public void setmBirthday(long mBirthday) {
+        this.mBirthday = mBirthday;
+    }
+
     public String getmAbout() {
         return mAbout;
+    }
+
+    public void setmAbout(String mAbout) {
+        this.mAbout = mAbout;
     }
 
     public String getmImageUrl() {
@@ -101,5 +106,5 @@ public class User {
 
     public void setmImageUrl(String mImageUrl) {
         this.mImageUrl = mImageUrl;
-    }
+    }   
 }

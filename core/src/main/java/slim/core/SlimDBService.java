@@ -24,6 +24,6 @@ public interface SlimDBService {
     Event getEventById(int id);
     Event createEvent(Event event);
     boolean saveEvent(Event event);
-    boolean deleteEventById(String id);
+    boolean deleteEventById(int id);
     List<Event> getAllEvents();
 }

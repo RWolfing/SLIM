@@ -71,7 +71,7 @@ public class XmlMappingTest extends BaseTest{
         User desUser = (User) mUnmarshaller.unmarshal(mTestFileSave);
         
         assertThat(desUser, is(not(sameInstance(user))));
-        assertThat(desUser.getID(), is(user.getID()));
+        assertThat(desUser.getmID(), is(user.getmID()));
     }
     
    // @Test
