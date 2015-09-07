@@ -30,6 +30,10 @@ public class Location {
         mLongitude = longitude;
     }
 
+    public int getmID(){
+        return mID;
+    }
+    
     public long getmLattitude() {
         return mLattitude;
     }

@@ -41,6 +41,7 @@ public class User {
     @DatabaseField
     private String mImageUrl;
 
+    @XmlElement(name = "guestlist")
     @DatabaseField(foreign = true, foreignAutoRefresh = true, columnName = "guestlist_id")
     private GuestList mGuestList;
 

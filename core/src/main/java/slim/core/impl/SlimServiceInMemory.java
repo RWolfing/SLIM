@@ -30,19 +30,20 @@ public class SlimServiceInMemory implements SlimService {
         return mDataBaseHelper.createEvent(event);
     }
 
+    //TODO return
     @Override
     public void deleteEvent(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        mDataBaseHelper.deleteEventById(id);
     }
 
     @Override
     public Event getEventById(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return mDataBaseHelper.getEventById(id);
     }
 
     @Override
     public List<Event> getEvents() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return mDataBaseHelper.getAllEvents();
     }
 
     @Override
@@ -53,7 +54,7 @@ public class SlimServiceInMemory implements SlimService {
 
     @Override
     public void deleteUser(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        mDataBaseHelper.deleteUserById(id);
     }
 
     @Override
@@ -63,11 +64,21 @@ public class SlimServiceInMemory implements SlimService {
 
     @Override
     public List<User> getUsers() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return mDataBaseHelper.getAllUsers();
     }
-    
+
     @Override
-    public void setDatabase(SlimDBServiceImpl mSlimDatabase){
+    public void setDatabase(SlimDBServiceImpl mSlimDatabase) {
         mDataBaseHelper = mSlimDatabase;
+    }
+
+    @Override
+    public boolean updateEvent(Event event) {
+       return mDataBaseHelper.saveEvent(event);
+    }
+
+    @Override
+    public boolean updateUser(User user) {
+        return mDataBaseHelper.saveUser(user);
     }
 }

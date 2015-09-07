@@ -18,6 +18,8 @@ public interface SlimService {
 
     Event createEvent(String name, long lattitude, long longitude, long eventBegin, long eventEnd, String description, User organizer);
 
+    boolean updateEvent(Event event);
+    
     void deleteEvent(int id);
 
     Event getEventById(int id);
@@ -26,6 +28,8 @@ public interface SlimService {
 
     User createUser(String nickname, String firstName, String lastName, long birthday, String about, String imageUrl);
 
+    boolean updateUser(User user);
+    
     void deleteUser(int id);
 
     User getUserById(int id);

@@ -45,59 +45,51 @@ public class Event {
         mOrganizer = organizer;
     }
 
-    /**
-     * @return the mID
-     */
     public int getmID() {
         return mID;
     }
 
-    /**
-     * @return the mName
-     */
     public String getmName() {
         return mName;
     }
 
-    /**
-     * @return the mLocation
-     */
+    public void setmName(String mName) {
+        this.mName = mName;
+    }
+
     public Location getmLocation() {
         return mLocation;
     }
 
-    /**
-     * @return the mEventBegin
-     */
     public long getmEventBegin() {
         return mEventBegin;
     }
 
-    /**
-     * @return the mEventEnd
-     */
+    public void setmEventBegin(long mEventBegin) {
+        this.mEventBegin = mEventBegin;
+    }
+
     public long getmEventEnd() {
         return mEventEnd;
     }
 
-    /**
-     * @return the mDescription
-     */
+    public void setmEventEnd(long mEventEnd) {
+        this.mEventEnd = mEventEnd;
+    }
+
     public String getmDescription() {
         return mDescription;
     }
 
-    /**
-     * @return the mGuestList
-     */
+    public void setmDescription(String mDescription) {
+        this.mDescription = mDescription;
+    }
+
     public GuestList getmGuestList() {
         return mGuestList;
     }
 
-    /**
-     * @return the mOrganizer
-     */
     public User getmOrganizer() {
         return mOrganizer;
-    }
+    }    
 }

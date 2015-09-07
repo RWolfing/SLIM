@@ -96,7 +96,7 @@ public class UserTest extends BaseTest {
         user.setmAbout(newUserAbout);
         user.setmImageUrl(newImageUrl);
 
-        boolean success = mSlimDatabase.saveUser(user);
+        boolean success = mSlimService.updateUser(user);
         assertThat(success, is(true));
 
         user = mSlimDatabase.getUserById(user.getmID());
@@ -116,9 +116,9 @@ public class UserTest extends BaseTest {
         User user = mSlimDatabase.getUserById(mTestUserID);
         assertThat(user, notNullValue());
         //löschen
-        mSlimDatabase.deleteUserById(user.getmID());
+        mSlimService.deleteUser(user.getmID());
         //prüfung
-        user = mSlimDatabase.getUserById(user.getmID());
+        user = mSlimService.getUserById(user.getmID());
         assertThat(user, is(nullValue()));
     }
     

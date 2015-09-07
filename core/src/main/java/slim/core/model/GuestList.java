@@ -26,4 +26,8 @@ public class GuestList {
     public GuestList(){
         
     }
+    
+    public int getmID(){
+        return mID;
+    }
 }
