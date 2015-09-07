@@ -1,0 +1,5 @@
+core/build/
+rest/build/
+.gradle/
+.nb-gradle/
+client/build/

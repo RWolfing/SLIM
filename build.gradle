@@ -1,0 +1,17 @@
+subprojects {
+    apply plugin: "java"
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        testCompile 'junit:junit:+'
+        testCompile 'commons-lang:commons-lang:+'
+        compile 'commons-beanutils:commons-beanutils:1.8.3'
+        compile group: 'javax.persistence', name: 'persistence-api', version: '1.0.2'
+        compile 'org.xerial:sqlite-jdbc:3.7.2'
+        compile 'com.j256.ormlite:ormlite-core:4.23'
+
+    }
+}
