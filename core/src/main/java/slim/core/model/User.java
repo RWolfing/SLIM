@@ -7,15 +7,19 @@ package slim.core.model;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Robert
  */
 @XmlRootElement(name = "user")
+@XmlAccessorType(XmlAccessType.FIELD)
 @DatabaseTable(tableName = "users")
 public class User {
 
@@ -41,7 +45,7 @@ public class User {
     @DatabaseField
     private String mImageUrl;
 
-    @XmlElement(name = "guestlist")
+    @XmlTransient
     @DatabaseField(foreign = true, foreignAutoRefresh = true, columnName = "guestlist_id")
     private GuestList mGuestList;
 

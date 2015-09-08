@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<user id="0">
+    <nickname>nickName</nickname>
+    <firstname>firstName</firstname>
+    <lastname>lastName</lastname>
+    <birthday>0</birthday>
+    <about>about</about>
+    <imageUrl>imageurl</imageUrl>
+</user>

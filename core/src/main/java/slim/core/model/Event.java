@@ -7,28 +7,43 @@ package slim.core.model;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author Robert
  */
+@XmlRootElement(name = "event")
+@XmlAccessorType(XmlAccessType.FIELD)
 @DatabaseTable(tableName = "events")
 public class Event {
 
+    @XmlAttribute(name = "id")
     @DatabaseField(generatedId = true)
     private int mID;
+    @XmlElement(name = "name")
     @DatabaseField
     private String mName;
+    @XmlElement(name = "location")
     @DatabaseField(foreign = true)
     private Location mLocation;
+    @XmlElement(name = "eventbegin")
     @DatabaseField
     private long mEventBegin;
+    @XmlElement(name = "eventend")
     @DatabaseField
     private long mEventEnd;
+    @XmlElement(name = "description")
     @DatabaseField
     private String mDescription;
+    @XmlElement(name = "guestlist")
     @DatabaseField(foreign = true)
     private GuestList mGuestList;
+    @XmlElement(name = "organizer")
     @DatabaseField(foreign = true)
     private User mOrganizer;
 

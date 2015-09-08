@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<event id="5">
+    <name>name</name>
+    <location id="7">
+        <lattitude>1000</lattitude>
+        <longitude>1000</longitude>
+    </location>
+    <eventbegin>1200</eventbegin>
+    <eventend>2200</eventend>
+    <description>description</description>
+    <guestlist id="0"/>
+    <organizer id="5">
+        <nickname>nickname</nickname>
+        <firstname>firstname</firstname>
+        <lastname>lastname</lastname>
+        <birthday>1000</birthday>
+        <about>about</about>
+        <imageUrl>www.test.de</imageUrl>
+    </organizer>
+</event>

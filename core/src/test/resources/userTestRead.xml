@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<user id="5">
+    <nickname>nickname</nickname>
+    <firstname>firstname</firstname>
+    <lastname>lastname</lastname>
+    <birthday>1000</birthday>
+    <about>about</about>
+    <imageUrl>www.test.de</imageUrl>
+</user>
