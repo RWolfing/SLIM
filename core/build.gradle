@@ -1,5 +1,3 @@
-apply plugin: "java"
-
 dependencies {
     testCompile 'junit:junit:+'
     testCompile 'commons-lang:commons-lang:+'
