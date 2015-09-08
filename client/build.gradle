@@ -1,0 +1,8 @@
+apply plugin: 'application'
+
+mainClassName = 'slim.client.SlimClient'
+
+dependencies{
+    compile project(':core')
+    compile 'commons-httpclient:commons-httpclient:3.1'
+}
