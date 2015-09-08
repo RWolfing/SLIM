@@ -35,6 +35,16 @@ public interface SlimService {
     User getUserById(int id);
 
     List<User> getUsers();
+    
+    List<Event> getEventsWithUser(int id);
+    
+    List<Event> getEventsFromUser(int id);
+    
+    List<Event> getEventsWithinLocation(long lattitudeFrom, long lattitudeTo, long longitudeFrom, long longitudeTo);
+    
+    List<Event> getEventsWithinGuestRange(int fromMin, int toMax);
+    
+    boolean doesHePartyWithMe(int idMe, int idHim);
 
     void setDatabase(SlimDBServiceImpl mSlimDatabase);
 }

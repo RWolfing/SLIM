@@ -194,5 +194,4 @@ public class SlimDBServiceImpl extends SlimDB implements SlimDBService {
         }
         return success;
     }
-
 }
