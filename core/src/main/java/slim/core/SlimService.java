@@ -26,7 +26,7 @@ public interface SlimService {
 
     List<Event> getEvents();
 
-    User createUser(String nickname, String firstName, String lastName, long birthday, String about, String imageUrl);
+    User createUser(String nickName, String firstName, String lastName, long birthday, String about, String imageUrl);
 
     boolean updateUser(User user);
     
