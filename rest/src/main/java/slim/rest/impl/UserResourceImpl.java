@@ -6,11 +6,9 @@
 package slim.rest.impl;
 
 import java.util.List;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
-import slim.core.SlimService;
 import slim.core.model.User;
 import slim.rest.UserResource;
 
@@ -18,18 +16,7 @@ import slim.rest.UserResource;
  *
  * @author Robert
  */
-public class UserResourceImpl implements UserResource {
-
-    @Context
-    private SlimService mSlimService;
-
-    public SlimService getmSlimService() {
-        return mSlimService;
-    }
-
-    public void setmSlimService(SlimService mSlimService) {
-        this.mSlimService = mSlimService;
-    }
+public class UserResourceImpl extends SlimResource implements UserResource {
 
     @Override
     public Response createUser(UriInfo uriInfo, String nickName, String firstName, String lastName, long birthday, String about, String imageUrl) {
@@ -105,5 +92,18 @@ public class UserResourceImpl implements UserResource {
         } else {
             return Response.status(Status.NOT_FOUND).build();
         }
+    }
+
+    @Override
+    public Response doesHePartyWithMe(int idUser1, int idUser2) {
+       if(idUser1 < 0 || idUser2 < 0){
+           return Response.status(Status.BAD_REQUEST).build();
+       }
+       
+       if(mSlimService.doesHePartyWithMe(idUser1, idUser2)){
+           return Response.status(Status.OK).entity(true).build();
+       } else {
+           return Response.status(Status.OK).entity(false).build();
+       }
     }
 }

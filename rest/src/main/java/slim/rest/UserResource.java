@@ -61,4 +61,8 @@ public interface UserResource {
     @GET
     @Produces({MediaType.APPLICATION_XML})
     Response fetchAllUsers();
+    
+    @GET
+    @Produces({MediaType.APPLICATION_XML})
+    Response doesHePartyWithMe(@PathParam("idyou") int idUser1, @PathParam("idhim") int idUser2);
 }
