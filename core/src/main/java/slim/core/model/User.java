@@ -112,5 +112,18 @@ public class User {
 
     public void setmImageUrl(String mImageUrl) {
         this.mImageUrl = mImageUrl;
-    }   
+    }
+    
+    @Override
+    public int hashCode() {
+        return mID;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || obj.getClass() != getClass()) {
+            return false;
+        }
+        return ((User) obj).getmID() == mID;
+    }
 }

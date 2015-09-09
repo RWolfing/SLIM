@@ -12,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -108,7 +109,7 @@ public class XmlMappingTest extends BaseTest {
 
     //TODO was ist mit der gästeliste
     @Test
-    public void createValidEventXmlFile() throws IOException, JAXBException {
+    public void createValidEventXmlFile() throws IOException, JAXBException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
         if (mEventTestFileWrite.exists()) {
             mEventTestFileWrite.delete();
         }
@@ -116,6 +117,16 @@ public class XmlMappingTest extends BaseTest {
         User organizer = new User("organizer", "organizer", "organizer", 0, "about", "imageurl");
         User guest1 = new User("guest", "guest", "guest", 0, "about", "imageurl");
         User guest2 = new User("guest2", "guest2", "guest2", 0, "about", "imageurl");
+        
+        /**
+         * IDs will be created through the underlying database. But here we wont be saving any users to the database, so the ids will be missing.
+         * Therefore will be mean and set them through reflection
+         */
+        Field guestId = User.class.getDeclaredField("mID");
+        guestId.setAccessible(true);
+        guestId.set(guest1, 1);
+        guestId.set(guest2, 2);
+      
         Location location = new Location(500, 500);
         Event event = new Event("name", location, 0, 10000, "description", organizer);
         event.addGuest(guest1);

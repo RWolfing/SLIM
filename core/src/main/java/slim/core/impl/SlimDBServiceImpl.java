@@ -156,6 +156,14 @@ public class SlimDBServiceImpl extends SlimDB implements SlimDBService {
         Event result = null;
         try {
             result = mEventDao.queryForId(id);
+            if (result != null) {
+                List<GuestEntry> guestEntries = mGuestListDao.queryBuilder().where().eq(GuestEntry.EVENT_ID_FIELD_NAME, result.getmID()).query();
+                if (guestEntries != null) {
+                    for (GuestEntry entry : guestEntries) {
+                        result.addGuest(entry.getmGuest());
+                    }
+                }
+            }
         } catch (SQLException ex) {
             Logger.getLogger(SlimDBServiceImpl.class.getName()).log(Level.SEVERE, "Could not retrieve event with id " + id, ex);
         } finally {
@@ -267,21 +275,6 @@ public class SlimDBServiceImpl extends SlimDB implements SlimDBService {
         return result;
     }
 
-    private Location retrieveLocation(long lattitude, long longitude) {
-        if (!open()) {
-            return null;
-        }
-        Location result = null;
-        try {
-            result = mLocationDao.queryBuilder().where().eq(Location.LATTITUDE_FIELD_NAME, lattitude).and().eq(Location.LONGITUDE_FIELD_NAME, longitude).queryForFirst();
-        } catch (SQLException ex) {
-            Logger.getLogger(SlimDBServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            close();
-        }
-        return result;
-    }
-
     @Override
     public Location createLocation(Location location) {
         if (!open() || location == null) {
@@ -346,9 +339,9 @@ public class SlimDBServiceImpl extends SlimDB implements SlimDBService {
         boolean success = false;
         try {
             Location location = mLocationDao.queryForId(id);
-            if(mLocationDao != null){
+            if (mLocationDao != null) {
                 List<Event> eventsWithLocation = mEventDao.queryBuilder().where().eq(Event.LOCATION_FIELD_NAME, location).query();
-                if(eventsWithLocation == null || eventsWithLocation.isEmpty()){
+                if (eventsWithLocation == null || eventsWithLocation.isEmpty()) {
                     mLocationDao.delete(location);
                     success = true;
                 } else {
@@ -364,5 +357,20 @@ public class SlimDBServiceImpl extends SlimDB implements SlimDBService {
             close();
         }
         return success;
+    }
+
+    private Location retrieveLocation(long lattitude, long longitude) {
+        if (!open()) {
+            return null;
+        }
+        Location result = null;
+        try {
+            result = mLocationDao.queryBuilder().where().eq(Location.LATTITUDE_FIELD_NAME, lattitude).and().eq(Location.LONGITUDE_FIELD_NAME, longitude).queryForFirst();
+        } catch (SQLException ex) {
+            Logger.getLogger(SlimDBServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            close();
+        }
+        return result;
     }
 }

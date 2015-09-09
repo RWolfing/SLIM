@@ -78,6 +78,24 @@ public class EventTest extends BaseTest {
     }
 
     @Test
+    public void addGuestsToEventTest() throws SQLException {
+        mSlimDatabase.clearAllTables();
+
+        Event event = createRandomEvent(null, null);
+        User guest1 = createRandomUser();
+        User guest2 = createRandomUser();
+
+        event.getGuests().add(guest1);
+        event.getGuests().add(guest2);
+        mSlimDatabase.saveEvent(event);
+
+        event = mSlimDatabase.getEventById(event.getmID());
+        assertThat(event.getGuests().contains(guest1), is(true));
+        assertThat(event.getGuests().contains(guest2), is(true));
+        assertThat(event.getGuests().size(), is(2));
+    }
+
+    @Test
     public void deleteEventById() throws SQLException {
         mSlimDatabase.clearAllTables();
         /**
