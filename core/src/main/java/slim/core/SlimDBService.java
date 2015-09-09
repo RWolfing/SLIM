@@ -9,6 +9,7 @@ import slim.core.model.User;
 import slim.core.model.Event;
 import java.util.List;
 import slim.core.model.GuestEntry;
+import slim.core.model.Location;
 
 /**
  *
@@ -22,6 +23,11 @@ public interface SlimDBService {
     boolean deleteUserById(int id);
     List<User> getAllUsers();
     
+    Location createLocation(Location location);
+    List<Location> getLocationWithinBounds(long lattiudeFrom, long longitudeFrom, long lattitudeTo, long longitudeTo);
+    Location getLocation(int id);
+    boolean deleteLocation(int id);
+    
     Event getEventById(int id);
     Event createEvent(Event event);
     boolean saveEvent(Event event);
@@ -29,6 +35,5 @@ public interface SlimDBService {
     List<GuestEntry> addGuestsToEvent(int eventId, int[] userIds);
     boolean deleteEventById(int id);
     List<Event> getAllEvents();
-    
     List<Event> getEventsWithUser(int id);
 }

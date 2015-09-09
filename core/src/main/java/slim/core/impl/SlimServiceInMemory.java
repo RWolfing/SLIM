@@ -5,6 +5,7 @@
  */
 package slim.core.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import slim.core.model.Event;
 import slim.core.SlimService;
@@ -25,14 +26,15 @@ public class SlimServiceInMemory implements SlimService {
 
     @Override
     public Event createEvent(String name, long lattitude, long longitude, long eventBegin, long eventEnd, String description, int organizerId) {
-        Location location = new Location(lattitude, longitude);
         User organizer = mDataBaseHelper.getUserById(organizerId);
+
         if (organizer != null) {
-            Event event = new Event(name, location, eventBegin, eventEnd, description, organizer);
-            return mDataBaseHelper.createEvent(event);
-        } else {
-            return null;
+            Location location = mDataBaseHelper.createLocation(new Location(lattitude, longitude));
+            if (location != null) {
+                return new Event(name, location, eventBegin, eventEnd, description, organizer);
+            }
         }
+        return null;
     }
 
     //TODO return
@@ -89,22 +91,47 @@ public class SlimServiceInMemory implements SlimService {
 
     @Override
     public List<Event> getEventsFromUser(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return mDataBaseHelper.getEventsWithUser(id);
     }
 
     @Override
     public List<Event> getEventsWithinLocation(long lattitudeFrom, long lattitudeTo, long longitudeFrom, long longitudeTo) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Location> locations = mDataBaseHelper.getLocationWithinBounds(lattitudeFrom, longitudeFrom, lattitudeTo, longitudeTo);
+        List<Event> result = new ArrayList<>();
+        if (locations != null) {
+            for (Location location : locations) {
+                result.addAll(location.getmEvents());
+            }
+            return result;
+        }
+        return null;
     }
 
     @Override
     public List<Event> getEventsWithinGuestRange(int fromMin, int toMax) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Event> events = mDataBaseHelper.getAllEvents();
+        List<Event> result = new ArrayList<>();
+        if (events != null) {
+            for (Event event : events) {
+                if (event.getGuests().size() <= toMax && event.getGuests().size() > fromMin) {
+                    result.add(event);
+                }
+            }
+            return result;
+        }
+        return null;
     }
 
     @Override
     public boolean doesHePartyWithMe(int idMe, int idHim) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Event> myEvents = mDataBaseHelper.getEventsWithUser(idMe);
+        List<Event> hisEvents = mDataBaseHelper.getEventsWithUser(idHim);
+        if (myEvents != null && hisEvents != null) {
+
+            myEvents.retainAll(hisEvents);
+            return myEvents.size() > 0;
+        }
+        return false;
     }
 
     @Override

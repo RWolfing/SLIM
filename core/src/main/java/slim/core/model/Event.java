@@ -24,6 +24,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @DatabaseTable(tableName = "events")
 public class Event {
 
+    public static final String LOCATION_FIELD_NAME = "location_id";
+    
     @XmlAttribute(name = "id")
     @DatabaseField(generatedId = true)
     private int mID;
@@ -31,7 +33,7 @@ public class Event {
     @DatabaseField
     private String mName;
     @XmlElement(name = "location")
-    @DatabaseField(foreign = true)
+    @DatabaseField(foreign = true, foreignAutoRefresh = true, columnName = LOCATION_FIELD_NAME)
     private Location mLocation;
     @XmlElement(name = "eventbegin")
     @DatabaseField
@@ -123,11 +125,15 @@ public class Event {
     }
 
     @Override
+    public int hashCode() {
+        return mID;
+    }
+
+    @Override
     public boolean equals(Object obj) {
-        if(obj instanceof Event){
-            return ((Event) obj).getmID() == mID;
-        } else {
+        if (obj == null || obj.getClass() != getClass()) {
             return false;
         }
+        return ((Event) obj).getmID() == mID;
     }
 }

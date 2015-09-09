@@ -45,6 +45,7 @@ public class User {
     @DatabaseField
     private String mImageUrl;
 
+    //TODO used?
     @XmlTransient
     @DatabaseField(foreign = true, foreignAutoRefresh = true, columnName = "guestlist_id")
     private GuestEntry mGuestList;

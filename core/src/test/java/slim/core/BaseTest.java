@@ -9,7 +9,6 @@ import java.io.File;
 import java.util.Collection;
 import slim.core.impl.SlimServiceInMemory;
 import java.util.Date;
-import java.util.Random;
 import java.util.UUID;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.math.RandomUtils;
@@ -70,16 +69,17 @@ public abstract class BaseTest {
     }
 
     protected Event createRandomEvent(Collection<User> guests, User organizer) {
-        Random random = new Random();
-        long eventBegin = Math.abs(random.nextLong());
-        long eventEnd = Math.abs(eventBegin + random.nextLong());
-        Location location = new Location(random.nextLong(), random.nextLong());
+        long eventBegin = Math.abs(RandomUtils.nextLong());
+        long eventEnd = Math.abs(eventBegin + RandomUtils.nextLong());
+
         Event event;
+        Location location = createRandomLocation();
         if (organizer != null) {
             event = mSlimDatabase.createEvent(new Event(getRandomName(), location, eventBegin, eventEnd, getRandomName(), organizer));
         } else {
             event = mSlimDatabase.createEvent(new Event(getRandomName(), location, eventBegin, eventEnd, getRandomName(), createRandomUser()));
         }
+
         if (guests != null) {
             for (User guest : guests) {
                 mSlimDatabase.addGuestToEvent(event.getmID(), guest.getmID());
@@ -90,5 +90,9 @@ public abstract class BaseTest {
 
     protected User createRandomUser() {
         return mSlimDatabase.createUser(new User(getRandomName(), getRandomName(), getRandomName(), 10000, getRandomName(), "www.imageurl.de"));
+    }
+
+    protected Location createRandomLocation() {
+        return mSlimDatabase.createLocation(new Location(RandomUtils.nextLong(), RandomUtils.nextLong()));
     }
 }
