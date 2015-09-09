@@ -25,7 +25,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
-import slim.core.model.GuestList;
+import slim.core.model.GuestEntry;
 import slim.core.model.Location;
 
 /**
@@ -71,7 +71,7 @@ public class XmlMappingTest extends BaseTest {
         mUserTestFileRead = new File(System.getProperty("user.dir") + "/src/test/resources/userTestRead.xml");
         mUserTestFileWrite = new File(System.getProperty("user.dir") + "/src/test/resources/userTestWrite.xml");
 
-        JAXBContext context = JAXBContext.newInstance(User.class, Event.class, Location.class, GuestList.class);
+        JAXBContext context = JAXBContext.newInstance(User.class, Event.class, Location.class, GuestEntry.class);
         mMarshaller = context.createMarshaller();
         mMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
@@ -118,6 +118,8 @@ public class XmlMappingTest extends BaseTest {
         User guest2 = new User("guest2", "guest2", "guest2", 0, "about", "imageurl");
         Location location = new Location(500, 500);
         Event event = new Event("name", location, 0, 10000, "description", organizer);
+        event.addGuest(guest1);
+        event.addGuest(guest2);
         mMarshaller.marshal(event, new FileWriter(mEventTestFileWrite));
 
         //Check if file was created
@@ -138,6 +140,8 @@ public class XmlMappingTest extends BaseTest {
         assertThat(desEvent.getmEventBegin(), is(event.getmEventBegin()));
         assertThat(desEvent.getmEventEnd(), is(event.getmEventEnd()));
         assertThat(desEvent.getmDescription(), is(event.getmDescription()));
+        assertThat(desEvent.getGuests(), notNullValue());
+        assertThat(desEvent.getGuests().size(), is(2));
         assertThat(desEvent.getmOrganizer(), notNullValue());
         assertThat(desEvent.getmOrganizer().getmID(), is(event.getmOrganizer().getmID()));
     }
@@ -177,5 +181,7 @@ public class XmlMappingTest extends BaseTest {
         assertThat(event.getmOrganizer().getmBirthday(), is(mReadBirthday));
         assertThat(event.getmOrganizer().getmAbout(), equalTo(mReadAbout));
         assertThat(event.getmOrganizer().getmImageUrl(), equalTo(mReadImageUrl));
+        assertThat(event.getGuests(), notNullValue());
+        assertThat(event.getGuests().size(), is(2));
     }
 }

@@ -24,10 +24,15 @@ public class SlimServiceInMemory implements SlimService {
     }
 
     @Override
-    public Event createEvent(String name, long lattitude, long longitude, long eventBegin, long eventEnd, String description, User organizer) {
+    public Event createEvent(String name, long lattitude, long longitude, long eventBegin, long eventEnd, String description, int organizerId) {
         Location location = new Location(lattitude, longitude);
-        Event event = new Event(name, location, eventBegin, eventEnd, description, organizer);
-        return mDataBaseHelper.createEvent(event);
+        User organizer = mDataBaseHelper.getUserById(organizerId);
+        if (organizer != null) {
+            Event event = new Event(name, location, eventBegin, eventEnd, description, organizer);
+            return mDataBaseHelper.createEvent(event);
+        } else {
+            return null;
+        }
     }
 
     //TODO return
@@ -74,17 +79,12 @@ public class SlimServiceInMemory implements SlimService {
 
     @Override
     public boolean updateEvent(Event event) {
-       return mDataBaseHelper.saveEvent(event);
+        return mDataBaseHelper.saveEvent(event);
     }
 
     @Override
     public boolean updateUser(User user) {
         return mDataBaseHelper.saveUser(user);
-    }
-
-    @Override
-    public List<Event> getEventsWithUser(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -105,5 +105,10 @@ public class SlimServiceInMemory implements SlimService {
     @Override
     public boolean doesHePartyWithMe(int idMe, int idHim) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Event> getEventsWithUser(int id) {
+        return mDataBaseHelper.getEventsWithUser(id);
     }
 }

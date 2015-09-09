@@ -16,7 +16,7 @@ import slim.core.impl.SlimDBServiceImpl;
  */
 public interface SlimService {
 
-    Event createEvent(String name, long lattitude, long longitude, long eventBegin, long eventEnd, String description, User organizer);
+    Event createEvent(String name, long lattitude, long longitude, long eventBegin, long eventEnd, String description, int organizerID);
 
     boolean updateEvent(Event event);
     

@@ -5,12 +5,15 @@
  */
 package slim.core.impl;
 
+import com.j256.ormlite.dao.CloseableWrappedIterable;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import slim.core.SlimDBService;
 import slim.core.model.Event;
+import slim.core.model.GuestEntry;
 import slim.core.model.User;
 
 /**
@@ -79,10 +82,10 @@ public class SlimDBServiceImpl extends SlimDB implements SlimDBService {
 
     @Override
     public boolean deleteEventById(int id) {
-        if(!open()){
+        if (!open()) {
             return false;
         }
-        
+
         boolean success = false;
         try {
             mEventDao.deleteById(id);
@@ -96,10 +99,10 @@ public class SlimDBServiceImpl extends SlimDB implements SlimDBService {
 
     @Override
     public List<User> getAllUsers() {
-        if(!open()){
+        if (!open()) {
             return null;
         }
-        
+
         try {
             return mUserDao.queryForAll();
         } catch (SQLException ex) {
@@ -112,10 +115,10 @@ public class SlimDBServiceImpl extends SlimDB implements SlimDBService {
 
     @Override
     public List<Event> getAllEvents() {
-        if(!open()){
+        if (!open()) {
             return null;
         }
-        
+
         try {
             return mEventDao.queryForAll();
         } catch (SQLException ex) {
@@ -128,10 +131,10 @@ public class SlimDBServiceImpl extends SlimDB implements SlimDBService {
 
     @Override
     public boolean deleteUserById(int id) {
-       if(!open()){
+        if (!open()) {
             return false;
         }
-        
+
         try {
             mUserDao.deleteById(id);
             return true;
@@ -145,10 +148,10 @@ public class SlimDBServiceImpl extends SlimDB implements SlimDBService {
 
     @Override
     public Event getEventById(int id) {
-        if(!open()){
+        if (!open()) {
             return null;
         }
-        
+
         try {
             return mEventDao.queryForId(id);
         } catch (SQLException ex) {
@@ -169,7 +172,7 @@ public class SlimDBServiceImpl extends SlimDB implements SlimDBService {
             mEventDao.create(event);
             return event;
         } catch (SQLException ex) {
-            Logger.getLogger(SlimDBServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SlimDBServiceImpl.class.getName()).log(Level.SEVERE, "Could not create event!", ex);
         } finally {
             close();
         }
@@ -185,6 +188,11 @@ public class SlimDBServiceImpl extends SlimDB implements SlimDBService {
         boolean success = false;
         try {
             mEventDao.createOrUpdate(event);
+            List<GuestEntry> entries = mGuestListDao.queryBuilder().where().eq(GuestEntry.EVENT_ID_FIELD_NAME, event.getmID()).query();
+            mGuestListDao.delete(entries);
+            for (User guest : event.getGuests()) {
+                addGuestToEvent(event.getmID(), guest.getmID());
+            }
             success = true;
         } catch (SQLException ex) {
             Logger.getLogger(SlimDBServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -193,5 +201,50 @@ public class SlimDBServiceImpl extends SlimDB implements SlimDBService {
             close();
         }
         return success;
+    }
+
+    @Override
+    public GuestEntry addGuestToEvent(int eventId, int userId) {
+        Event event = getEventById(eventId);
+        User user = getUserById(userId);
+        if (event != null || user != null) {
+            try {
+                GuestEntry guestListEntry = new GuestEntry(event, user);
+                mGuestListDao.create(guestListEntry);
+                return guestListEntry;
+            } catch (SQLException ex) {
+                Logger.getLogger(SlimDBServiceImpl.class.getName()).log(Level.SEVERE, "Could not create guest list entry!", ex);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public List<GuestEntry> addGuestsToEvent(int eventId, int[] userIds) {
+        List<GuestEntry> guestListEntries = new ArrayList();
+        for (int userId : userIds) {
+            guestListEntries.add(addGuestToEvent(eventId, userId));
+        }
+        return guestListEntries;
+    }
+    
+     @Override
+    public List<Event> getEventsWithUser(int id) {
+        List<Event> result = new ArrayList<>();
+        User user = getUserById(id);
+        if(user != null){
+            try {
+               List<GuestEntry> guestListEntries = mGuestListDao.queryBuilder().where().eq(GuestEntry.USER_ID_FIELD_NAME, user.getmID()).query();
+               if(guestListEntries != null && guestListEntries.size() > 0){
+                   for(GuestEntry entry : guestListEntries){
+                      result.add(mEventDao.queryForId(entry.getmEvent().getmID()));
+                   }
+                   return result;
+               }
+            } catch (SQLException ex) {
+                Logger.getLogger(SlimDBServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
     }
 }

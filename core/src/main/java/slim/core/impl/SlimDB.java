@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 import slim.core.DatabaseConnection;
 import slim.core.utils.Constants;
 import slim.core.model.Event;
-import slim.core.model.GuestList;
+import slim.core.model.GuestEntry;
 import slim.core.model.Location;
 import slim.core.model.User;
 
@@ -31,10 +31,10 @@ public class SlimDB implements DatabaseConnection {
     protected ConnectionSource mConnectionSource;
 
     protected Dao<Event, Integer> mEventDao;
-    protected Dao<GuestList, Integer> mGuestListDao;
+    protected Dao<GuestEntry, Integer> mGuestListDao;
     protected Dao<Location, Integer> mLocationDao;
     protected Dao<User, Integer> mUserDao;
-
+    
     public SlimDB() {
         mDatabaseName = Constants.DB_NAME;
     }
@@ -46,7 +46,7 @@ public class SlimDB implements DatabaseConnection {
     @Override
     public boolean open() {
         //Check if the connection is valid & open, if so return right away
-        if(mConnectionSource != null && mConnectionSource.isOpen()){
+        if (mConnectionSource != null && mConnectionSource.isOpen()) {
             return true;
         }
         //Else setup the connection
@@ -66,14 +66,23 @@ public class SlimDB implements DatabaseConnection {
 
     private void setupDatabase(ConnectionSource connectionSource) throws SQLException {
         mEventDao = DaoManager.createDao(connectionSource, Event.class);
-        mGuestListDao = DaoManager.createDao(connectionSource, GuestList.class);
+        mGuestListDao = DaoManager.createDao(connectionSource, GuestEntry.class);
         mLocationDao = DaoManager.createDao(connectionSource, Location.class);
         mUserDao = DaoManager.createDao(connectionSource, User.class);
 
         TableUtils.createTableIfNotExists(connectionSource, Event.class);
-        TableUtils.createTableIfNotExists(connectionSource, GuestList.class);
+        TableUtils.createTableIfNotExists(connectionSource, GuestEntry.class);
         TableUtils.createTableIfNotExists(connectionSource, Location.class);
         TableUtils.createTableIfNotExists(connectionSource, User.class);
+    }
+
+    public void clearAllTables() throws SQLException {
+        if (mConnectionSource != null) {
+            TableUtils.clearTable(mConnectionSource, Event.class);
+            TableUtils.clearTable(mConnectionSource, GuestEntry.class);
+            TableUtils.clearTable(mConnectionSource, Location.class);
+            TableUtils.clearTable(mConnectionSource, User.class);
+        }
     }
 
     @Override

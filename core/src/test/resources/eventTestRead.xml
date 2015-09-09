@@ -17,4 +17,20 @@
         <about>about</about>
         <imageUrl>www.test.de</imageUrl>
     </organizer>
+    <guests id="0">
+        <nickname>guest</nickname>
+        <firstname>guest</firstname>
+        <lastname>guest</lastname>
+        <birthday>0</birthday>
+        <about>about</about>
+        <imageUrl>imageurl</imageUrl>
+    </guests>
+    <guests id="0">
+        <nickname>guest2</nickname>
+        <firstname>guest2</firstname>
+        <lastname>guest2</lastname>
+        <birthday>0</birthday>
+        <about>about</about>
+        <imageUrl>imageurl</imageUrl>
+    </guests>
 </event>

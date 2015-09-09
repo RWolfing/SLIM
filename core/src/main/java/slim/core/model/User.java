@@ -47,7 +47,7 @@ public class User {
 
     @XmlTransient
     @DatabaseField(foreign = true, foreignAutoRefresh = true, columnName = "guestlist_id")
-    private GuestList mGuestList;
+    private GuestEntry mGuestList;
 
     public User() {
     }

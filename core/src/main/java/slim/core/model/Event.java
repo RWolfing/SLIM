@@ -7,6 +7,8 @@ package slim.core.model;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -40,14 +42,15 @@ public class Event {
     @XmlElement(name = "description")
     @DatabaseField
     private String mDescription;
-    @XmlElement(name = "guestlist")
-    @DatabaseField(foreign = true)
-    private GuestList mGuestList;
     @XmlElement(name = "organizer")
     @DatabaseField(foreign = true)
     private User mOrganizer;
 
+    @XmlElement(name = "guests")
+    private List<User> mGuests;
+
     public Event() {
+        mGuests = new ArrayList<>();
     }
 
     public Event(String name, Location location, long eventBegin, long eventEnd, String description, User organizer) {
@@ -56,7 +59,7 @@ public class Event {
         mEventBegin = eventBegin;
         mEventEnd = eventEnd;
         mDescription = description;
-        mGuestList = new GuestList();
+        mGuests = new ArrayList();
         mOrganizer = organizer;
     }
 
@@ -100,11 +103,31 @@ public class Event {
         this.mDescription = mDescription;
     }
 
-    public GuestList getmGuestList() {
-        return mGuestList;
-    }
-
     public User getmOrganizer() {
         return mOrganizer;
-    }    
+    }
+
+    public void setGuests(List<User> guests) {
+        mGuests.clear();
+        mGuests.addAll(guests);
+    }
+
+    public void addGuest(User guest) {
+        if (!mGuests.contains(guest)) {
+            mGuests.add(guest);
+        }
+    }
+
+    public List<User> getGuests() {
+        return mGuests;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Event){
+            return ((Event) obj).getmID() == mID;
+        } else {
+            return false;
+        }
+    }
 }
