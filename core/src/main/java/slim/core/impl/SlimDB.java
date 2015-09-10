@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package slim.core.impl;
 
 import com.j256.ormlite.dao.Dao;
@@ -21,8 +16,10 @@ import slim.core.model.Location;
 import slim.core.model.User;
 
 /**
+ * Base class of the slim database. It provides methods that will be needed by
+ * all childs.
  *
- * @author Robert
+ * @author Robert Wolfinger
  */
 public class SlimDB implements DatabaseConnection {
 
@@ -30,19 +27,33 @@ public class SlimDB implements DatabaseConnection {
 
     protected ConnectionSource mConnectionSource;
 
+    //Ormlite daos for mapping
     protected Dao<Event, Integer> mEventDao;
     protected Dao<GuestEntry, Integer> mGuestListDao;
     protected Dao<Location, Integer> mLocationDao;
     protected Dao<User, Integer> mUserDao;
-    
+
+    /**
+     * Default constructor that sets the default name of the database
+     */
     public SlimDB() {
         mDatabaseName = Constants.DB_NAME;
     }
 
+    /**
+     * Constructor that sets the name of the database to the given databaseName
+     *
+     * @param databaseName name of the database
+     */
     public SlimDB(String databaseName) {
         mDatabaseName = databaseName;
     }
 
+    /**
+     * Opens a connection to the database
+     *
+     * @return success
+     */
     @Override
     public boolean open() {
         //Check if the connection is valid & open, if so return right away
@@ -64,6 +75,14 @@ public class SlimDB implements DatabaseConnection {
         return false;
     }
 
+    /**
+     * Initial setup of the database. The available ormlite daos will be
+     * created. All tables that are necessary will be created if they do not
+     * exist.
+     *
+     * @param connectionSource the connectionsource
+     * @throws SQLException sql error
+     */
     private void setupDatabase(ConnectionSource connectionSource) throws SQLException {
         mEventDao = DaoManager.createDao(connectionSource, Event.class);
         mGuestListDao = DaoManager.createDao(connectionSource, GuestEntry.class);
@@ -76,6 +95,11 @@ public class SlimDB implements DatabaseConnection {
         TableUtils.createTableIfNotExists(connectionSource, User.class);
     }
 
+    /**
+     * Deletes all tables of the database
+     *
+     * @throws SQLException sql error
+     */
     public void clearAllTables() throws SQLException {
         if (mConnectionSource != null) {
             TableUtils.clearTable(mConnectionSource, Event.class);
@@ -85,6 +109,11 @@ public class SlimDB implements DatabaseConnection {
         }
     }
 
+    /**
+     * Closes the connection to the database
+     *
+     * @return success
+     */
     @Override
     public boolean close() {
         if (mConnectionSource != null) {

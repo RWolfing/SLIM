@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package slim.core;
 
 import slim.core.model.User;
@@ -11,8 +6,11 @@ import java.util.List;
 import slim.core.impl.SlimDBServiceImpl;
 
 /**
- *
- * @author Robert
+ * Interface that defines all available service operations.
+ * 
+ * @see SlimDBServiceImpl
+ * 
+ * @author Robert Wolfinger
  */
 public interface SlimService {
 

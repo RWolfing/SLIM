@@ -21,7 +21,6 @@ public class EventTest extends BaseTest {
 
     @Test
     public void createEventTest() throws SQLException {
-        mSlimDatabase.clearAllTables();
         /**
          * Neuen Event erzeugen
          */
@@ -47,7 +46,6 @@ public class EventTest extends BaseTest {
 
     @Test
     public void updateEventTest() throws SQLException {
-        mSlimDatabase.clearAllTables();
         /**
          * Neuen Event erzeugen
          */
@@ -79,8 +77,6 @@ public class EventTest extends BaseTest {
 
     @Test
     public void addGuestsToEventTest() throws SQLException {
-        mSlimDatabase.clearAllTables();
-
         Event event = createRandomEvent(null, null);
         User guest1 = createRandomUser();
         User guest2 = createRandomUser();
@@ -97,7 +93,6 @@ public class EventTest extends BaseTest {
 
     @Test
     public void deleteEventById() throws SQLException {
-        mSlimDatabase.clearAllTables();
         /**
          * Neuen Event erzeugen
          */
@@ -113,8 +108,6 @@ public class EventTest extends BaseTest {
 
     @Test
     public void getAllEvents() throws SQLException {
-        mSlimDatabase.clearAllTables();
-
         User organzier = createRandomUser();
 
         Event event1 = createRandomEvent(null, organzier);
