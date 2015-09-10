@@ -5,6 +5,7 @@
  */
 package slim.rest;
 
+import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
@@ -14,6 +15,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -45,8 +47,6 @@ public interface EventRessource {
     Response updateEvent(@Context UriInfo uriInfo,
             @PathParam("id") int eventId,
             @FormParam("name") String name,
-            @FormParam("lattitude") long lattitude,
-            @FormParam("longitude") String longitude,
             @FormParam("eventbegin") long eventBegin,
             @FormParam("eventend") long eventEnd,
             @FormParam("description") String description
@@ -86,5 +86,30 @@ public interface EventRessource {
     
     @GET
     @Produces({MediaType.APPLICATION_XML})
-    Response getEventsWithinRange(@PathParam("minguests") int minGuests, @PathParam("maxguests") int maxGuests);
+    Response getEventsWithinGuestRange(@PathParam("minguests") int minGuests, @PathParam("maxguests") int maxGuests);
+    
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @POST
+    @Produces({MediaType.APPLICATION_XML})
+    Response addGuestToEvent(@Context UriInfo uriInfo,
+            @PathParam("eventId") int eventId,
+            @FormParam("userId") int userId);
+    
+    @POST
+    @Produces({MediaType.APPLICATION_XML})
+    Response addGuestsToEvent(@Context UriInfo uriInfo,
+            @PathParam("eventId") int eventId,
+            @QueryParam("userIds") final List<Integer> userids);
+    
+    @DELETE
+    @Produces({MediaType.APPLICATION_XML})
+    Response removeGuestFromEvent(@Context UriInfo uriInfo,
+            @PathParam("eventId") int eventId,
+            @QueryParam("userIds") int userid);
+    
+    @DELETE
+    @Produces({MediaType.APPLICATION_XML})
+    Response removeGuestsFromEvent(@Context UriInfo uriInfo,
+            @PathParam("eventId") int eventId,
+            @QueryParam("userIds") final List<Integer> userids);
 }
