@@ -31,7 +31,8 @@ public class SlimServiceInMemory implements SlimService {
         if (organizer != null) {
             Location location = mDataBaseHelper.createLocation(new Location(lattitude, longitude));
             if (location != null) {
-                return new Event(name, location, eventBegin, eventEnd, description, organizer);
+                Event event = new Event(name, location, eventBegin, eventEnd, description, organizer);
+                return mDataBaseHelper.createEvent(event);
             }
         }
         return null;

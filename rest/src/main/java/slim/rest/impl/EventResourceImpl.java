@@ -7,6 +7,7 @@ package slim.rest.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
@@ -18,10 +19,11 @@ import slim.rest.EventRessource;
  *
  * @author Robert
  */
+@Path("events")
 public class EventResourceImpl extends SlimResource implements EventRessource {
 
     @Override
-    public Response createEvent(UriInfo uriInfo, String name, long lattitude, String longitude, long eventBegin, long eventEnd, String description, int idOrganizer) {
+    public Response createEvent(UriInfo uriInfo, String name, long lattitude, long longitude, long eventBegin, long eventEnd, String description, int idOrganizer) {
         if (uriInfo == null || name == null || name.equals("") || eventBegin < 0 || eventEnd < eventBegin || idOrganizer < 0) {
             return Response.status(Status.BAD_REQUEST).build();
         }
@@ -50,7 +52,7 @@ public class EventResourceImpl extends SlimResource implements EventRessource {
             event.setmEventEnd(eventEnd);
             event.setmDescription(description);
             mSlimService.updateEvent(event);
-            return Response.status(Status.OK).build();
+            return Response.ok(event).build();
         } else {
             return Response.status(Status.NOT_FOUND).build();
         }
@@ -61,7 +63,7 @@ public class EventResourceImpl extends SlimResource implements EventRessource {
         if (mSlimService.deleteEvent(id)) {
             return Response.status(Status.OK).build();
         } else {
-            return Response.status(Status.NOT_FOUND).build();
+            return Response.status(Status.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -143,11 +145,9 @@ public class EventResourceImpl extends SlimResource implements EventRessource {
                 if (user != null) {
                     guests.add(user);
                 }
-            } else {
-                return Response.status(Status.BAD_REQUEST).build();
             }
         }
-        if (event != null && guests.size() == userids.size()) {
+        if (event != null) {
             for (User guest : guests) {
                 event.addGuest(guest);
                 mSlimService.updateEvent(event);
@@ -193,11 +193,9 @@ public class EventResourceImpl extends SlimResource implements EventRessource {
                 if (user != null) {
                     guestsToRemove.add(user);
                 }
-            } else {
-                return Response.status(Status.BAD_REQUEST).build();
             }
         }
-        if (event != null && guestsToRemove.size() == userids.size()) {
+        if (event != null) {
             for (User guest : guestsToRemove) {
                 event.removeGuest(guest);
                 mSlimService.updateEvent(event);

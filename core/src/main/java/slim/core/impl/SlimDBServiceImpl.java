@@ -75,7 +75,6 @@ public class SlimDBServiceImpl extends SlimDB implements SlimDBService {
             success = true;
         } catch (SQLException ex) {
             Logger.getLogger(SlimDBServiceImpl.class.getName()).log(Level.SEVERE, "Could not save user " + user.getmID(), ex);
-            success = false;
         } finally {
             close();
         }
@@ -91,6 +90,7 @@ public class SlimDBServiceImpl extends SlimDB implements SlimDBService {
         boolean success = false;
         try {
             mEventDao.deleteById(id);
+            success = true;
         } catch (SQLException ex) {
             Logger.getLogger(SlimDBServiceImpl.class.getName()).log(Level.SEVERE, "Could not delete event by the id " + id, ex);
         } finally {

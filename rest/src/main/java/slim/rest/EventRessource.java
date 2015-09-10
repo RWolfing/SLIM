@@ -25,7 +25,6 @@ import javax.ws.rs.core.UriInfo;
  *
  * @author Robert
  */
-@Path("events")
 public interface EventRessource {
 
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -34,7 +33,7 @@ public interface EventRessource {
     Response createEvent(@Context UriInfo uriInfo,
             @FormParam("name") String name,
             @FormParam("lattitude") long lattitude,
-            @FormParam("longitude") String longitude,
+            @FormParam("longitude") long longitude,
             @FormParam("eventbegin") long eventBegin,
             @FormParam("eventend") long eventEnd,
             @FormParam("description") String description,

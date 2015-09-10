@@ -28,14 +28,19 @@ public abstract class RestBaseTest {
     private static final String CLASS_NAME = RestBaseTest.class.getName();
     protected static final int SUM_USERS = 5;
     protected static final int SUM_EVENTS = 3;
+    protected static final int TEST_USER_SUM_EVENTS_JOINED = 1;
+    protected static final int TEST_USER_SUM_EVENTS_CREATED = 1;
 
     @Context
     protected SlimService mSlimService;
     private SlimDBServiceImpl mSlimDatabase;
 
     protected User mTestUser;
+    protected User mTestUser2;
     protected User mPartyFriend1;
     protected User mPartyFriend2;
+
+    protected Event mTestEvent;
 
     /**
      * Prepare the initial setup before testing
@@ -54,7 +59,7 @@ public abstract class RestBaseTest {
 
         mTestUser = max = mSlimDatabase.createUser(max);
         mPartyFriend1 = anna = mSlimDatabase.createUser(anna);
-        klaus = mSlimDatabase.createUser(klaus);
+        mTestUser2 = klaus = mSlimDatabase.createUser(klaus);
         mPartyFriend2 = gustav = mSlimDatabase.createUser(gustav);
         bianca = mSlimDatabase.createUser(bianca);
 
@@ -69,7 +74,7 @@ public abstract class RestBaseTest {
         Event event0 = new Event("Event0", location0, 8000, 90000, "Event 0 ist toll", max);
         event0.addGuest(gustav);
         event0.addGuest(anna);
-        mSlimDatabase.createEvent(event0);
+        mTestEvent = mSlimDatabase.createEvent(event0);
 
         Event event1 = new Event("Event1", location1, 123100, 9000000, "Event 1 ist toll", anna);
         event1.addGuest(gustav);
