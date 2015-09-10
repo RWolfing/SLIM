@@ -6,6 +6,7 @@
 package slim.core;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 import slim.core.impl.SlimServiceInMemory;
 import java.util.Date;
@@ -81,9 +82,8 @@ public abstract class BaseTest {
         }
 
         if (guests != null) {
-            for (User guest : guests) {
-                mSlimDatabase.addGuestToEvent(event.getmID(), guest.getmID());
-            }
+            event.setGuests(new ArrayList<>(guests));
+            mSlimDatabase.saveEvent(event);
         }
         return event;
     }

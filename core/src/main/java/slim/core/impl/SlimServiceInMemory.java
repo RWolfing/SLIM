@@ -37,10 +37,9 @@ public class SlimServiceInMemory implements SlimService {
         return null;
     }
 
-    //TODO return
     @Override
-    public void deleteEvent(int id) {
-        mDataBaseHelper.deleteEventById(id);
+    public boolean deleteEvent(int id) {
+        return mDataBaseHelper.deleteEventById(id);
     }
 
     @Override
@@ -113,7 +112,7 @@ public class SlimServiceInMemory implements SlimService {
         List<Event> result = new ArrayList<>();
         if (events != null) {
             for (Event event : events) {
-                if (event.getGuests().size() <= toMax && event.getGuests().size() > fromMin) {
+                if (event.getGuests().size() <= toMax && event.getGuests().size() >= fromMin) {
                     result.add(event);
                 }
             }

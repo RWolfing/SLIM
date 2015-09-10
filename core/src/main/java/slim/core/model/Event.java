@@ -119,6 +119,10 @@ public class Event {
             mGuests.add(guest);
         }
     }
+    
+    public void removeGuest(User guest) {
+        mGuests.remove(guest);
+    }
 
     public List<User> getGuests() {
         return mGuests;

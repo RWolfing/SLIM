@@ -123,6 +123,16 @@ public class SlimDBServiceImpl extends SlimDB implements SlimDBService {
         List<Event> result = null;
         try {
             result = mEventDao.queryForAll();
+            if (result != null) {
+                for (Event event : result) {
+                    List<GuestEntry> guestEntries = mGuestListDao.queryBuilder().where().eq(GuestEntry.EVENT_ID_FIELD_NAME, event.getmID()).query();
+                    if (guestEntries != null) {
+                        for (GuestEntry entry : guestEntries) {
+                            event.addGuest(entry.getmGuest());
+                        }
+                    }
+                }
+            }
         } catch (SQLException ex) {
             Logger.getLogger(SlimDBServiceImpl.class.getName()).log(Level.SEVERE, "Could not retrieve a list of all events!", ex);
         } finally {
@@ -179,7 +189,12 @@ public class SlimDBServiceImpl extends SlimDB implements SlimDBService {
         }
         Event result = null;
         try {
+            List<User> guests = event.getGuests();
             mEventDao.create(event);
+            for (User guest : guests) {
+                GuestEntry guestListEntry = new GuestEntry(event, guest);
+                mGuestListDao.create(guestListEntry);
+            }
             result = event;
         } catch (SQLException ex) {
             Logger.getLogger(SlimDBServiceImpl.class.getName()).log(Level.SEVERE, "Could not create event!", ex);

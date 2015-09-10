@@ -51,4 +51,45 @@ public class SlimServiceTest extends BaseTest {
         assertThat(result.contains(event3), is(true));
         assertThat(result.contains(event4), is(false));
     }
+
+    @Test
+    public void getEventsWithinGuestRange() throws SQLException {
+        mSlimDatabase.clearAllTables();
+
+        User guest0 = createRandomUser();
+        User guest1 = createRandomUser();
+        User guest2 = createRandomUser();
+        User guest3 = createRandomUser();
+        
+        List<User> guestListMinRange = new ArrayList<>();
+         guestListMinRange.add(guest0);
+
+        List<User> guestListInRange = new ArrayList<>();
+        guestListInRange.add(guest0);
+        guestListInRange.add(guest2);
+
+        List<User> guestListMaxRange = new ArrayList<>();
+        guestListMaxRange.add(guest0);
+        guestListMaxRange.add(guest1);
+        guestListMaxRange.add(guest2);
+
+        List<User> guestListOverRange = new ArrayList<>();
+        guestListOverRange.add(guest0);
+        guestListOverRange.add(guest1);
+        guestListOverRange.add(guest2);
+        guestListOverRange.add(guest3);
+
+        Event eventOutOfRange = createRandomEvent(null, guest3);
+        Event eventInMinRange = createRandomEvent(guestListMinRange, null);
+        Event eventInRange = createRandomEvent(guestListInRange, null);
+        Event eventInMaxRange = createRandomEvent(guestListMaxRange, null);
+        Event eventOverMaxRange = createRandomEvent(guestListOverRange, null);
+        
+        List<Event> result = mSlimService.getEventsWithinGuestRange(1, 3);
+        assertThat(result, notNullValue());
+        assertThat(result.size(), is(3));
+        assertThat(result.contains(eventInMinRange), is(true));
+        assertThat(result.contains(eventInRange), is(true));
+        assertThat(result.contains(eventInMaxRange), is(true));
+    }
 }

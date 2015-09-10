@@ -120,7 +120,7 @@ public class XmlMappingTest extends BaseTest {
         
         /**
          * IDs will be created through the underlying database. But here we wont be saving any users to the database, so the ids will be missing.
-         * Therefore will be mean and set them through reflection
+         * Therefore we will smart and set them through reflection ;).
          */
         Field guestId = User.class.getDeclaredField("mID");
         guestId.setAccessible(true);

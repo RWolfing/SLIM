@@ -20,7 +20,7 @@ public interface SlimService {
 
     boolean updateEvent(Event event);
     
-    void deleteEvent(int id);
+    boolean deleteEvent(int id);
 
     Event getEventById(int id);
 
