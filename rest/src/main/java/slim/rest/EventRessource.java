@@ -8,6 +8,7 @@ package slim.rest;
 import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -42,6 +43,7 @@ public interface EventRessource {
 
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @PUT
+    @Path("{id}")
     @Produces({MediaType.APPLICATION_XML})
     Response updateEvent(@Context UriInfo uriInfo,
             @PathParam("id") int eventId,
@@ -54,12 +56,12 @@ public interface EventRessource {
     @DELETE
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML})
-    Response deleteEvent(int id);
+    Response deleteEvent(@PathParam("id") int id);
 
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML})
-    Response fetchEventById(int id);
+    Response fetchEventById(@PathParam("id") int id);
 
     @GET
     @Produces({MediaType.APPLICATION_XML})
@@ -68,45 +70,53 @@ public interface EventRessource {
     @GET
     @Path("withuser/{id}")
     @Produces({MediaType.APPLICATION_XML})
-    Response getEventsWithUser(int userId);
+    Response getEventsWithUser(@PathParam("id") int userId);
 
     @GET
     @Path("fromuser/{id}")
     @Produces({MediaType.APPLICATION_XML})
-    Response getEventsFromUser(int userId);
+    Response getEventsFromUser(@PathParam("id") int userId);
 
     @GET
+    @Path("location/")
     @Produces({MediaType.APPLICATION_XML})
     Response getEventsWithinLocation(
-            @PathParam("lattfrom") long lattitudeFrom,
-            @PathParam("lattto") long lattiudeTo,
-            @PathParam("longfrom") long longitudeFrom,
-            @PathParam("longto") long longitudeTo);
+            @QueryParam("lattfrom") long lattitudeFrom,
+            @QueryParam("lattto") long lattiudeTo,
+            @QueryParam("longfrom") long longitudeFrom,
+            @QueryParam("longto") long longitudeTo);
     
     @GET
+    @Path("guestrange/")
     @Produces({MediaType.APPLICATION_XML})
-    Response getEventsWithinGuestRange(@PathParam("minguests") int minGuests, @PathParam("maxguests") int maxGuests);
+    Response getEventsWithinGuestRange(
+            @QueryParam("minguests") int minGuests,
+            @QueryParam("maxguests") int maxGuests);
     
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @POST
+    @Path("addguest/{id}")
     @Produces({MediaType.APPLICATION_XML})
     Response addGuestToEvent(@Context UriInfo uriInfo,
             @PathParam("eventId") int eventId,
-            @FormParam("userId") int userId);
+            @QueryParam("userId") int userId);
     
     @POST
+    @Path("addguests/{eventId}")
     @Produces({MediaType.APPLICATION_XML})
     Response addGuestsToEvent(@Context UriInfo uriInfo,
             @PathParam("eventId") int eventId,
             @QueryParam("userIds") final List<Integer> userids);
     
     @DELETE
+    @Path("removeguest/{eventId}")
     @Produces({MediaType.APPLICATION_XML})
     Response removeGuestFromEvent(@Context UriInfo uriInfo,
             @PathParam("eventId") int eventId,
-            @QueryParam("userIds") int userid);
+            @QueryParam("userId") int userid);
     
     @DELETE
+    @Path("removeguests/{eventId}")
     @Produces({MediaType.APPLICATION_XML})
     Response removeGuestsFromEvent(@Context UriInfo uriInfo,
             @PathParam("eventId") int eventId,

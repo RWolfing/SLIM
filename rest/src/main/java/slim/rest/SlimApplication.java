@@ -9,6 +9,8 @@ import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.server.ResourceConfig;
 import slim.core.SlimService;
 import slim.core.impl.SlimServiceInMemory;
+import slim.rest.impl.EventResourceImpl;
+import slim.rest.impl.UserResourceImpl;
 
 /**
  *
@@ -16,7 +18,11 @@ import slim.core.impl.SlimServiceInMemory;
  */
 public class SlimApplication extends ResourceConfig{
     
+   
     public SlimApplication(){
+   
+        register(UserResourceImpl.class);
+        register(EventResourceImpl.class);
         
         register(new AbstractBinder() {
 
