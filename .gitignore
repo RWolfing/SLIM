@@ -3,3 +3,4 @@ rest/build/
 .gradle/
 .nb-gradle/
 client/build/
+slim.db
