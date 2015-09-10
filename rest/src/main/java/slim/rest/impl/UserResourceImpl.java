@@ -10,6 +10,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
+import slim.core.SlimService;
 import slim.core.model.User;
 import slim.rest.UserResource;
 
@@ -17,7 +18,6 @@ import slim.rest.UserResource;
  *
  * @author Robert
  */
-@Path("users")
 public class UserResourceImpl extends SlimResource implements UserResource {
 
     @Override
@@ -107,5 +107,10 @@ public class UserResourceImpl extends SlimResource implements UserResource {
        } else {
            return Response.status(Status.OK).entity(false).build();
        }
+    }
+
+    @Override
+    public void setService(SlimService service) {
+       mSlimService = service;
     }
 }

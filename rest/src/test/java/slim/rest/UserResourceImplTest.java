@@ -28,19 +28,19 @@ import slim.core.model.User;
  */
 public class UserResourceImplTest extends RestBaseTest {
 
-    private UserResourceImpl mUserResource;
+    private UserResource mUserResource;
     private UriInfo mUriInfo;
 
     @Before
     public void prepareResourcesTest() {
         mUserResource = new UserResourceImpl();
-        mUserResource.setmSlimService(mSlimService);
+        mUserResource.setService(mSlimService);
     }
 
     @Before
     public void mockUriInfo() {
         mUriInfo = mock(UriInfo.class);
-        final UriBuilder fromResource = UriBuilder.fromResource(UserResourceImpl.class);
+        final UriBuilder fromResource = UriBuilder.fromResource(UserResource.class);
         when(mUriInfo.getAbsolutePathBuilder()).thenAnswer(new Answer<UriBuilder>() {
 
             @Override

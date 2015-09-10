@@ -18,6 +18,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import slim.core.SlimService;
 
 /**
  *
@@ -39,7 +40,7 @@ public interface UserResource {
 
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @PUT
-    @Path("id")
+    @Path("{id}")
     @Produces({MediaType.APPLICATION_XML})
     Response updateUser(
             @PathParam("id") int userId,
@@ -51,18 +52,21 @@ public interface UserResource {
     @DELETE
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML})
-    Response deleteUser(int id);
+    Response deleteUser(@PathParam("id") int id);
 
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML})
-    Response fetchUserById(int id);
+    Response fetchUserById(@PathParam("id") int id);
 
     @GET
     @Produces({MediaType.APPLICATION_XML})
     Response fetchAllUsers();
     
     @GET
+    @Path("{idyou}/{idhim}")
     @Produces({MediaType.APPLICATION_XML})
     Response doesHePartyWithMe(@PathParam("idyou") int idUser1, @PathParam("idhim") int idUser2);
+    
+    void setService(SlimService service);
 }
