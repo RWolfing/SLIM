@@ -126,4 +126,9 @@ public class User {
         }
         return ((User) obj).getmID() == mID;
     }
+
+    @Override
+    public String toString() {
+        return "User{" + "mID=" + mID + ", mNickName=" + mNickName + ", mFirstName=" + mFirstName + ", mLastName=" + mLastName + ", mBirthday=" + mBirthday + ", mAbout=" + mAbout + ", mImageUrl=" + mImageUrl + ", mGuestList=" + mGuestList + '}';
+    }
 }

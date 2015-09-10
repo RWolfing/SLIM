@@ -23,6 +23,7 @@ import javax.ws.rs.core.UriInfo;
  *
  * @author Robert
  */
+@Path("users")
 public interface UserResource {
 
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)

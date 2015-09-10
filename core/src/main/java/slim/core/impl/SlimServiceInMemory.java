@@ -91,7 +91,7 @@ public class SlimServiceInMemory implements SlimService {
 
     @Override
     public List<Event> getEventsFromUser(int id) {
-        return mDataBaseHelper.getEventsWithUser(id);
+        return mDataBaseHelper.getEventsFromUser(id);
     }
 
     @Override

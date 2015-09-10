@@ -36,4 +36,5 @@ public interface SlimDBService {
     boolean deleteEventById(int id);
     List<Event> getAllEvents();
     List<Event> getEventsWithUser(int id);
+    List<Event> getEventsFromUser(int id);
 }

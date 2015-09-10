@@ -268,10 +268,11 @@ public class SlimDBServiceImpl extends SlimDB implements SlimDBService {
             return null;
         }
 
-        List<Event> result = new ArrayList<>();
+        List<Event> result = null;
         User user = getUserById(id);
 
         if (user != null) {
+            result = new ArrayList<>();
             try {
                 List<GuestEntry> guestListEntries = mGuestListDao.queryBuilder().where().eq(GuestEntry.USER_ID_FIELD_NAME, user.getmID()).query();
                 if (guestListEntries != null && guestListEntries.size() > 0) {
@@ -387,5 +388,20 @@ public class SlimDBServiceImpl extends SlimDB implements SlimDBService {
             close();
         }
         return result;
+    }
+
+    @Override
+    public List<Event> getEventsFromUser(int id) {
+        if(getUserById(id) == null){
+            return null;
+        }
+        
+        List<Event> events = null;
+        try {
+            events = mEventDao.queryBuilder().where().eq(Event.ORGANIZER_FIELD_NAME, id).query();
+        } catch (SQLException ex) {
+            Logger.getLogger(SlimDBServiceImpl.class.getName()).log(Level.SEVERE, "Could not retrieve events from user!", ex);
+        }
+        return events;
     }
 }

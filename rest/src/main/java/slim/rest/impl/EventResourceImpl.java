@@ -123,7 +123,7 @@ public class EventResourceImpl extends SlimResource implements EventRessource {
         if (user != null && event != null) {
             event.addGuest(user);
             if (mSlimService.updateEvent(event)) {
-                return Response.status(Status.OK).build();
+                return Response.ok(event).build();
             } else {
                 return Response.status(Status.INTERNAL_SERVER_ERROR).build();
             }

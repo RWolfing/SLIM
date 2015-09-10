@@ -25,6 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Event {
 
     public static final String LOCATION_FIELD_NAME = "location_id";
+    public static final String ORGANIZER_FIELD_NAME = "organizer_id";
     
     @XmlAttribute(name = "id")
     @DatabaseField(generatedId = true)
@@ -45,7 +46,7 @@ public class Event {
     @DatabaseField
     private String mDescription;
     @XmlElement(name = "organizer")
-    @DatabaseField(foreign = true)
+    @DatabaseField(foreign = true, columnName = ORGANIZER_FIELD_NAME)
     private User mOrganizer;
 
     @XmlElement(name = "guests")

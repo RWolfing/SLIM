@@ -83,8 +83,8 @@ public class EventResourceImplTest extends RestBaseTest {
         Event event = (Event) response.getEntity();
         assertThat(event.getmID(), is(mTestEvent.getmID()));
         assertThat(event.getmName(), is("updated name"));
-        assertThat(event.getmEventBegin(), is(2000));
-        assertThat(event.getmEventEnd(), is(3000));
+        assertThat(event.getmEventBegin(), is(2000L));
+        assertThat(event.getmEventEnd(), is(3000L));
         assertThat(event.getmDescription(), is("new description"));
 
         //Test failure bad request name null
@@ -222,5 +222,4 @@ public class EventResourceImplTest extends RestBaseTest {
         response = mEventResource.removeGuestsFromEvent(mUriInfo, mTestEvent.getmID(), null);
         assertThat(response.getStatus(), is(Response.Status.BAD_REQUEST.getStatusCode()));
     }
-
 }
