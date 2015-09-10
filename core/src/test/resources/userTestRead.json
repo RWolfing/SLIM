@@ -1,0 +1,9 @@
+{
+   "id" : 5,
+   "nickname" : "nickname",
+   "firstname" : "firstname",
+   "lastname" : "lastname",
+   "birthday" : 1000,
+   "about" : "about",
+   "imageUrl" : "www.test.de"
+}

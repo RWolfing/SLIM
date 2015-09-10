@@ -1,35 +1,35 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <event id="0">
-    <name>name</name>
-    <location id="0">
-        <lattitude>500</lattitude>
-        <longitude>500</longitude>
-    </location>
-    <eventbegin>0</eventbegin>
-    <eventend>10000</eventend>
-    <description>description</description>
-    <organizer id="0">
-        <nickname>organizer</nickname>
-        <firstname>organizer</firstname>
-        <lastname>organizer</lastname>
-        <birthday>0</birthday>
-        <about>about</about>
-        <imageUrl>imageurl</imageUrl>
-    </organizer>
-    <guests id="1">
-        <nickname>guest</nickname>
-        <firstname>guest</firstname>
-        <lastname>guest</lastname>
-        <birthday>0</birthday>
-        <about>about</about>
-        <imageUrl>imageurl</imageUrl>
-    </guests>
-    <guests id="2">
-        <nickname>guest2</nickname>
-        <firstname>guest2</firstname>
-        <lastname>guest2</lastname>
-        <birthday>0</birthday>
-        <about>about</about>
-        <imageUrl>imageurl</imageUrl>
-    </guests>
+   <name>name</name>
+   <location id="0">
+      <lattitude>500</lattitude>
+      <longitude>500</longitude>
+   </location>
+   <eventbegin>0</eventbegin>
+   <eventend>10000</eventend>
+   <description>description</description>
+   <organizer id="0">
+      <nickname>organizer</nickname>
+      <firstname>organizer</firstname>
+      <lastname>organizer</lastname>
+      <birthday>0</birthday>
+      <about>about</about>
+      <imageUrl>imageurl</imageUrl>
+   </organizer>
+   <guests id="1">
+      <nickname>guest</nickname>
+      <firstname>guest</firstname>
+      <lastname>guest</lastname>
+      <birthday>0</birthday>
+      <about>about</about>
+      <imageUrl>imageurl</imageUrl>
+   </guests>
+   <guests id="2">
+      <nickname>guest2</nickname>
+      <firstname>guest2</firstname>
+      <lastname>guest2</lastname>
+      <birthday>0</birthday>
+      <about>about</about>
+      <imageUrl>imageurl</imageUrl>
+   </guests>
 </event>

@@ -17,7 +17,7 @@
         <about>about</about>
         <imageUrl>www.test.de</imageUrl>
     </organizer>
-    <guests id="0">
+    <guests id="1">
         <nickname>guest</nickname>
         <firstname>guest</firstname>
         <lastname>guest</lastname>
@@ -25,7 +25,7 @@
         <about>about</about>
         <imageUrl>imageurl</imageUrl>
     </guests>
-    <guests id="0">
+    <guests id="2">
         <nickname>guest2</nickname>
         <firstname>guest2</firstname>
         <lastname>guest2</lastname>

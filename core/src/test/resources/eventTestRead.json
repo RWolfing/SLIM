@@ -1,0 +1,38 @@
+{
+   "id" : 5,
+   "name" : "name",
+   "location" : {
+      "id" : 7,
+      "lattitude" : 1000,
+      "longitude" : 1000
+   },
+   "eventbegin" : 1200,
+   "eventend" : 2200,
+   "description" : "description",
+   "organizer" : {
+      "id" : 5,
+      "nickname" : "nickname",
+      "firstname" : "firstname",
+      "lastname" : "lastname",
+      "birthday" : 1000,
+      "about" : "about",
+      "imageUrl" : "www.test.de"
+   },
+   "guests" : [ {
+      "id" : 1,
+      "nickname" : "guest",
+      "firstname" : "guest",
+      "lastname" : "guest",
+      "birthday" : 0,
+      "about" : "about",
+      "imageUrl" : "imageurl"
+   }, {
+      "id" : 2,
+      "nickname" : "guest2",
+      "firstname" : "guest2",
+      "lastname" : "guest2",
+      "birthday" : 0,
+      "about" : "about",
+      "imageUrl" : "imageurl"
+   } ]
+}
