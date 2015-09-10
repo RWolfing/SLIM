@@ -40,17 +40,16 @@ public interface EventRessource {
             @FormParam("description") String description,
             @FormParam("organizerid") int idOrganizer
     );
-
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    
     @PUT
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML})
     Response updateEvent(@Context UriInfo uriInfo,
             @PathParam("id") int eventId,
-            @FormParam("name") String name,
-            @FormParam("eventbegin") long eventBegin,
-            @FormParam("eventend") long eventEnd,
-            @FormParam("description") String description
+            @QueryParam("name") String name,
+            @QueryParam("eventbegin") long eventBegin,
+            @QueryParam("eventend") long eventEnd,
+            @QueryParam("description") String description
     );
 
     @DELETE
@@ -93,15 +92,14 @@ public interface EventRessource {
             @QueryParam("minguests") int minGuests,
             @QueryParam("maxguests") int maxGuests);
     
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @POST
+    @PUT
     @Path("addguest/{id}")
     @Produces({MediaType.APPLICATION_XML})
     Response addGuestToEvent(@Context UriInfo uriInfo,
             @PathParam("eventId") int eventId,
             @QueryParam("userId") int userId);
     
-    @POST
+    @PUT
     @Path("addguests/{eventId}")
     @Produces({MediaType.APPLICATION_XML})
     Response addGuestsToEvent(@Context UriInfo uriInfo,
