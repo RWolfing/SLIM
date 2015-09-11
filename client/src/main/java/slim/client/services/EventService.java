@@ -3,8 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package slim.client;
+package slim.client.services;
 
+import slim.client.services.SlimResult;
+import slim.client.services.SlimService;
+import slim.client.services.UserService;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
