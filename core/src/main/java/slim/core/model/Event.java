@@ -130,6 +130,11 @@ public class Event {
     }
 
     @Override
+    public String toString() {
+        return "Event{" + "mID=" + mID + ", mName=" + mName + ", mLocation=" + mLocation + ", mEventBegin=" + mEventBegin + ", mEventEnd=" + mEventEnd + ", mDescription=" + mDescription + ", mOrganizer=" + mOrganizer + '}';
+    }
+
+    @Override
     public int hashCode() {
         return mID;
     }

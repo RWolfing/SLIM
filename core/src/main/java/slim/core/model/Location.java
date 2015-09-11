@@ -92,6 +92,11 @@ public class Location {
     }
 
     @Override
+    public String toString() {
+        return "Location{" + "mID=" + mID + ", mEvents=" + mEvents + ", mName=" + mName + ", mLattitude=" + mLattitude + ", mLongitude=" + mLongitude + '}';
+    }
+
+    @Override
     public int hashCode() {
         return mID;
     }
