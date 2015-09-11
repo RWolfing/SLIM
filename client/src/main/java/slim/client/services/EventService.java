@@ -43,7 +43,7 @@ public class EventService extends SlimService {
         postMethod.addParameter("description", description);
         postMethod.addParameter("organizerid", String.valueOf(organizerID));
         postMethod.addRequestHeader("Accept", mMediaType.getValue());
-
+        
         try {
             int status = mHttpClient.executeMethod(postMethod);
             result.setStatus(status);
@@ -56,6 +56,7 @@ public class EventService extends SlimService {
         } catch (JAXBException ex) {
             Logger.getLogger(EventService.class.getName()).log(Level.SEVERE, ERROR_JAXB_LOCATION, ex);
         }
+        whatAmIDoing(result, postMethod.getPath());
         return result;
     }
 
@@ -81,6 +82,7 @@ public class EventService extends SlimService {
         } catch (JAXBException ex) {
             Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, ERROR_JAXB_LOCATION, ex);
         }
+          whatAmIDoing(result, putMethod.getPath());
         return result;
     }
 
@@ -93,6 +95,7 @@ public class EventService extends SlimService {
         } catch (IOException ex) {
             Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, null, ex);
         }
+         whatAmIDoing(result, deleteMethod.getPath());
         return result;
     }
 
@@ -112,6 +115,7 @@ public class EventService extends SlimService {
         } catch (JAXBException ex) {
             Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, ERROR_JAXB_LOCATION, ex);
         }
+        whatAmIDoing(result, getMethod.getPath());
         return result;
     }
 
@@ -122,21 +126,25 @@ public class EventService extends SlimService {
 
     public SlimResult<List<Event>> getEventsWithUser(int userID) {
         SlimResult result = new SlimResult(null);
+        whatAmIDoing(result, "");
         return result;
     }
 
     public SlimResult<List<Event>> getEventsFromUser(int userId) {
         SlimResult result = new SlimResult(null);
+        whatAmIDoing(result, "");
         return result;
     }
 
     public SlimResult<List<Event>> getEventsWithinLocation(long lattitudeFrom, long lattitudeTo, long longitudeFrom, long longitudeTo) {
         SlimResult result = new SlimResult(null);
+        whatAmIDoing(result, "");
         return result;
     }
 
     public SlimResult<List<Event>> getEventsWithinGuestRange(int minGuests, int maxGuests) {
         SlimResult result = new SlimResult(null);
+        whatAmIDoing(result, "");
         return result;
     }
 
@@ -159,6 +167,7 @@ public class EventService extends SlimService {
         } catch (JAXBException ex) {
             Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, ERROR_JAXB_LOCATION, ex);
         }
+        whatAmIDoing(result, putMethod.getPath());
         return result;
     }
 
@@ -188,6 +197,7 @@ public class EventService extends SlimService {
         } catch (JAXBException ex) {
             Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, ERROR_JAXB_LOCATION, ex);
         }
+         whatAmIDoing(result, putMethod.getPath());
         return result;
     }
 
@@ -208,6 +218,7 @@ public class EventService extends SlimService {
         } catch (JAXBException ex) {
             Logger.getLogger(EventService.class.getName()).log(Level.SEVERE, ERROR_JAXB_LOCATION, ex);
         }
+         whatAmIDoing(result, deleteMethod.getPath());
         return result;
     }
 
@@ -238,6 +249,7 @@ public class EventService extends SlimService {
         } catch (JAXBException ex) {
             Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, ERROR_JAXB_LOCATION, ex);
         }
+         whatAmIDoing(result, deleteMethod.getPath());
         return result;
     }
 }

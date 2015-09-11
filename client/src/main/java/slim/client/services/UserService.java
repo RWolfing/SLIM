@@ -54,6 +54,7 @@ public class UserService extends SlimService {
         } catch (IOException ex) {
             Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, ERROR_IO + "create user", ex);
         }
+          whatAmIDoing(result, post.getPath());
         return result;
     }
     
@@ -79,6 +80,7 @@ public class UserService extends SlimService {
         } catch (JAXBException ex) {
             Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, ERROR_JAXB_USER, ex);
         }
+          whatAmIDoing(result, putMethod.getPath());
         return result;
     }
     
@@ -91,6 +93,7 @@ public class UserService extends SlimService {
         } catch (IOException ex) {
             Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, null, ex);
         }
+          whatAmIDoing(result, deleteMethod.getPath());
         return result;
     }
     
@@ -110,6 +113,7 @@ public class UserService extends SlimService {
         } catch (JAXBException ex) {
             Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, ERROR_JAXB_USER, ex);
         }
+          whatAmIDoing(result, getMethod.getPath());
         return result;
     }
     
@@ -135,6 +139,7 @@ public class UserService extends SlimService {
         } catch (JAXBException ex) {
             Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, ERROR_JAXB_USER, ex);
         }
+          whatAmIDoing(result, getMethod.getPath());
         return result;
     }
 }

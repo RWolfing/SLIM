@@ -11,7 +11,6 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import org.apache.commons.httpclient.HttpClient;
-import org.eclipse.persistence.jaxb.MarshallerProperties;
 
 /**
  *
@@ -21,7 +20,7 @@ public class SlimService {
 
     protected static final String ERROR_IO = "IO Exception while fetching: ";
     protected static final String ERROR_JAXB = "Could not unmarshall: ";
-    
+
     protected final String mServiceBaseURI;
     protected final HttpClient mHttpClient;
     protected MediaType mMediaType = MediaType.XML;
@@ -50,13 +49,23 @@ public class SlimService {
             return mType;
         }
     }
-    
-    protected Object unmarshall(String content, Class clazz) throws JAXBException{
+
+    protected Object unmarshall(String content, Class clazz) throws JAXBException {
         return unmarshallFromXML(new StringReader(content), JAXBContext.newInstance(clazz));
     }
-    
-    private Object unmarshallFromXML(Reader in, JAXBContext jaxbc) throws JAXBException{
+
+    private Object unmarshallFromXML(Reader in, JAXBContext jaxbc) throws JAXBException {
         Unmarshaller unmarshaller = jaxbc.createUnmarshaller();
         return unmarshaller.unmarshal(in);
+    }
+
+    protected void whatAmIDoing(SlimResult result, String servicePath) {
+        System.out.println();
+        System.out.println("--------- SERVICE CALL -----------");
+        System.out.println("Executed " + servicePath);
+        System.out.println("Mediatype: " + mMediaType);
+        System.out.println("Response: " + result.getmResultStatus());
+        System.out.println("Result: " + result.getmResultContent());
+        System.out.println("------ SERVICE CALL  END ---------");
     }
 }

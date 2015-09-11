@@ -49,6 +49,7 @@ public class LocationService extends SlimService {
         } catch (JAXBException ex) {
             Logger.getLogger(LocationService.class.getName()).log(Level.SEVERE, ERROR_JAXB_LOCATION, ex);
         }
+        whatAmIDoing(result, postMethod.getPath());
         return result;
     }
 
@@ -71,6 +72,7 @@ public class LocationService extends SlimService {
         } catch (JAXBException ex) {
             Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, ERROR_JAXB_LOCATION, ex);
         }
+        whatAmIDoing(result, putMethod.getPath());
         return result;
     }
 
@@ -83,6 +85,7 @@ public class LocationService extends SlimService {
         } catch (IOException ex) {
             Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, "IO Exception", ex);
         }
+        whatAmIDoing(result, deleteMethod.getPath());
         return result;
     }
 
@@ -102,6 +105,7 @@ public class LocationService extends SlimService {
         } catch (JAXBException ex) {
             Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, ERROR_JAXB_LOCATION, ex);
         }
+        whatAmIDoing(result, getMethod.getPath());
         return result;
     }
 
@@ -124,6 +128,7 @@ public class LocationService extends SlimService {
         } catch (JAXBException ex) {
             Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, ERROR_JAXB_LOCATION, ex);
         }
+        whatAmIDoing(result, getMethod.getPath());
         return result;
     }
 }
