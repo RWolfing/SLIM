@@ -11,7 +11,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import org.apache.commons.httpclient.HttpClient;
-import slim.core.model.User;
+import org.eclipse.persistence.jaxb.MarshallerProperties;
 
 /**
  *
@@ -19,6 +19,9 @@ import slim.core.model.User;
  */
 public class SlimService {
 
+    protected static final String ERROR_IO = "IO Exception while fetching: ";
+    protected static final String ERROR_JAXB = "Could not unmarshall: ";
+    
     protected final String mServiceBaseURI;
     protected final HttpClient mHttpClient;
     protected MediaType mMediaType = MediaType.XML;
