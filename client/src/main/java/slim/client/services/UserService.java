@@ -10,11 +10,13 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.bind.JAXBException;
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.DeleteMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
+import static slim.client.services.SlimService.ERROR_JAXB;
 import slim.core.model.User;
 
 /**
@@ -22,20 +24,15 @@ import slim.core.model.User;
  * @author Robert
  */
 public class UserService extends SlimService {
-
-    private static final String USER_ENDPOINT_PATH = "users";
-    private static final String USER_ENDPOINT_CREATE = USER_ENDPOINT_PATH;
-    private static final String USER_ENDPOINT_UPDATE = USER_ENDPOINT_PATH + "/id";
-    private static final String USER_ENDPOINT_DELETE = USER_ENDPOINT_PATH;
-    private static final String USER_ENDPOINT_GET = USER_ENDPOINT_PATH;
-    private static final String USER_ENDPOINT_GET_ALL = USER_ENDPOINT_PATH;
-    private static final String USER_ENDPOINT_PARTY_WITH = USER_ENDPOINT_PATH;
-
+    
+    private static final String ERROR_JAXB_USER = ERROR_JAXB + User.class.getName();
+    
     public UserService(String serviceUrl, MediaType type) {
         super(serviceUrl + "/users", type);
     }
-
+    
     public SlimResult<User> createUser(String nickName, String firstName, String lastName, long birthday, String about, String imageUrl) {
+        SlimResult result = new SlimResult(null);
         PostMethod post = new PostMethod(mServiceBaseURI);
         post.addParameter("nickname", nickName);
         post.addParameter("firstname", firstName);
@@ -44,20 +41,24 @@ public class UserService extends SlimService {
         post.addParameter("about", about);
         post.addParameter("imageurl", imageUrl);
         post.setRequestHeader("Accept", mMediaType.getValue());
-
+        
         try {
             int status = mHttpClient.executeMethod(post);
-            User user = (User) unmarshall(post.getResponseBodyAsString(), User.class);
-            return new SlimResult<>(status, user);
+            result.setStatus(status);
+            if (status == HttpStatus.SC_CREATED) {
+                User user = (User) unmarshall(post.getResponseBodyAsString(), User.class);
+                result.setResultContent(user);
+            }
         } catch (JAXBException ex) {
-            Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, "JAXB Exception", ex);
+            Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, ERROR_JAXB_USER, ex);
         } catch (IOException ex) {
-            Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, "IO Exception", ex);
+            Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, ERROR_IO + "create user", ex);
         }
-        return null;
+        return result;
     }
-
+    
     public SlimResult<User> updateUser(int userId, String nickName, long birthday, String about, String imageUrl) {
+        SlimResult result = new SlimResult(null);
         PutMethod putMethod = new PutMethod(mServiceBaseURI + "/" + userId);
         NameValuePair pairNick = new NameValuePair("nickName", nickName);
         NameValuePair pairBDay = new NameValuePair("birthday", String.valueOf(birthday));
@@ -68,60 +69,72 @@ public class UserService extends SlimService {
         
         try {
             int status = mHttpClient.executeMethod(putMethod);
-            User user = (User) unmarshall(putMethod.getResponseBodyAsString(), User.class);
-            return new SlimResult<>(status, user);
+            result.setStatus(status);
+            if (status == HttpStatus.SC_OK) {
+                User user = (User) unmarshall(putMethod.getResponseBodyAsString(), User.class);
+                result.setResultContent(user);
+            }
         } catch (IOException ex) {
-            Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, "IO Exception", ex);
+            Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, ERROR_IO + "udpate user", ex);
         } catch (JAXBException ex) {
-            Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, "JAXB Exception", ex);
+            Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, ERROR_JAXB_USER, ex);
         }
-        return null;
+        return result;
     }
-
+    
     public SlimResult deleteUser(int userId) {
+        SlimResult result = new SlimResult(null);
         DeleteMethod deleteMethod = new DeleteMethod(mServiceBaseURI + "/" + userId);
         try {
             int status = mHttpClient.executeMethod(deleteMethod);
-            return new SlimResult(status, null);
+            result.setStatus(status);
         } catch (IOException ex) {
             Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return null;
+        return result;
     }
-
+    
     public SlimResult<User> fetchUserById(int id) {
+        SlimResult result = new SlimResult(null);
         GetMethod getMethod = new GetMethod(mServiceBaseURI + "/" + id);
         getMethod.setRequestHeader("Accept", mMediaType.getValue());
         try {
             int status = mHttpClient.executeMethod(getMethod);
-            User user = (User) unmarshall(getMethod.getResponseBodyAsString(), User.class);
-            return new SlimResult<>(status, user);
+            result.setStatus(status);
+            if (status == HttpStatus.SC_OK) {
+                User user = (User) unmarshall(getMethod.getResponseBodyAsString(), User.class);
+                result.setResultContent(user);
+            }
         } catch (IOException ex) {
-            Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, "IO Exception", ex);
+            Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, ERROR_IO + "fetch user by id", ex);
         } catch (JAXBException ex) {
-            Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, "JAXB Exception", ex);
+            Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, ERROR_JAXB_USER, ex);
         }
-        return null;
+        return result;
     }
-
+    
     public SlimResult<List<User>> fetchAllUsers() {
-        
+        SlimResult result = new SlimResult(null);
         return null;
     }
-
+    
     public SlimResult<Boolean> doesHePartyWitheMe(int userId1, int userId2) {
+        SlimResult result = new SlimResult(null);
         GetMethod getMethod = new GetMethod(mServiceBaseURI + "/" + userId1 + "/" + userId2);
         getMethod.setRequestHeader("Accept", mMediaType.getValue());
         
         try {
             int status = mHttpClient.executeMethod(getMethod);
-            Boolean isTrue = (Boolean) unmarshall(getMethod.getResponseBodyAsString(), User.class);
-            return new SlimResult<>(status, isTrue);
+            result.setStatus(status);
+            if (status == HttpStatus.SC_OK) {
+                Boolean isTrue = (Boolean) unmarshall(getMethod.getResponseBodyAsString(), User.class);
+                result.setResultContent(isTrue);
+            }
         } catch (IOException ex) {
-            Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, "IO Exception", ex);
+            Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, ERROR_IO + "does he party with me", ex);
         } catch (JAXBException ex) {
-            Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, "JAXB Exception", ex);
+            Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, ERROR_JAXB_USER, ex);
         }
-        return null;
+        return result;
     }
 }
