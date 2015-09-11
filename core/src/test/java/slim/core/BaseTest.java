@@ -93,6 +93,6 @@ public abstract class BaseTest {
     }
 
     protected Location createRandomLocation() {
-        return mSlimDatabase.createLocation(new Location(RandomUtils.nextLong(), RandomUtils.nextLong()));
+        return mSlimDatabase.createLocation(new Location("auto-generated", RandomUtils.nextLong(), RandomUtils.nextLong()));
     }
 }

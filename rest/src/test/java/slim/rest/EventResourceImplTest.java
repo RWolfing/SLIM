@@ -12,6 +12,7 @@ import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import org.apache.commons.lang.math.RandomUtils;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
@@ -59,6 +60,7 @@ public class EventResourceImplTest extends RestBaseTest {
         Event event = (Event) response.getEntity();
         response = mEventResource.fetchEventById(event.getmID());
         assertThat(response.getStatus(), is(Response.Status.OK.getStatusCode()));
+        assertThat(event, notNullValue());
         assertThat(event.getmID(), is(((Event) response.getEntity()).getmID()));
 
         //Test failure name missing

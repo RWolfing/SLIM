@@ -34,7 +34,7 @@ public class EventTest extends BaseTest {
         Event fetchedEvent = mSlimDatabase.getEventById(event.getmID());
         assertThat(fetchedEvent.getmName(), is(equalTo(event.getmName())));
         assertThat(fetchedEvent.getmLocation(), notNullValue());
-        assertThat(fetchedEvent.getmLocation().getmID(), is(event.getmLocation().getmID()));
+        assertThat(fetchedEvent.getmLocation().getID(), is(event.getmLocation().getID()));
         assertThat(fetchedEvent.getmEventBegin(), is(event.getmEventBegin()));
         assertThat(fetchedEvent.getmEventEnd(), is(event.getmEventEnd()));
         assertThat(fetchedEvent.getGuests(), notNullValue());

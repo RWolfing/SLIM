@@ -59,6 +59,7 @@ public class XmlMappingTest extends BaseTest {
     private int mReadEventID = 5;
     private String mReadName = "name";
     private int mReadLocID = 7;
+    private String mReadLocName = "auto-generated";
     private long mReadLattitude = 1000;
     private long mReadLongitude = 1000;
     private long mReadEventBegin = 1200;
@@ -127,7 +128,7 @@ public class XmlMappingTest extends BaseTest {
         guestId.set(guest1, 1);
         guestId.set(guest2, 2);
       
-        Location location = new Location(500, 500);
+        Location location = new Location("auto-generated", 500, 500);
         Event event = new Event("name", location, 0, 10000, "description", organizer);
         event.addGuest(guest1);
         event.addGuest(guest2);
@@ -145,9 +146,10 @@ public class XmlMappingTest extends BaseTest {
         assertThat(desEvent.getmID(), is(event.getmID()));
         assertThat(desEvent.getmName(), equalTo(event.getmName()));
         assertThat(desEvent.getmLocation(), notNullValue());
-        assertThat(desEvent.getmLocation().getmID(), is(event.getmLocation().getmID()));
-        assertThat(desEvent.getmLocation().getmLattitude(), is(event.getmLocation().getmLattitude()));
-        assertThat(desEvent.getmLocation().getmLongitude(), is(event.getmLocation().getmLongitude()));
+        assertThat(desEvent.getmLocation().getID(), is(event.getmLocation().getID()));
+        assertThat(desEvent.getmLocation().getName(), is(event.getmLocation().getName()));
+        assertThat(desEvent.getmLocation().getLattitude(), is(event.getmLocation().getLattitude()));
+        assertThat(desEvent.getmLocation().getLongitude(), is(event.getmLocation().getLongitude()));
         assertThat(desEvent.getmEventBegin(), is(event.getmEventBegin()));
         assertThat(desEvent.getmEventEnd(), is(event.getmEventEnd()));
         assertThat(desEvent.getmDescription(), is(event.getmDescription()));
@@ -179,9 +181,10 @@ public class XmlMappingTest extends BaseTest {
         assertThat(event.getmID(), is(mReadEventID));
         assertThat(event.getmName(), equalTo(mReadName));
         assertThat(event.getmLocation(), notNullValue());
-        assertThat(event.getmLocation().getmID(), is(mReadLocID));
-        assertThat(event.getmLocation().getmLattitude(), is(mReadLattitude));
-        assertThat(event.getmLocation().getmLongitude(), is(mReadLongitude));
+        assertThat(event.getmLocation().getID(), is(mReadLocID));
+        assertThat(event.getmLocation().getName(), equalTo(mReadLocName));
+        assertThat(event.getmLocation().getLattitude(), is(mReadLattitude));
+        assertThat(event.getmLocation().getLongitude(), is(mReadLongitude));
         assertThat(event.getmEventBegin(), is(mReadEventBegin));
         assertThat(event.getmEventEnd(), is(mReadEventEnd));
         assertThat(event.getmOrganizer(), notNullValue());

@@ -27,6 +27,7 @@ public class Location {
 
     public final static String LATTITUDE_FIELD_NAME = "lattitude";
     public final static String LONGITUDE_FIELD_NAME = "longitude";
+    public final static String NAME_FIELD_NAME = "name";
 
     @XmlAttribute(name = "id")
     @DatabaseField(generatedId = true)
@@ -35,6 +36,10 @@ public class Location {
     @XmlTransient
     @ForeignCollectionField
     private ForeignCollection<Event> mEvents;
+
+    @XmlElement(name = "name")
+    @DatabaseField(columnName = NAME_FIELD_NAME)
+    private String mName;
 
     @XmlElement(name = "lattitude")
     @DatabaseField(columnName = LATTITUDE_FIELD_NAME)
@@ -48,35 +53,44 @@ public class Location {
 
     }
 
-    public Location(long lattitude, long longitude) {
+    public Location(String name, long lattitude, long longitude) {
+        mName = name;
         mLattitude = lattitude;
         mLongitude = longitude;
     }
 
-    public int getmID() {
+    public int getID() {
         return mID;
     }
 
-    public long getmLattitude() {
+    public ForeignCollection<Event> getEvents() {
+        return mEvents;
+    }
+
+    public String getName() {
+        return mName;
+    }
+
+    public void setName(String name) {
+        this.mName = name;
+    }
+
+    public long getLattitude() {
         return mLattitude;
     }
 
-    public void setmLattitude(long mLattitude) {
-        this.mLattitude = mLattitude;
+    public void setLattitude(long lattitude) {
+        this.mLattitude = lattitude;
     }
 
-    public long getmLongitude() {
+    public long getLongitude() {
         return mLongitude;
     }
 
-    public void setmLongitude(long mLongitude) {
-        this.mLongitude = mLongitude;
+    public void setLongitude(long longitude) {
+        this.mLongitude = longitude;
     }
 
-    public ForeignCollection<Event> getmEvents() {
-        return mEvents;
-    }
-    
     @Override
     public int hashCode() {
         return mID;
@@ -87,6 +101,6 @@ public class Location {
         if (obj == null || obj.getClass() != getClass()) {
             return false;
         }
-        return ((Location) obj).getmID() == mID;
+        return ((Location) obj).getID() == mID;
     }
 }

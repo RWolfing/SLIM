@@ -10,6 +10,7 @@ import org.glassfish.jersey.server.ResourceConfig;
 import slim.core.SlimService;
 import slim.core.impl.SlimServiceInMemory;
 import slim.rest.impl.EventResourceImpl;
+import slim.rest.impl.LocationResourceImpl;
 import slim.rest.impl.UserResourceImpl;
 
 /**
@@ -23,6 +24,7 @@ public class SlimApplication extends ResourceConfig{
    
         register(UserResourceImpl.class);
         register(EventResourceImpl.class);
+         register(LocationResourceImpl.class);
         
         register(new AbstractBinder() {
 

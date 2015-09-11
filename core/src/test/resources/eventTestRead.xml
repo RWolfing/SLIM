@@ -2,6 +2,7 @@
 <event id="5">
     <name>name</name>
     <location id="7">
+        <name>auto-generated</name>
         <lattitude>1000</lattitude>
         <longitude>1000</longitude>
     </location>

@@ -41,6 +41,7 @@ public abstract class RestBaseTest {
     protected User mPartyFriend2;
 
     protected Event mTestEvent;
+    protected Location mTestLocation;
 
     /**
      * Prepare the initial setup before testing
@@ -63,11 +64,11 @@ public abstract class RestBaseTest {
         mPartyFriend2 = gustav = mSlimDatabase.createUser(gustav);
         bianca = mSlimDatabase.createUser(bianca);
 
-        Location location0 = new Location(RandomUtils.nextLong(), RandomUtils.nextLong());
-        Location location1 = new Location(RandomUtils.nextLong(), RandomUtils.nextLong());
-        Location location2 = new Location(RandomUtils.nextLong(), RandomUtils.nextLong());
+        Location location0 = new Location("auto-generated", RandomUtils.nextLong(), RandomUtils.nextLong());
+        Location location1 = new Location("auto-generated", RandomUtils.nextLong(), RandomUtils.nextLong());
+        Location location2 = new Location("auto-generated", RandomUtils.nextLong(), RandomUtils.nextLong());
 
-        location0 = mSlimDatabase.createLocation(location0);
+        mTestLocation = location0 = mSlimDatabase.createLocation(location0);
         location1 = mSlimDatabase.createLocation(location1);
         location2 = mSlimDatabase.createLocation(location2);
 

@@ -5,6 +5,7 @@
  */
 package slim.core.impl;
 
+import com.j256.ormlite.stmt.UpdateBuilder;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +64,34 @@ public class SlimDBServiceImpl extends SlimDB implements SlimDBService {
             close();
         }
         return result;
+    }
+
+    /**
+     * Saves the given id by overwriting the name field of the location with the
+     * same id. This method should only be used if the same location already
+     * exists.
+     *
+     * @param location location that changed & should be saved
+     * @return success
+     */
+    @Override
+    public boolean saveLocation(Location location) {
+        if (!open() || location == null) {
+            return false;
+        }
+
+        boolean success = false;
+
+        try {
+            //Only update the name of a location
+            UpdateBuilder<Location, Integer> updateBuilder = mLocationDao.updateBuilder();
+            updateBuilder.updateColumnValue(Location.NAME_FIELD_NAME, location.getName());
+            updateBuilder.update();
+            success = true;
+        } catch (SQLException ex) {
+            Logger.getLogger(SlimDBServiceImpl.class.getName()).log(Level.SEVERE, "Could not update name of the location!", ex);
+        }
+        return success;
     }
 
     /**
@@ -263,7 +292,7 @@ public class SlimDBServiceImpl extends SlimDB implements SlimDBService {
 
     /**
      * Deletes the event in the database with the given id. An id of an event
-     * that does not exist in the database will be ignored. To keep the data 
+     * that does not exist in the database will be ignored. To keep the data
      * consistent all guest entries of the given event will be deleted too.
      *
      * @param id id of the event
@@ -356,10 +385,10 @@ public class SlimDBServiceImpl extends SlimDB implements SlimDBService {
         User user = getUserById(userId);
         GuestEntry result = null;
         //Check if the event & user do exist in the database
-        if (event != null || user != null) {
+        if (event != null && user != null) {
             try {
                 //Check if the user is not already a guest of this event
-                if (mGuestListDao.queryBuilder().where().eq(GuestEntry.USER_ID_FIELD_NAME, userId).queryForFirst() == null) {
+                if (!event.getGuests().contains(user)) {
                     //Create the entry
                     GuestEntry guestListEntry = new GuestEntry(event, user);
                     mGuestListDao.create(guestListEntry);
@@ -431,8 +460,7 @@ public class SlimDBServiceImpl extends SlimDB implements SlimDBService {
         }
         return result;
     }
-    
-    
+
     /**
      * Retrieves all events from the database where the user with the given id
      * is the organizer.
@@ -471,7 +499,7 @@ public class SlimDBServiceImpl extends SlimDB implements SlimDBService {
         Location result = null;
         try {
             //Check if the location already exists
-            Location existingLoc = retrieveLocation(location.getmLattitude(), location.getmLongitude());
+            Location existingLoc = retrieveLocation(location.getLattitude(), location.getLongitude());
             if (existingLoc != null) {
                 result = existingLoc;
             } else {
@@ -578,7 +606,8 @@ public class SlimDBServiceImpl extends SlimDB implements SlimDBService {
      * @param longitude longitude of the location
      * @return a location or null
      */
-    private Location retrieveLocation(long lattitude, long longitude) {
+    @Override
+    public Location retrieveLocation(long lattitude, long longitude) {
         if (!open()) {
             return null;
         }

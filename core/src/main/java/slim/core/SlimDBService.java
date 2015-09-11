@@ -33,10 +33,14 @@ public interface SlimDBService {
     List<User> getAllUsers();
 
     Location createLocation(Location location);
+    
+    boolean saveLocation(Location location);
 
     List<Location> getLocationWithinBounds(long lattiudeFrom, long longitudeFrom, long lattitudeTo, long longitudeTo);
-
+    
     Location getLocation(int id);
+    
+    Location retrieveLocation(long lattitude, long longitude);
 
     boolean deleteLocation(int id);
 

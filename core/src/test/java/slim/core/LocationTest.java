@@ -19,34 +19,36 @@ import slim.core.model.Event;
  */
 public class LocationTest extends BaseTest {
 
+    private final String mName = "auto-generated";
     private final long mLattitude = 123151231;
     private final long mLongitude = 123423512;
 
     @Test
     public void createLocation() {
-        Location location = new Location(mLattitude, mLongitude);
+        Location location = new Location(mName, mLattitude, mLongitude);
         Location createdLocation = mSlimDatabase.createLocation(location);
         assertThat(createdLocation, notNullValue());
 
-        Location fetchedLocation = mSlimDatabase.getLocation(createdLocation.getmID());
+        Location fetchedLocation = mSlimDatabase.getLocation(createdLocation.getID());
         assertThat(fetchedLocation, notNullValue());
-        assertThat(fetchedLocation.getmLattitude(), is(mLattitude));
-        assertThat(fetchedLocation.getmLongitude(), is(mLongitude));
+        assertThat(fetchedLocation.getName(), equalTo(mName));
+        assertThat(fetchedLocation.getLattitude(), is(mLattitude));
+        assertThat(fetchedLocation.getLongitude(), is(mLongitude));
     }
 
     @Test
     public void getLocInBoundsTest() throws SQLException {
         mSlimDatabase.clearAllTables();
 
-        Location locOutMinLat = new Location(99, 100);
-        Location locOutMinLong = new Location(100, 99);
+        Location locOutMinLat = new Location(mName, 99, 100);
+        Location locOutMinLong = new Location(mName, 100, 99);
 
-        Location locEdgeMin = new Location(100, 100);
-        Location locInBounds = new Location(500, 500);
-        Location locEdgeMax = new Location(1000, 1000);
+        Location locEdgeMin = new Location(mName, 100, 100);
+        Location locInBounds = new Location(mName, 500, 500);
+        Location locEdgeMax = new Location(mName, 1000, 1000);
 
-        Location locOutMaxLat = new Location(1001, 500);
-        Location locOutMaxLong = new Location(500, 1001);
+        Location locOutMaxLat = new Location(mName, 1001, 500);
+        Location locOutMaxLong = new Location(mName, 500, 1001);
 
         locOutMinLat = mSlimDatabase.createLocation(locOutMinLat);
         locOutMinLong = mSlimDatabase.createLocation(locOutMinLong);
@@ -66,6 +68,23 @@ public class LocationTest extends BaseTest {
         assertThat(result.contains(locOutMaxLat), is(false));
         assertThat(result.contains(locOutMaxLong), is(false));
     }
+    
+    @Test
+    public void updateLocation(){
+        Location location = new Location(mName, 900000, 100000);
+        location = mSlimDatabase.createLocation(location);
+        
+        location.setName("updated-name");
+        location.setLattitude(1);
+        location.setLongitude(1);
+        mSlimDatabase.saveLocation(location);
+        
+        location = mSlimDatabase.getLocation(location.getID());
+        assertThat(location.getName(), equalTo("updated-name"));
+        assertThat(location.getLattitude(), is(900000l));
+        assertThat(location.getLongitude(), is(100000l));
+        
+    }
 
     @Test
     public void deleteLocation() {
@@ -73,12 +92,12 @@ public class LocationTest extends BaseTest {
         Location location = createRandomLocation();
         assertThat(location, notNullValue());
 
-        boolean success = mSlimDatabase.deleteLocation(location.getmID());
+        boolean success = mSlimDatabase.deleteLocation(location.getID());
         assertThat(success, is(true));
 
         //With event
         Event event = createRandomEvent(null, null);
-        success = mSlimDatabase.deleteLocation(event.getmLocation().getmID());
+        success = mSlimDatabase.deleteLocation(event.getmLocation().getID());
         assertThat(success, is(false));
     }
 }

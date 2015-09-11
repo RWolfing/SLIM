@@ -29,7 +29,7 @@ public class SlimServiceInMemory implements SlimService {
         User organizer = mDataBaseHelper.getUserById(organizerId);
 
         if (organizer != null) {
-            Location location = mDataBaseHelper.createLocation(new Location(lattitude, longitude));
+            Location location = mDataBaseHelper.createLocation(new Location("auto-generated", lattitude, longitude));
             if (location != null) {
                 Event event = new Event(name, location, eventBegin, eventEnd, description, organizer);
                 return mDataBaseHelper.createEvent(event);
@@ -39,8 +39,23 @@ public class SlimServiceInMemory implements SlimService {
     }
 
     @Override
+    public Location createLocation(String locationName, long lattitude, long longitude) {
+        return mDataBaseHelper.createLocation(new Location(locationName, lattitude, longitude));
+    }
+
+    @Override
+    public Location getLocationById(int id) {
+        return mDataBaseHelper.getLocation(id);
+    }
+
+    @Override
     public boolean deleteEvent(int id) {
         return mDataBaseHelper.deleteEventById(id);
+    }
+
+    @Override
+    public boolean deleteLocation(int locationId) {
+        return mDataBaseHelper.deleteLocation(locationId);
     }
 
     @Override
@@ -80,8 +95,18 @@ public class SlimServiceInMemory implements SlimService {
     }
 
     @Override
+    public Location retrieveLocationByLongLat(long lattitude, long longitude) {
+        return mDataBaseHelper.retrieveLocation(lattitude, longitude);
+    }
+
+    @Override
     public boolean updateEvent(Event event) {
         return mDataBaseHelper.saveEvent(event);
+    }
+
+    @Override
+    public boolean updateLocation(Location location) {
+       return mDataBaseHelper.saveLocation(location);
     }
 
     @Override
@@ -100,7 +125,7 @@ public class SlimServiceInMemory implements SlimService {
         List<Event> result = new ArrayList<>();
         if (locations != null) {
             for (Location location : locations) {
-                result.addAll(location.getmEvents());
+                result.addAll(location.getEvents());
             }
             return result;
         }

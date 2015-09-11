@@ -3,6 +3,7 @@
    "name" : "name",
    "location" : {
       "id" : 0,
+      "name" : "auto-generated",
       "lattitude" : 500,
       "longitude" : 500
    },

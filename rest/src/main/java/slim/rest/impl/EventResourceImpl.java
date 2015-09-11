@@ -51,8 +51,12 @@ public class EventResourceImpl extends SlimResource implements EventRessource {
             event.setmEventBegin(eventBegin);
             event.setmEventEnd(eventEnd);
             event.setmDescription(description);
-            mSlimService.updateEvent(event);
-            return Response.ok(event).build();
+            if (mSlimService.updateEvent(event)) {
+                return Response.ok(event).build();
+            } else {
+                return Response.serverError().build();
+            }
+
         } else {
             return Response.status(Status.NOT_FOUND).build();
         }

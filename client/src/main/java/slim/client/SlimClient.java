@@ -5,6 +5,9 @@
  */
 package slim.client;
 
+import slim.client.services.EventService;
+import slim.client.services.SlimService;
+import slim.client.services.UserService;
 import slim.core.model.User;
 
 /**
