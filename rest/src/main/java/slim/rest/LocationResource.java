@@ -27,7 +27,7 @@ import javax.ws.rs.core.UriInfo;
  */
 @Path("locations")
 public interface LocationResource {
-    
+
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @POST
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -35,7 +35,7 @@ public interface LocationResource {
             @FormParam("name") String name,
             @FormParam("lattitude") long lattitude,
             @FormParam("longitude") long longitude);
-    
+
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @PUT
     @Path("{id}")
@@ -43,22 +43,22 @@ public interface LocationResource {
     Response updateLocation(
             @PathParam("id") int locationId,
             @QueryParam("name") @DefaultValue("") String name);
-    
-     @DELETE
+
+    @DELETE
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML})
     Response deleteLocation(@PathParam("id") int id);
-    
+
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML})
     Response fetchLocationById(@PathParam("id") int id);
-    
+
     @GET
     @Produces({MediaType.APPLICATION_XML})
     Response fetchLocationByLongLat(
             @QueryParam("lattitude") long lattitude,
             @QueryParam("longitude") long longitude);
-    
+
     //TODO fetch all
 }
