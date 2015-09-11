@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 import slim.core.model.Event;
+import slim.core.model.EventList;
 import slim.core.model.User;
 import slim.rest.EventRessource;
 
@@ -83,14 +84,23 @@ public class EventResourceImpl extends SlimResource implements EventRessource {
 
     @Override
     public Response fetchAllEvents() {
-        return Response.ok(mSlimService.getEvents()).build();
+        List<Event> events = mSlimService.getEvents();
+        if (events != null && events.size() > 0) {
+            EventList eventList = new EventList();
+            eventList.setEvents(events);
+            return Response.ok(eventList).build();
+        } else {
+            return Response.status(Status.NOT_FOUND).build();
+        }
     }
 
     @Override
     public Response getEventsWithUser(int userId) {
-        List<Event> result = mSlimService.getEventsWithUser(userId);
-        if (result != null) {
-            return Response.ok(result).build();
+        List<Event> events = mSlimService.getEventsWithUser(userId);
+        if (events != null && events.size() > 0) {
+            EventList eventList = new EventList();
+            eventList.setEvents(events);
+            return Response.ok(eventList).build();
         } else {
             return Response.status(Status.NOT_FOUND).build();
         }
@@ -98,9 +108,11 @@ public class EventResourceImpl extends SlimResource implements EventRessource {
 
     @Override
     public Response getEventsFromUser(int userId) {
-        List<Event> result = mSlimService.getEventsFromUser(userId);
-        if (result != null) {
-            return Response.ok(result).build();
+        List<Event> events = mSlimService.getEventsFromUser(userId);
+        if (events != null && events.size() > 0) {
+            EventList eventList = new EventList();
+            eventList.setEvents(events);
+            return Response.ok(eventList).build();
         } else {
             return Response.status(Status.NOT_FOUND).build();
         }
@@ -108,12 +120,26 @@ public class EventResourceImpl extends SlimResource implements EventRessource {
 
     @Override
     public Response getEventsWithinLocation(long lattitudeFrom, long lattiudeTo, long longitudeFrom, long longitudeTo) {
-        return Response.ok(mSlimService.getEventsWithinLocation(lattitudeFrom, lattiudeTo, longitudeFrom, longitudeTo)).build();
+        List<Event> events = mSlimService.getEventsWithinLocation(lattitudeFrom, lattiudeTo, longitudeFrom, longitudeTo);
+        if(events != null && events.size() > 0){
+            EventList eventList = new EventList();
+            eventList.setEvents(events);
+            return Response.ok(eventList).build();
+        } else {
+            return Response.status(Status.NOT_FOUND).build();
+        }
     }
 
     @Override
     public Response getEventsWithinGuestRange(int minGuests, int maxGuests) {
-        return Response.ok(mSlimService.getEventsWithinGuestRange(minGuests, maxGuests)).build();
+        List<Event> events = mSlimService.getEventsWithinGuestRange(minGuests, maxGuests);
+        if(events != null && events.size() > 0){
+            EventList eventList = new EventList();
+            eventList.setEvents(events);
+            return Response.ok(eventList).build();
+        } else {
+            return Response.status(Status.NOT_FOUND).build();
+        }
     }
 
     @Override
@@ -208,6 +234,5 @@ public class EventResourceImpl extends SlimResource implements EventRessource {
         } else {
             return Response.status(Status.NOT_FOUND).build();
         }
-
     }
 }

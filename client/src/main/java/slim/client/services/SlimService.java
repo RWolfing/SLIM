@@ -10,7 +10,10 @@ import java.io.StringReader;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpMethodBase;
+import org.eclipse.persistence.jaxb.MarshallerProperties;
 
 /**
  *
@@ -51,21 +54,45 @@ public class SlimService {
     }
 
     protected Object unmarshall(String content, Class clazz) throws JAXBException {
-        return unmarshallFromXML(new StringReader(content), JAXBContext.newInstance(clazz));
+        switch(mMediaType){
+            case XML:
+                return unmarshallFromXML(new StringReader(content), JAXBContext.newInstance(clazz));
+            case JSON:
+                return unmarshallFromJson(new StringReader(content), JAXBContext.newInstance(clazz), clazz);
+            default:
+                throw new UnsupportedOperationException("Unmarshalling for the given MediaType is not supported!");
+        }
     }
 
     private Object unmarshallFromXML(Reader in, JAXBContext jaxbc) throws JAXBException {
         Unmarshaller unmarshaller = jaxbc.createUnmarshaller();
         return unmarshaller.unmarshal(in);
     }
+    
+    private Object unmarshallFromJson(Reader in, JAXBContext jaxbc, Class clazz) throws JAXBException{
+        Unmarshaller unmarshaller = jaxbc.createUnmarshaller();
+        unmarshaller.setProperty(MarshallerProperties.MEDIA_TYPE, "application/json");
+        unmarshaller.setProperty(MarshallerProperties.JSON_INCLUDE_ROOT, false);
+        return unmarshaller.unmarshal(new StreamSource(in), clazz).getValue();
+    }
 
-    protected void whatAmIDoing(SlimResult result, String servicePath) {
+    protected void whatAmIDoing(SlimResult result, HttpMethodBase httpMethod) {
+        if (httpMethod == null) {
+            System.out.println("I am doing nothing....");
+            return;
+        }
+
         System.out.println();
-        System.out.println("--------- SERVICE CALL -----------");
-        System.out.println("Executed " + servicePath);
+        System.out.println("----------- SERVICE CALL -----------");
+        System.out.println("Executed " + httpMethod.getPath());
+        System.out.println("Type " + httpMethod.getName());
         System.out.println("Mediatype: " + mMediaType);
-        System.out.println("Response: " + result.getmResultStatus());
-        System.out.println("Result: " + result.getmResultContent());
-        System.out.println("------ SERVICE CALL  END ---------");
+        if (result != null) {
+            System.out.println("Response: " + result.getmResultStatus());
+            System.out.println("Result: " + result.getmResultContent());
+        } else {
+            System.out.println("The result was null....");
+        }
+        System.out.println("--------- SERVICE CALL END ---------");
     }
 }

@@ -31,7 +31,7 @@ public interface UserResource {
 
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @POST
-    @Produces({MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     Response createUser(@Context UriInfo uriInfo,
             @FormParam("nickname") String nickName,
             @FormParam("firstname") String firstName,
@@ -43,7 +43,7 @@ public interface UserResource {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @PUT
     @Path("{id}")
-    @Produces({MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     Response updateUser(
             @PathParam("id") int userId,
             @QueryParam("nickname") @DefaultValue("") String nickName,
@@ -53,21 +53,21 @@ public interface UserResource {
 
     @DELETE
     @Path("{id}")
-    @Produces({MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     Response deleteUser(@PathParam("id") int id);
 
     @GET
     @Path("{id}")
-    @Produces({MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     Response fetchUserById(@PathParam("id") int id);
 
     @GET
-    @Produces({MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     Response fetchAllUsers();
     
     @GET
     @Path("{idyou}/{idhim}")
-    @Produces({MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     Response doesHePartyWithMe(@PathParam("idyou") int idUser1, @PathParam("idhim") int idUser2);
     
     void setService(SlimService service);

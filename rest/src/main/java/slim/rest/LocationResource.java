@@ -46,19 +46,17 @@ public interface LocationResource {
 
     @DELETE
     @Path("{id}")
-    @Produces({MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     Response deleteLocation(@PathParam("id") int id);
 
     @GET
     @Path("{id}")
-    @Produces({MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     Response fetchLocationById(@PathParam("id") int id);
 
     @GET
-    @Produces({MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     Response fetchLocationByLongLat(
             @QueryParam("lattitude") long lattitude,
             @QueryParam("longitude") long longitude);
-
-    //TODO fetch all
 }

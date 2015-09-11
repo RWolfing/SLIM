@@ -11,6 +11,7 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 import slim.core.SlimService;
 import slim.core.model.User;
+import slim.core.model.UserList;
 import slim.rest.UserResource;
 
 /**
@@ -89,7 +90,9 @@ public class UserResourceImpl extends SlimResource implements UserResource {
         List<User> users = mSlimService.getUsers();
 
         if (users != null && users.size() > 0) {
-            return Response.status(Status.OK).entity(users).build();
+            UserList userList = new UserList();
+            userList.setUsers(users);
+            return Response.status(Status.OK).entity(userList).build();
         } else {
             return Response.status(Status.NOT_FOUND).build();
         }

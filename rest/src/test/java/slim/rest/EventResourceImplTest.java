@@ -21,6 +21,7 @@ import static org.mockito.Mockito.when;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import slim.core.model.Event;
+import slim.core.model.EventList;
 import slim.rest.impl.EventResourceImpl;
 
 /**
@@ -108,7 +109,7 @@ public class EventResourceImplTest extends RestBaseTest {
     public void fetchAllEventsTest() {
         Response response = mEventResource.fetchAllEvents();
         assertThat(response.getStatus(), is(Response.Status.OK.getStatusCode()));
-        List<Event> result = (List<Event>) response.getEntity();
+        List<Event> result = ((EventList) response.getEntity()).getEvents();
         assertThat(result.size(), is(SUM_EVENTS));
     }
 
@@ -117,7 +118,7 @@ public class EventResourceImplTest extends RestBaseTest {
         //Test success
         Response response = mEventResource.getEventsWithUser(mTestUser.getmID());
         assertThat(response.getStatus(), is(Response.Status.OK.getStatusCode()));
-        List<Event> result = (List<Event>) response.getEntity();
+        List<Event> result = ((EventList) response.getEntity()).getEvents();
         assertThat(result.size(), is(TEST_USER_SUM_EVENTS_JOINED));
 
         //Test failure not found
@@ -130,7 +131,7 @@ public class EventResourceImplTest extends RestBaseTest {
         //Test success
         Response response = mEventResource.getEventsFromUser(mTestUser.getmID());
         assertThat(response.getStatus(), is(Response.Status.OK.getStatusCode()));
-        List<Event> result = (List<Event>) response.getEntity();
+        List<Event> result = ((EventList) response.getEntity()).getEvents();
         assertThat(result.size(), is(TEST_USER_SUM_EVENTS_CREATED));
 
         //Test not found
@@ -140,7 +141,7 @@ public class EventResourceImplTest extends RestBaseTest {
 
     @Test
     public void getEventsWithinLocation() {
-        Response response = mEventResource.getEventsWithinLocation(RandomUtils.nextLong(), RandomUtils.nextLong(), RandomUtils.nextLong(), RandomUtils.nextLong());
+        Response response = mEventResource.getEventsWithinLocation(Long.MIN_VALUE, Long.MAX_VALUE, Long.MIN_VALUE, Long.MAX_VALUE);
         assertThat(response.getStatus(), is(Response.Status.OK.getStatusCode()));
     }
 

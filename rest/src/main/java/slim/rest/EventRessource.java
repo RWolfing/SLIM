@@ -8,7 +8,6 @@ package slim.rest;
 import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
-import javax.ws.rs.DefaultValue;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -30,7 +29,7 @@ public interface EventRessource {
 
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @POST
-    @Produces({MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     Response createEvent(@Context UriInfo uriInfo,
             @FormParam("name") String name,
             @FormParam("lattitude") long lattitude,
@@ -43,7 +42,7 @@ public interface EventRessource {
     
     @PUT
     @Path("{id}")
-    @Produces({MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     Response updateEvent(@Context UriInfo uriInfo,
             @PathParam("id") int eventId,
             @QueryParam("name") String name,
@@ -54,31 +53,31 @@ public interface EventRessource {
 
     @DELETE
     @Path("{id}")
-    @Produces({MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     Response deleteEvent(@PathParam("id") int id);
 
     @GET
     @Path("{id}")
-    @Produces({MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     Response fetchEventById(@PathParam("id") int id);
 
     @GET
-    @Produces({MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     Response fetchAllEvents();
 
     @GET
     @Path("withuser/{id}")
-    @Produces({MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     Response getEventsWithUser(@PathParam("id") int userId);
 
     @GET
     @Path("fromuser/{id}")
-    @Produces({MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     Response getEventsFromUser(@PathParam("id") int userId);
 
     @GET
     @Path("location/")
-    @Produces({MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     Response getEventsWithinLocation(
             @QueryParam("lattfrom") long lattitudeFrom,
             @QueryParam("lattto") long lattiudeTo,
@@ -87,35 +86,35 @@ public interface EventRessource {
     
     @GET
     @Path("guestrange/")
-    @Produces({MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     Response getEventsWithinGuestRange(
             @QueryParam("minguests") int minGuests,
             @QueryParam("maxguests") int maxGuests);
     
     @PUT
     @Path("addguest/{id}")
-    @Produces({MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     Response addGuestToEvent(@Context UriInfo uriInfo,
             @PathParam("eventId") int eventId,
             @QueryParam("userId") int userId);
     
     @PUT
     @Path("addguests/{eventId}")
-    @Produces({MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     Response addGuestsToEvent(@Context UriInfo uriInfo,
             @PathParam("eventId") int eventId,
             @QueryParam("userIds") final List<Integer> userids);
     
     @DELETE
     @Path("removeguest/{eventId}")
-    @Produces({MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     Response removeGuestFromEvent(@Context UriInfo uriInfo,
             @PathParam("eventId") int eventId,
             @QueryParam("userId") int userid);
     
     @DELETE
     @Path("removeguests/{eventId}")
-    @Produces({MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     Response removeGuestsFromEvent(@Context UriInfo uriInfo,
             @PathParam("eventId") int eventId,
             @QueryParam("userIds") final List<Integer> userids);

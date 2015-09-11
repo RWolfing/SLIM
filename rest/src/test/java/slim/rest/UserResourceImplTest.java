@@ -21,6 +21,7 @@ import org.mockito.stubbing.Answer;
 import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.Test;
 import slim.core.model.User;
+import slim.core.model.UserList;
 
 /**
  *
@@ -87,7 +88,7 @@ public class UserResourceImplTest extends RestBaseTest {
     public void fetchAllUsers() {
         Response response = mUserResource.fetchAllUsers();
         assertThat(response.getStatus(), is(Response.Status.OK.getStatusCode()));
-        List<User> result = (List<User>) response.getEntity();
+        List<User> result = ((UserList) response.getEntity()).getUsers();
         assertThat(result.size(), is(SUM_USERS));
     }
 

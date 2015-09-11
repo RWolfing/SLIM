@@ -5,12 +5,13 @@
  */
 package slim.client;
 
+import java.util.Calendar;
+import java.util.List;
 import slim.client.services.EventService;
 import slim.client.services.LocationService;
 import slim.client.services.SlimService;
 import slim.client.services.UserService;
 import slim.core.model.Event;
-import slim.core.model.Location;
 import slim.core.model.User;
 
 /**
@@ -18,35 +19,53 @@ import slim.core.model.User;
  * @author Robert
  */
 public class SlimClient {
-     private static final String serviceBaseURI = "http://localhost:8080";
-     
-    public static void main(String[] args){
-        UserService userService = new UserService(serviceBaseURI, SlimService.MediaType.XML);
-        EventService eventService = new EventService(serviceBaseURI, SlimService.MediaType.XML);
-        LocationService locationService = new LocationService(serviceBaseURI, SlimService.MediaType.XML);
+
+    private static final String serviceBaseURI = "http://localhost:8080";
+
+    private static UserService mUserService = new UserService(serviceBaseURI, SlimService.MediaType.JSON);
+    private static EventService mEventService = new EventService(serviceBaseURI, SlimService.MediaType.JSON);
+    private static LocationService mLocationService = new LocationService(serviceBaseURI, SlimService.MediaType.JSON);
+
+    public static void main(String[] args) {
+        testUserFunctionality();
+        testEventFunctionality();
+    }
+
+    private static void testUserFunctionality() {
+        System.out.println();
+        System.out.println("---- CREATING USER ----");
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(2000, 3, 20);
+        User userMax = mUserService.createUser("mmuster", "Max", "Mustermann", cal.getTimeInMillis(), "Super läufts", "www.geilesaeue.de").getmResultContent();
+
+        System.out.println();
+        System.out.println("---- UPDATING USER ----");
+        mUserService.updateUser(userMax.getmID(), "maxi", userMax.getmBirthday() + 10000000l, "Läuft immer besser", "www.nettebilder.de");
+
+        System.out.println();
+        System.out.println("---- RETRIEVING USER ----");
+        mUserService.fetchUserById(userMax.getmID());
+
+        System.out.println();
+        System.out.println("---- DELETING USER ----");
+        mUserService.deleteUser(userMax.getmID());
+
+        System.out.println();
+        System.out.println("---- RETRIEVING USER ----");
+        mUserService.fetchUserById(userMax.getmID());
         
-        User user1 = userService.createUser("Hansi", "Hansi", "Hinterseher", 5000000, "Super läufts", "www.geilesaeue.de").getmResultContent();
-        System.out.println("Created user: " + user1);
+        userMax = mUserService.createUser("mmuster", "Max", "Mustermann", cal.getTimeInMillis(), "Super läufts", "www.geilesaeue.de").getmResultContent();
+        userMax = mUserService.createUser("mmuster", "Max1", "Mustermann", cal.getTimeInMillis(), "Super läufts", "www.geilesaeue.de").getmResultContent();
+        userMax = mUserService.createUser("mmuster", "Max2", "Mustermann", cal.getTimeInMillis(), "Super läufts", "www.geilesaeue.de").getmResultContent();
         
-        User user2 = userService.createUser("Franzi", "Schmanzi", "Mustermann", 5000000, "Super läufts", "www.geileresaeue.de").getmResultContent();
-        System.out.println("Created user: " + user2);
+        mUserService.fetchAllUsers();
+    }
+    
+    private static void testEventFunctionality(){
+        User userMax = mUserService.createUser("mmuster", "Max", "Mustermann", 5910591000l, "Super läufts", "www.geilesaeue.de").getmResultContent();
+        Event event = mEventService.createEvent("test", 5000, 5000, 500, 5000, "description", userMax.getmID()).getmResultContent();
         
-        User user3 = userService.createUser("Wilder", "Hugo", "Haudrauf", 549814900, "Super läufts", "www.geilesaeue.de").getmResultContent();
-        System.out.println("Created user: " + user3);
-        
-        User user4 = userService.createUser("Schnegge", "Jessica", "Joil", 16505651, "Super läufts", "www.geilesaeue.de").getmResultContent();
-        System.out.println("Created user: " + user4);
-        
-        User user5 = userService.createUser("KeineFreunde", "Kevin", "Knoll", 987941, "Super läufts", "www.geilesaeue.de").getmResultContent();
-        System.out.println("Created user: " + user5);
-        
-        User user6 = userService.createUser("EndeGelaende", "Klaus", "Kick", 498191951, "Super läufts", "www.geilesaeue.de").getmResultContent();
-        System.out.println("Created user: " + user6);
-        
-        Event event1 = eventService.createEvent("Testevent1", 71010, 8000, 90000, 150000, "Description Testevent", user1.getmID()).getmResultContent();
-        System.out.println("Created event: " + event1);
-        
-        Location location1 = locationService.createLocation("Testlocation", 80000, 71010).getmResultContent();
-        System.out.println("Created location: " + location1);
+        List<Event> events = mEventService.fetchAllEvents().getmResultContent();
     }
 }
