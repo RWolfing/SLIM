@@ -11,13 +11,25 @@ package slim.client.services;
  * @param <T>
  */
 public class SlimResult<T> {
-    
-    private final T mResultContent;
-    private final int mResultStatus;
-    
-    public SlimResult(int status, T content){
+
+    private T mResultContent;
+    private int mResultStatus;
+
+    public SlimResult(int status, T content) {
         mResultStatus = status;
         mResultContent = content;
+    }
+    
+    public SlimResult(T content){
+        
+    }
+
+    public void setResultContent(T resultContent) {
+        mResultContent = resultContent;
+    }
+
+    public void setStatus(int status) {
+        mResultStatus = status;
     }
 
     public T getmResultContent() {

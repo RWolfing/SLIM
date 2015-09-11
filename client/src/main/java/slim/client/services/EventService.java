@@ -45,7 +45,7 @@ public class EventService extends SlimService {
         try {
             int status = mHttpClient.executeMethod(postMethod);
             Event event = (Event) unmarshall(postMethod.getResponseBodyAsString(), Event.class);
-            return new SlimResult<>(status, null);
+            return new SlimResult<>(status, event);
         } catch (IOException ex) {
             Logger.getLogger(EventService.class.getName()).log(Level.SEVERE, null, ex);
         } catch (JAXBException ex) {
