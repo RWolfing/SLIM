@@ -42,6 +42,8 @@ public class SlimClient {
     private Scanner mScanner;
     private BufferedReader mReader;
 
+    private SlimService.MediaType mMediaType = SlimService.MediaType.JSON;
+
     public SlimClient() {
         mScanner = new Scanner(System.in);
     }
@@ -61,7 +63,7 @@ public class SlimClient {
                     break;
                 case 2:
                     setLoggingEnabled(true);
-                    testUserFunctionality();
+                    testUserSimpleLifeCycle();
                     break;
                 case 3:
                     setLoggingEnabled(true);
@@ -72,7 +74,18 @@ public class SlimClient {
                     break;
                 case 5:
                     setLoggingEnabled(true);
-                    testEventFunctionality();
+                    testEventSimpleLifeCycle();
+                    break;
+                case 6:
+                    setLoggingEnabled(true);
+                    testLocationSimpleLifeCycle();
+                    break;
+                case 7:
+                    setLoggingEnabled(true);
+                    testGuestLifeCycle();
+                    break;
+                case 8:
+                    switchMediaType();
                     break;
                 default:
                     System.out.println("No valid option!");
@@ -98,8 +111,11 @@ public class SlimClient {
         System.out.println("| 0: To Exit programm.. |");
         System.out.println("| 1: Setup Datapool |");
         System.out.println("| 4: Cleanup Datapool |");
-        System.out.println("| 2: Show User create->update->retrieve->delete->retrieve |");
-         System.out.println("| 5: Show Evemt create->update->retrieve |");
+        System.out.println("| 8: Switch MediaType, Active: " + mMediaType);
+        System.out.println("| 2: Test User Lifecylce |");
+        System.out.println("| 5: Test Event Lifecylce |");
+        System.out.println("| 6: Test Location Lifecycle |");
+        System.out.println("| 7: Test Guest Lifecycle |");
         System.out.println("| 3: Fetch all users |");
     }
 
@@ -139,43 +155,109 @@ public class SlimClient {
         }
     }
 
-    public void testUserFunctionality() {
-        System.out.println();
-        System.out.println("---- CREATING USER ----");
-
+    public void testUserSimpleLifeCycle() {
+        printMessage("creating user");
         Calendar cal = Calendar.getInstance();
         cal.set(2000, 3, 20);
-        User userMax = mUserService.createUser("mizekate", "Max", "Mustermann", cal.getTimeInMillis(), "Super läufts", "www.geilesaeue.de").getResultContent();
-
-        System.out.println();
-        System.out.println("---- UPDATING USER ----");
-        mUserService.updateUser(userMax.getID(), "maxi", userMax.getBirthday() + 10000000l, "Läuft immer besser", "www.nettebilder.de");
-
-        System.out.println();
-        System.out.println("---- RETRIEVING USER ----");
+        User userMax = mUserService.createUser("mschmitz", "Mario ", "Schmitz", cal.getTimeInMillis(), "Super laeufts", "www.mario.de").getResultContent();
+        printMessage("updating user");
+        mUserService.updateUser(userMax.getID(), "maxi", userMax.getBirthday() + 10000000l, "Laeuft immer besser", "www.mario-update.de");
+        printMessage("retrieving user");
+        mUserService.fetchUserById(userMax.getID());
+        printMessage("deleting user");
+        mUserService.deleteUser(userMax.getID());
+        printMessage("retrieving user");
         mUserService.fetchUserById(userMax.getID());
     }
-    
-    public void testEventFunctionality(){
-        printMessage("creating event");    
+
+    public void testEventSimpleLifeCycle() {
+        if (mUserGSchulze == null) {
+            System.err.println("Needed User is missing, pls setup datapool first!");
+            return;
+        }
+        printMessage("creating event");
         Event event = mEventService.createEvent("CreatedEvent", 100, 500, 4560540l, 987985109510l, "Ein neu erzeugter Event", mUserGSchulze.getID()).getResultContent();
         printMessage("updating event");
         mEventService.updateEvent(event.getID(), "UpdatedEvent", 10, 100, "Ein geupdateter Event").getResultContent();
         printMessage("retrieving event");
         mEventService.fetchEventById(event.getID());
+        printMessage("deleting event");
+        mEventService.deleteEvent(event.getID());
+        printMessage("retrieving event");
+        mEventService.fetchEventById(event.getID());
     }
-    
-    private void printMessage(String message){
+
+    public void testLocationSimpleLifeCycle() {
+        printMessage("creating location");
+        Location location = mLocationService.createLocation("Max Location", Long.MAX_VALUE, Long.MAX_VALUE).getResultContent();
+        printMessage("updating location");
+        mLocationService.updateLocation(location.getID(), "Updated Max Location");
+        printMessage("retrieving location by id");
+        mLocationService.fetchLocationById(location.getID());
+        printMessage("retrieving location by lat/long (SUCCESS)");
+        mLocationService.fetchLocationLongLat(location.getLattitude(), location.getLongitude());
+        printMessage("retrieving location by lat/long (NOT FOUND)");
+        mLocationService.fetchLocationLongLat(Long.MIN_VALUE, Long.MIN_VALUE);
+        printMessage("deleting location");
+        mLocationService.deleteLocation(location.getID());
+        printMessage("retrieving location");
+        mLocationService.fetchLocationById(location.getID());
+    }
+
+    public void testGuestLifeCycle() {
+        if (mUserABranco == null) {
+            System.err.println("Needed Users & Events are missing, pls setup datapool first!");
+            return;
+        }
+        printMessage("adding guest " + mUserABranco.getID() + " to event " + mEventStandard.getID());
+        mEventService.addGuestToEvent(mEventStandard.getID(), mUserABranco.getID());
+
+        printMessage("adding guest " + mUserLKopfer.getID() + " to event " + mEventStandard.getID());
+        mEventService.addGuestToEvent(mEventStandard.getID(), mUserLKopfer.getID());
+
+        printMessage("adding invalid user " + Integer.MAX_VALUE + " to event " + mEventStandard.getID());
+        mEventService.addGuestToEvent(mEventStandard.getID(), Integer.MAX_VALUE);
+
+        printMessage("retrieving event " + mEventStandard.getID());
+        mEventService.fetchEventById(mEventStandard.getID());
+
+        printMessage("removing guest " + mUserABranco.getID() + " from event " + mEventStandard.getID());
+        mEventService.removeGuestFromEvent(mEventStandard.getID(), mUserABranco.getID());
+
+        printMessage("removing guest " + mUserLKopfer.getID() + " from event " + mEventStandard.getID());
+        mEventService.removeGuestFromEvent(mEventStandard.getID(), mUserLKopfer.getID());
+
+        printMessage("retrieving event " + mEventStandard.getID());
+        mEventService.fetchEventById(mEventStandard.getID());
+    }
+
+    private void printMessage(String message) {
         System.out.println("----" + message.toUpperCase() + "----");
     }
 
     public void testUserFetchAll() {
         mUserService.fetchAllUsers();
     }
-    
-    public void setLoggingEnabled(boolean enabled){
+
+    public void setLoggingEnabled(boolean enabled) {
         mUserService.setLoggingEnabled(enabled);
         mEventService.setLoggingEnabled(enabled);
         mLocationService.setLoggingEnabled(enabled);
+    }
+
+    public void switchMediaType() {
+        switch (mMediaType) {
+            case JSON:
+                mMediaType = SlimService.MediaType.XML;
+                break;
+            case XML:
+                mMediaType = SlimService.MediaType.JSON;
+                break;
+            default:
+                break;
+        }
+        mUserService.setMediaType(mMediaType);
+        mEventService.setMediaType(mMediaType);
+        mLocationService.setMediaType(mMediaType);
     }
 }

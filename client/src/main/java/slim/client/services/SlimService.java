@@ -1,7 +1,10 @@
 package slim.client.services;
 
+import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -124,7 +127,6 @@ public class SlimService {
                 return;
             }
 
-            System.out.println();
             System.out.println("----------- SERVICE CALL -----------");
             System.out.println("Executed " + httpMethod.getPath());
             System.out.println("QueryParams " + httpMethod.getQueryString());
@@ -135,6 +137,13 @@ public class SlimService {
                 System.out.println("Result: " + result.getResultContent());
             } else {
                 System.out.println("The result was null....");
+            }
+            if (result.getResultStatus() == 200 || result.getResultStatus() == 201) {
+                try {
+                    System.out.println("Response Raw: " + httpMethod.getResponseBodyAsString());
+                } catch (IOException ex) {
+                    System.out.println("Response Raw: " + "IO Exception could not retrieve...");
+                }
             }
             System.out.println("--------- SERVICE CALL END ---------");
         }
