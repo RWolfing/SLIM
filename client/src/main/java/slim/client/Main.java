@@ -13,6 +13,7 @@ package slim.client;
 public class Main {
     
     public static void main(String[] args) {
-       
+       SlimClient client = new SlimClient();
+       client.start();
     }
 }

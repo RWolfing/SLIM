@@ -117,6 +117,8 @@ public class SlimClient {
     }
 
     public void testUserFunctionality() {
+        cleanupDatabase();
+        mUserService.setLoggingEnabled(true);
         System.out.println();
         System.out.println("---- CREATING USER ----");
 
@@ -139,10 +141,6 @@ public class SlimClient {
         System.out.println();
         System.out.println("---- RETRIEVING USER ----");
         mUserService.fetchUserById(userMax.getmID());
-
-        userMax = mUserService.createUser("mmuster", "Max", "Mustermann", cal.getTimeInMillis(), "Super läufts", "www.geilesaeue.de").getResultContent();
-        userMax = mUserService.createUser("mmuster", "Max1", "Mustermann", cal.getTimeInMillis(), "Super läufts", "www.geilesaeue.de").getResultContent();
-        userMax = mUserService.createUser("mmuster", "Max2", "Mustermann", cal.getTimeInMillis(), "Super läufts", "www.geilesaeue.de").getResultContent();
 
         mUserService.fetchAllUsers();
     }
