@@ -55,8 +55,8 @@ public class EventTest extends BaseTest {
         User guest = createRandomUser();
 
         //Create a event
-        Event event = createRandomEvent(null, organzier);
-        assertThat(event, notNullValue());
+        Event createdEvent = createRandomEvent(null, organzier);
+        assertThat(createdEvent, notNullValue());
 
         //Update the event with new values
         String newDescription = "new description";
@@ -64,6 +64,7 @@ public class EventTest extends BaseTest {
         long newEventBegin = 1000;
         long newEventEnd = 500000000;
 
+        Event event = mSlimService.getEventById(createdEvent.getmID());
         event.setmDescription(newDescription);
         event.setmEventBegin(newEventBegin);
         event.setmEventEnd(newEventEnd);

@@ -10,3 +10,13 @@ dependencies{
 if (!hasProperty('mainClass')) {
     ext.mainClass = 'slim.client.Main'
 }
+
+run{
+ standardInput = System.in
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'slim.client.Main'
+    }
+} 

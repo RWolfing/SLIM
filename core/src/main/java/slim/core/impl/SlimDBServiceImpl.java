@@ -84,10 +84,15 @@ public class SlimDBServiceImpl extends SlimDB implements SlimDBService {
 
         try {
             //Only update the name of a location
-            UpdateBuilder<Location, Integer> updateBuilder = mLocationDao.updateBuilder();
-            updateBuilder.updateColumnValue(Location.NAME_FIELD_NAME, location.getName());
-            updateBuilder.update();
-            success = true;
+            Location existingLoc = mLocationDao.queryForId(location.getID());
+            {
+                if (existingLoc != null) {
+                    existingLoc.setName(location.getName());
+                    mLocationDao.update(existingLoc);
+                    success = true;
+                }
+            }
+
         } catch (SQLException ex) {
             Logger.getLogger(SlimDBServiceImpl.class.getName()).log(Level.SEVERE, "Could not update name of the location!", ex);
         }
@@ -109,8 +114,17 @@ public class SlimDBServiceImpl extends SlimDB implements SlimDBService {
 
         boolean success = false;
         try {
-            mUserDao.update(user);
-            success = true;
+            User existingUsers = mUserDao.queryForId(user.getmID());
+            if (existingUsers != null) {
+                existingUsers.setmNickName(user.getmNickName());
+                existingUsers.setmFirstName(user.getmFirstName());
+                existingUsers.setmLastName(user.getmLastName());
+                existingUsers.setmBirthday(user.getmBirthday());
+                existingUsers.setmAbout(user.getmAbout());
+                existingUsers.setmImageUrl(user.getmImageUrl());
+                mUserDao.update(existingUsers);
+                success = true;
+            }
         } catch (SQLException ex) {
             Logger.getLogger(SlimDBServiceImpl.class.getName()).log(Level.SEVERE, "Could not save user " + user.getmID(), ex);
         } finally {
@@ -235,18 +249,22 @@ public class SlimDBServiceImpl extends SlimDB implements SlimDBService {
 
         boolean success = false;
         try {
-            mEventDao.createOrUpdate(event);
-            /**
-             * The guests may have changed, so we query for all guest entries
-             * delete & recreated them with the new data.
-             */
-            List<GuestEntry> entries = mGuestListDao.queryBuilder().where().eq(GuestEntry.EVENT_ID_FIELD_NAME, event.getmID()).query();
-            mGuestListDao.delete(entries);
-            for (User guest : event.getGuests()) {
-                //Create the guest entries again
-                addGuestToEvent(event.getmID(), guest.getmID());
+            Event createdEvent = mEventDao.queryForId(event.getmID());
+            if (createdEvent != null) {
+                event.setmID(createdEvent.getmID());
+                mEventDao.update(event);
+                /**
+                 * The guests may have changed, so we query for all guest
+                 * entries delete & recreated them with the new data.
+                 */
+                List<GuestEntry> entries = mGuestListDao.queryBuilder().where().eq(GuestEntry.EVENT_ID_FIELD_NAME, event.getmID()).query();
+                mGuestListDao.delete(entries);
+                for (User guest : event.getGuests()) {
+                    //Create the guest entries again
+                    addGuestToEvent(event.getmID(), guest.getmID());
+                }
+                success = true;
             }
-            success = true;
         } catch (SQLException ex) {
             Logger.getLogger(SlimDBServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
             success = false;

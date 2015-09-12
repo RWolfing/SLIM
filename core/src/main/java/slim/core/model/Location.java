@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Model for a location
- * 
+ *
  * @author Robert Wolfinger
  */
 @XmlRootElement(name = "location")
@@ -54,6 +54,10 @@ public class Location {
         mName = name;
         mLattitude = lattitude;
         mLongitude = longitude;
+    }
+
+    public void setID(int id) {
+        mID = id;
     }
 
     public int getID() {

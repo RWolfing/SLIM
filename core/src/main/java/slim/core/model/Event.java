@@ -62,6 +62,10 @@ public class Event {
         mGuests = new ArrayList();
         mOrganizer = organizer;
     }
+    
+    public void setmID(int id){
+        mID = id;
+    }
 
     public int getmID() {
         return mID;

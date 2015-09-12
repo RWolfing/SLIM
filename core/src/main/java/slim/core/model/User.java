@@ -51,6 +51,10 @@ public class User {
         mAbout = about;
         mImageUrl = imageUrl;
     }
+    
+    public void setmID(int id){
+        mID = id;
+    }
 
     public int getmID() {
         return mID;

@@ -52,13 +52,23 @@ public class SlimClient {
             showAvailableOptions();
             int input = mScanner.nextInt();
             switch (input) {
+                case 0:
+                    nextRound = false;
+                    break;
                 case 1:
+                    setLoggingEnabled(false);
+                    setupDataPool();
+                    break;
+                case 2:
+                    setLoggingEnabled(true);
                     testUserFunctionality();
                     break;
+                case 3:
+                    setLoggingEnabled(true);
+                    testUserFetchAll();
+                    break;
                 default:
-                    System.out.println();
                     System.out.println("No valid option!");
-                    nextRound = false;
             }
         }
 
@@ -78,10 +88,14 @@ public class SlimClient {
 
     public void showAvailableOptions() {
         System.out.println("|------- Available options --------|");
-        System.out.println("| 1: Show User create->update->retrieve->delete->retrieve |");
+        System.out.println("| 0: To Exit programm.. |");
+        System.out.println("| 1: Setup Datapool |");
+        System.out.println("| 2: Show User create->update->retrieve->delete->retrieve |");
+        System.out.println("| 3: Fetch all users |");
     }
 
     public boolean setupDataPool() {
+        cleanupDatabase();
         System.out.println("Setting up data pool.....");
         //Setup users
         mCalendar.set(2000, 3, 20);
@@ -117,14 +131,12 @@ public class SlimClient {
     }
 
     public void testUserFunctionality() {
-        cleanupDatabase();
-        mUserService.setLoggingEnabled(true);
         System.out.println();
         System.out.println("---- CREATING USER ----");
 
         Calendar cal = Calendar.getInstance();
         cal.set(2000, 3, 20);
-        User userMax = mUserService.createUser("mmuster", "Max", "Mustermann", cal.getTimeInMillis(), "Super läufts", "www.geilesaeue.de").getResultContent();
+        User userMax = mUserService.createUser("mizekate", "Max", "Mustermann", cal.getTimeInMillis(), "Super läufts", "www.geilesaeue.de").getResultContent();
 
         System.out.println();
         System.out.println("---- UPDATING USER ----");
@@ -133,15 +145,9 @@ public class SlimClient {
         System.out.println();
         System.out.println("---- RETRIEVING USER ----");
         mUserService.fetchUserById(userMax.getmID());
+    }
 
-        System.out.println();
-        System.out.println("---- DELETING USER ----");
-        mUserService.deleteUser(userMax.getmID());
-
-        System.out.println();
-        System.out.println("---- RETRIEVING USER ----");
-        mUserService.fetchUserById(userMax.getmID());
-
+    public void testUserFetchAll() {
         mUserService.fetchAllUsers();
     }
 
@@ -150,5 +156,11 @@ public class SlimClient {
         Event event = mEventService.createEvent("test", 5000, 5000, 500, 5000, "description", userMax.getmID()).getResultContent();
 
         List<Event> events = mEventService.fetchAllEvents().getResultContent();
+    }
+    
+    public void setLoggingEnabled(boolean enabled){
+        mUserService.setLoggingEnabled(enabled);
+        mEventService.setLoggingEnabled(enabled);
+        mLocationService.setLoggingEnabled(enabled);
     }
 }

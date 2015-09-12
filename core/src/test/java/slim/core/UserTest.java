@@ -95,7 +95,7 @@ public class UserTest extends BaseTest {
         assertThat(success, is(true));
 
         //Retrieve the user and compare fields
-        user = mSlimDatabase.getUserById(user.getmID());
+        user = mSlimDatabase.getUserById(createdUser.getmID());
         assertThat(newNickName, is(equalTo(user.getmNickName())));
         assertThat(newUserName, is(equalTo(user.getmFirstName())));
         assertThat(newUserLastName, is(equalTo(user.getmLastName())));
