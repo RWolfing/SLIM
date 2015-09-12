@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package slim.core.model;
 
 import com.j256.ormlite.field.DatabaseField;
@@ -12,14 +7,16 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
- * @author Robert
+ * Model that connects a event with a user (guest)
+ * 
+ * @author Robert Wolfinger
  */
 @XmlRootElement(name = "guestlist")
 @XmlAccessorType(XmlAccessType.FIELD)
 @DatabaseTable(tableName = "guestlist")
 public class GuestEntry {
 
+    //Column names needed to query for values
     public final static String USER_ID_FIELD_NAME = "user_id";
     public final static String EVENT_ID_FIELD_NAME = "event_id";
      

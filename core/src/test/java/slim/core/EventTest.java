@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package slim.core;
 
 import java.sql.SQLException;
@@ -14,23 +9,31 @@ import slim.core.model.Event;
 import slim.core.model.User;
 
 /**
+ * Class to test the functionality of the event model and all connected service
+ * write & reads
  *
- * @author Robert
+ * @author Robert Wolfinger
  */
 public class EventTest extends BaseTest {
 
     @Test
     public void createEventTest() throws SQLException {
         /**
-         * Neuen Event erzeugen
+         * Create new organizer
          */
         User organzier = createRandomUser();
 
+        /**
+         * Create new event
+         */
         Event event = createRandomEvent(null, organzier);
         assertThat(event, notNullValue());
         assertThat(event.getmLocation(), notNullValue());
         assertThat(event.getmOrganizer(), notNullValue());
 
+        /**
+         * Read the event from the db & check every field
+         */
         Event fetchedEvent = mSlimDatabase.getEventById(event.getmID());
         assertThat(fetchedEvent.getmName(), is(equalTo(event.getmName())));
         assertThat(fetchedEvent.getmLocation(), notNullValue());
@@ -46,15 +49,16 @@ public class EventTest extends BaseTest {
 
     @Test
     public void updateEventTest() throws SQLException {
-        /**
-         * Neuen Event erzeugen
-         */
+        //Create a organizer
         User organzier = createRandomUser();
+        //Create a guest
         User guest = createRandomUser();
 
+        //Create a event
         Event event = createRandomEvent(null, organzier);
         assertThat(event, notNullValue());
 
+        //Update the event with new values
         String newDescription = "new description";
         String newName = "new name";
         long newEventBegin = 1000;
@@ -76,31 +80,45 @@ public class EventTest extends BaseTest {
     }
 
     @Test
-    public void addGuestsToEventTest() throws SQLException {
+    public void guestsOfEventTest() throws SQLException {
+        //Create a events
         Event event = createRandomEvent(null, null);
+        //Create guests
         User guest1 = createRandomUser();
         User guest2 = createRandomUser();
+        //Add the guest & save the event
+        event.addGuest(guest1);
+        event.addGuest(guest2);
+        boolean success = mSlimDatabase.saveEvent(event);
+        assertThat(success, is(true));
 
-        event.getGuests().add(guest1);
-        event.getGuests().add(guest2);
-        mSlimDatabase.saveEvent(event);
-
+        //Fetch event from db and check if guests match
         event = mSlimDatabase.getEventById(event.getmID());
         assertThat(event.getGuests().contains(guest1), is(true));
         assertThat(event.getGuests().contains(guest2), is(true));
         assertThat(event.getGuests().size(), is(2));
+
+        //Remove guest from event
+        event.removeGuest(guest1);
+        success = mSlimDatabase.saveEvent(event);
+        assertThat(success, is(true));
+
+        //Fetch event from db and check if guests match
+        event = mSlimDatabase.getEventById(event.getmID());
+        assertThat(event.getGuests().contains(guest1), is(false));
+        assertThat(event.getGuests().contains(guest2), is(true));
     }
 
     @Test
     public void deleteEventById() throws SQLException {
-        /**
-         * Neuen Event erzeugen
-         */
+        //Create event organizer
         User organzier = createRandomUser();
 
+        //Create event
         Event event = createRandomEvent(null, organzier);
         assertThat(event, notNullValue());
 
+        //Delete event
         mSlimService.deleteEvent(event.getmID());
         event = mSlimService.getEventById(event.getmID());
         assertThat(event, nullValue());
@@ -108,8 +126,10 @@ public class EventTest extends BaseTest {
 
     @Test
     public void getAllEvents() throws SQLException {
+        //Create organizer
         User organzier = createRandomUser();
 
+        //Create 3 events
         Event event1 = createRandomEvent(null, organzier);
         assertThat(event1, notNullValue());
 
@@ -119,9 +139,12 @@ public class EventTest extends BaseTest {
         Event event3 = createRandomEvent(null, organzier);
         assertThat(event3, notNullValue());
 
+        //Retrieve all events and check if the size is 3
         List<Event> allEvents = mSlimDatabase.getAllEvents();
         assertThat(allEvents, notNullValue());
         assertThat(allEvents.size(), is(3));
-
+        assertThat(allEvents.contains(event1), is(true));
+        assertThat(allEvents.contains(event2), is(true));
+        assertThat(allEvents.contains(event3), is(true));
     }
 }

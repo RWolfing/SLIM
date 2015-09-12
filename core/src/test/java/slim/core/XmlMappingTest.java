@@ -30,8 +30,9 @@ import slim.core.model.GuestEntry;
 import slim.core.model.Location;
 
 /**
+ * Class to test the xml mapping of all models
  *
- * @author Robert
+ * @author Robert Wolfinger
  */
 public class XmlMappingTest extends BaseTest {
 
@@ -78,7 +79,6 @@ public class XmlMappingTest extends BaseTest {
         mMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
         mUnmarshaller = context.createUnmarshaller();
-
     }
 
     @Test
@@ -108,7 +108,6 @@ public class XmlMappingTest extends BaseTest {
         assertThat(desUser.getmBirthday(), is(user.getmBirthday()));
     }
 
-    //TODO was ist mit der gästeliste
     @Test
     public void createValidEventXmlFile() throws IOException, JAXBException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
         if (mEventTestFileWrite.exists()) {
@@ -118,21 +117,30 @@ public class XmlMappingTest extends BaseTest {
         User organizer = new User("organizer", "organizer", "organizer", 0, "about", "imageurl");
         User guest1 = new User("guest", "guest", "guest", 0, "about", "imageurl");
         User guest2 = new User("guest2", "guest2", "guest2", 0, "about", "imageurl");
-        
+
         /**
-         * IDs will be created through the underlying database. But here we wont be saving any users to the database, so the ids will be missing.
+         * IDs will be created through the underlying database. But here we wont
+         * be saving any users to the database, so the ids will be missing.
          * Therefore we will smart and set them through reflection ;).
          */
-        Field guestId = User.class.getDeclaredField("mID");
-        guestId.setAccessible(true);
-        guestId.set(guest1, 1);
-        guestId.set(guest2, 2);
-      
+        Field guestId = User.class
+                .getDeclaredField("mID");
+        guestId.setAccessible(
+                true);
+        guestId.set(guest1,
+                1);
+        guestId.set(guest2,
+                2);
+
         Location location = new Location("auto-generated", 500, 500);
         Event event = new Event("name", location, 0, 10000, "description", organizer);
+
         event.addGuest(guest1);
+
         event.addGuest(guest2);
-        mMarshaller.marshal(event, new FileWriter(mEventTestFileWrite));
+
+        mMarshaller.marshal(event,
+                new FileWriter(mEventTestFileWrite));
 
         //Check if file was created
         assertThat(mEventTestFileWrite.exists(), is(true));
@@ -161,7 +169,6 @@ public class XmlMappingTest extends BaseTest {
 
     @Test
     public void loadUserFromXmlFile() throws JAXBException, FileNotFoundException {
-
         User user = (User) mUnmarshaller.unmarshal(new FileReader(mUserTestFileRead));
 
         assertThat(user.getmID(), is(mReadUserId));
@@ -175,7 +182,6 @@ public class XmlMappingTest extends BaseTest {
     //TODO Guestlist
     @Test
     public void loadEventFromXmlFile() throws JAXBException, FileNotFoundException {
-
         Event event = (Event) mUnmarshaller.unmarshal(new FileReader(mEventTestFileRead));
 
         assertThat(event.getmID(), is(mReadEventID));

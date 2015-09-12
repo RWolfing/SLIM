@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package slim.core;
 
 import java.sql.SQLException;
@@ -14,8 +9,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import slim.core.model.Event;
 
 /**
+ * Class to test all read & writes of a location
  *
- * @author Robert
+ * @author Robert Wolfinger
  */
 public class LocationTest extends BaseTest {
 
@@ -25,10 +21,12 @@ public class LocationTest extends BaseTest {
 
     @Test
     public void createLocation() {
+        //Create location
         Location location = new Location(mName, mLattitude, mLongitude);
         Location createdLocation = mSlimDatabase.createLocation(location);
         assertThat(createdLocation, notNullValue());
 
+        //Fetch location & compares values
         Location fetchedLocation = mSlimDatabase.getLocation(createdLocation.getID());
         assertThat(fetchedLocation, notNullValue());
         assertThat(fetchedLocation.getName(), equalTo(mName));
@@ -40,6 +38,7 @@ public class LocationTest extends BaseTest {
     public void getLocInBoundsTest() throws SQLException {
         mSlimDatabase.clearAllTables();
 
+        //Create a couple of locations with edge cases
         Location locOutMinLat = new Location(mName, 99, 100);
         Location locOutMinLong = new Location(mName, 100, 99);
 
@@ -50,6 +49,7 @@ public class LocationTest extends BaseTest {
         Location locOutMaxLat = new Location(mName, 1001, 500);
         Location locOutMaxLong = new Location(mName, 500, 1001);
 
+        //Save the locations in the dabase
         locOutMinLat = mSlimDatabase.createLocation(locOutMinLat);
         locOutMinLong = mSlimDatabase.createLocation(locOutMinLong);
         locEdgeMin = mSlimDatabase.createLocation(locEdgeMin);
@@ -58,6 +58,7 @@ public class LocationTest extends BaseTest {
         locOutMaxLat = mSlimDatabase.createLocation(locOutMaxLat);
         locOutMaxLong = mSlimDatabase.createLocation(locOutMaxLong);
 
+        //Retrieve locations in bounds & check if the result is right
         List<Location> result = mSlimDatabase.getLocationWithinBounds(100, 100, 1000, 1000);
         assertThat(result.contains(locEdgeMin), is(true));
         assertThat(result.contains(locInBounds), is(true));
@@ -68,22 +69,24 @@ public class LocationTest extends BaseTest {
         assertThat(result.contains(locOutMaxLat), is(false));
         assertThat(result.contains(locOutMaxLong), is(false));
     }
-    
+
     @Test
-    public void updateLocation(){
+    public void updateLocation() {
+        //Create location
         Location location = new Location(mName, 900000, 100000);
         location = mSlimDatabase.createLocation(location);
-        
+
+        //Update the location with new values
         location.setName("updated-name");
         location.setLattitude(1);
         location.setLongitude(1);
         mSlimDatabase.saveLocation(location);
-        
+
+        //Retrieve the location and check if only name field was updated
         location = mSlimDatabase.getLocation(location.getID());
         assertThat(location.getName(), equalTo("updated-name"));
         assertThat(location.getLattitude(), is(900000l));
         assertThat(location.getLongitude(), is(100000l));
-        
     }
 
     @Test
@@ -99,5 +102,17 @@ public class LocationTest extends BaseTest {
         Event event = createRandomEvent(null, null);
         success = mSlimDatabase.deleteLocation(event.getmLocation().getID());
         assertThat(success, is(false));
+    }
+
+    @Test
+    public void retrieveByLongLat() {
+        //Create a random location
+        Location location = createRandomLocation();
+        assertThat(location, notNullValue());
+
+        //Retrieve the location by its lattitude/longitude
+        Location retrLoc = mSlimDatabase.retrieveLocation(location.getLattitude(), location.getLongitude());
+        assertThat(retrLoc, notNullValue());
+        assertThat(location.getID(), is(retrLoc.getID()));
     }
 }

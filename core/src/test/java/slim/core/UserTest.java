@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package slim.core;
 
 import java.util.List;
@@ -15,7 +10,7 @@ import org.junit.Before;
 
 /**
  *
- * @author Robert
+ * @author Robert Wolfinger
  */
 public class UserTest extends BaseTest {
 
@@ -24,7 +19,7 @@ public class UserTest extends BaseTest {
     @Before
     public void setupDummyUser() {
         /**
-         * Nutzer erzeugen
+         * Create dummy user
          */
         String nickName = getRandomName();
         String userName = getRandomName();
@@ -38,7 +33,7 @@ public class UserTest extends BaseTest {
     public void createTestUser() {
 
         /**
-         * Nutzer erzeugen
+         * Create & test user
          */
         String nickName = getRandomName();
         String userName = getRandomName();
@@ -50,7 +45,7 @@ public class UserTest extends BaseTest {
         assertThat(createdUser, notNullValue());
 
         /**
-         * Gespeicherten Nutzer laden & vergleichen
+         * Compare saved values
          */
         User fetchedUser = mSlimService.getUserById(createdUser.getmID());
         assertThat(fetchedUser.getmNickName(), is(equalTo(createdUser.getmNickName())));
@@ -65,7 +60,7 @@ public class UserTest extends BaseTest {
     public void updateUserTest() {
 
         /**
-         * Nutzer erzeugen
+         * Create user
          */
         String nickName = getRandomName();
         String userName = getRandomName();
@@ -77,7 +72,7 @@ public class UserTest extends BaseTest {
         assertThat(createdUser, notNullValue());
 
         /**
-         * Nutzer Felder mit neuen Werten updaten
+         * Update user fields with new values
          */
         String newNickName = getRandomName();
         String newUserName = getRandomName();
@@ -99,6 +94,7 @@ public class UserTest extends BaseTest {
         boolean success = mSlimService.updateUser(user);
         assertThat(success, is(true));
 
+        //Retrieve the user and compare fields
         user = mSlimDatabase.getUserById(user.getmID());
         assertThat(newNickName, is(equalTo(user.getmNickName())));
         assertThat(newUserName, is(equalTo(user.getmFirstName())));
@@ -108,28 +104,21 @@ public class UserTest extends BaseTest {
         assertThat(newImageUrl, is(equalTo(user.getmImageUrl())));
     }
 
-    /**
-     * Nutzer löschen
-     */
     @Test
     public void deleteExistingUserByIdTest() {
         User user = mSlimDatabase.getUserById(mTestUserID);
         assertThat(user, notNullValue());
-        //löschen
+        //Delete the testuser
         mSlimService.deleteUser(user.getmID());
-        //prüfung
+        //Check if it really was deleted
         user = mSlimService.getUserById(user.getmID());
         assertThat(user, is(nullValue()));
     }
-    
-    //TODO
-    /**
-     * Liste von Nutzern abrufen
-     */
+
     public void getAllUsersTest(){
         List<User> users = mSlimDatabase.getAllUsers();
         assertThat(users, notNullValue());
-        //We have 
+        //We should have one user in the database
         assertThat(users.size(), is(1));
     }
 }

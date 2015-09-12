@@ -1,16 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package slim.core;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import slim.core.impl.SlimServiceInMemory;
-import java.util.Date;
-import java.util.UUID;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.math.RandomUtils;
 import org.junit.After;
@@ -22,8 +15,9 @@ import slim.core.model.User;
 import slim.core.utils.Constants;
 
 /**
- *
- * @author Robert
+ * Base unit test
+ * 
+ * @author Robert Wolfinger
  */
 public abstract class BaseTest {
 
@@ -56,19 +50,22 @@ public abstract class BaseTest {
         }
     }
 
+    /**
+     * Creates a random name
+     * 
+     * @return name
+     */
     protected String getRandomName() {
         return RandomStringUtils.randomAlphanumeric(RandomUtils.nextInt(10) + 1);
     }
 
-    protected String getRandomUUIDString() {
-        return String.valueOf(UUID.randomUUID());
-    }
-
-    protected String getRandomDateString() {
-        Date date = new Date(Math.abs(System.currentTimeMillis() - RandomUtils.nextLong()));
-        return date.toString();
-    }
-
+    /**
+     * Creates a random event
+     * 
+     * @param guests guests
+     * @param organizer organizer
+     * @return the created event
+     */
     protected Event createRandomEvent(Collection<User> guests, User organizer) {
         long eventBegin = Math.abs(RandomUtils.nextLong());
         long eventEnd = Math.abs(eventBegin + RandomUtils.nextLong());
@@ -88,10 +85,20 @@ public abstract class BaseTest {
         return event;
     }
 
+    /**
+     * Creates a random user
+     * 
+     * @return the created user
+     */
     protected User createRandomUser() {
         return mSlimDatabase.createUser(new User(getRandomName(), getRandomName(), getRandomName(), 10000, getRandomName(), "www.imageurl.de"));
     }
 
+    /**
+     * Creates a random location
+     * 
+     * @return the created location
+     */
     protected Location createRandomLocation() {
         return mSlimDatabase.createLocation(new Location("auto-generated", RandomUtils.nextLong(), RandomUtils.nextLong()));
     }

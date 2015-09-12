@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package slim.core.model;
 
 import com.j256.ormlite.field.DatabaseField;
@@ -16,17 +11,19 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
+ * Model for a event
  *
- * @author Robert
+ * @author Robert Wolfinger
  */
 @XmlRootElement(name = "event")
 @XmlAccessorType(XmlAccessType.FIELD)
 @DatabaseTable(tableName = "events")
 public class Event {
 
+    //Column names to query for values
     public static final String LOCATION_FIELD_NAME = "location_id";
     public static final String ORGANIZER_FIELD_NAME = "organizer_id";
-    
+
     @XmlAttribute(name = "id")
     @DatabaseField(generatedId = true)
     private int mID;
@@ -120,7 +117,7 @@ public class Event {
             mGuests.add(guest);
         }
     }
-    
+
     public void removeGuest(User guest) {
         mGuests.remove(guest);
     }

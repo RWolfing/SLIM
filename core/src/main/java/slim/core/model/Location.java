@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package slim.core.model;
 
 import com.j256.ormlite.dao.ForeignCollection;
@@ -17,14 +12,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- *
- * @author Robert
+ * Model for a location
+ * 
+ * @author Robert Wolfinger
  */
 @XmlRootElement(name = "location")
 @XmlAccessorType(XmlAccessType.FIELD)
 @DatabaseTable(tableName = "locations")
 public class Location {
 
+    //Column names need to access the values
     public final static String LATTITUDE_FIELD_NAME = "lattitude";
     public final static String LONGITUDE_FIELD_NAME = "longitude";
     public final static String NAME_FIELD_NAME = "name";

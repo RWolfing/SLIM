@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package slim.core;
 
 import java.io.File;
@@ -31,8 +26,9 @@ import slim.core.model.Location;
 import slim.core.model.User;
 
 /**
- *
- * @author Robert
+ * Class to test the json mapping of all models
+ * 
+ * @author Robert Wolfinger
  */
 public class JSONMappingTest {
 
@@ -91,7 +87,7 @@ public class JSONMappingTest {
             mUserTestFileWrite.delete();
         }
 
-        //Create xml file for user
+        //Create json file for the user
         User user = new User("nickName", "firstName", "lastName", 0, "about", "imageurl");
         mMarshaller.marshal(user, new FileWriter(mUserTestFileWrite));
 
@@ -110,6 +106,7 @@ public class JSONMappingTest {
         assertThat(desUser.getmLastName(), equalTo(user.getmLastName()));
         assertThat(desUser.getmAbout(), equalTo(user.getmAbout()));
         assertThat(desUser.getmBirthday(), is(user.getmBirthday()));
+        assertThat(desUser.getmImageUrl(), is(user.getmImageUrl()));
     }
 
     @Test
@@ -125,7 +122,7 @@ public class JSONMappingTest {
         /**
          * IDs will be created through the underlying database. But here we wont
          * be saving any users to the database, so the ids will be missing.
-         * Therefore we will smart and set them through reflection ;).
+         * Therefore we will be smart and set them through reflection ;).
          */
         Field guestId = User.class.getDeclaredField("mID");
         guestId.setAccessible(true);
@@ -159,6 +156,8 @@ public class JSONMappingTest {
         assertThat(desEvent.getmDescription(), is(event.getmDescription()));
         assertThat(desEvent.getGuests(), notNullValue());
         assertThat(desEvent.getGuests().size(), is(2));
+        assertThat(desEvent.getGuests().contains(guest1), is(true));
+        assertThat(desEvent.getGuests().contains(guest2), is(true));
         assertThat(desEvent.getmOrganizer(), notNullValue());
         assertThat(desEvent.getmOrganizer().getmID(), is(event.getmOrganizer().getmID()));
     }
@@ -170,6 +169,7 @@ public class JSONMappingTest {
         assertThat(user.getmID(), is(mReadUserId));
         assertThat(user.getmNickName(), equalTo(mReadNickName));
         assertThat(user.getmFirstName(), equalTo(mReadFirstName));
+        assertThat(user.getmLastName(), equalTo(mReadLastName));
         assertThat(user.getmBirthday(), is(mReadBirthday));
         assertThat(user.getmAbout(), equalTo(mReadAbout));
         assertThat(user.getmImageUrl(), equalTo(mReadImageUrl));

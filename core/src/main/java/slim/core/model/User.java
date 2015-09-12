@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package slim.core.model;
 
 import com.j256.ormlite.field.DatabaseField;
@@ -12,11 +7,11 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
- *
- * @author Robert
+ * Model for a user
+ * 
+ * @author Robert Wolfinger
  */
 @XmlRootElement(name = "user")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -44,11 +39,6 @@ public class User {
     @XmlElement(name = "imageUrl")
     @DatabaseField
     private String mImageUrl;
-
-    //TODO used?
-    @XmlTransient
-    @DatabaseField(foreign = true, foreignAutoRefresh = true, columnName = "guestlist_id")
-    private GuestEntry mGuestList;
 
     public User() {
     }
@@ -129,6 +119,6 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" + "mID=" + mID + ", mNickName=" + mNickName + ", mFirstName=" + mFirstName + ", mLastName=" + mLastName + ", mBirthday=" + mBirthday + ", mAbout=" + mAbout + ", mImageUrl=" + mImageUrl + ", mGuestList=" + mGuestList + '}';
+        return "User{" + "mID=" + mID + ", mNickName=" + mNickName + ", mFirstName=" + mFirstName + ", mLastName=" + mLastName + ", mBirthday=" + mBirthday + ", mAbout=" + mAbout + ", mImageUrl=" + mImageUrl + '}';
     }
 }
