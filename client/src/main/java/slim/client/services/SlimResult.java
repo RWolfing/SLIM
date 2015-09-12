@@ -1,17 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package slim.client.services;
 
 /**
- *
- * @author Robert
- * @param <T>
+ * Container class to wrap a response from the webservice.
+ * 
+ * @author Robert Wolfinger
+ * @param <T> content class
  */
 public class SlimResult<T> {
-
+    
     private T mResultContent;
     private int mResultStatus;
 
@@ -32,11 +28,11 @@ public class SlimResult<T> {
         mResultStatus = status;
     }
 
-    public T getmResultContent() {
+    public T getResultContent() {
         return mResultContent;
     }
 
-    public int getmResultStatus() {
+    public int getResultStatus() {
         return mResultStatus;
     }
 }

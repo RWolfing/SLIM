@@ -27,7 +27,7 @@ public class EventResourceImpl extends SlimResource implements EventRessource {
         //Check if organizer exists
         if (mSlimService.getUserById(idOrganizer) != null) {
             //Create event
-            Event event = mSlimService.createEvent(name, lattitude, lattitude, eventBegin, eventEnd, description, idOrganizer);
+            Event event = mSlimService.createEvent(name, lattitude, longitude, eventBegin, eventEnd, description, idOrganizer);
             if (event != null) {
                 return Response.status(Status.CREATED).entity(event).build();
             } else {

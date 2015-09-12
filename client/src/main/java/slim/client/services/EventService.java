@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package slim.client.services;
 
 import java.io.IOException;
@@ -22,8 +17,9 @@ import slim.core.model.Event;
 import slim.core.model.EventList;
 
 /**
- *
- * @author Robert
+ * Service for all event related functionality
+ * 
+ * @author Robert Wolfinger
  */
 public class EventService extends SlimService {
 

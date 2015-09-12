@@ -170,7 +170,7 @@ public interface EventRessource {
      * found, Else the appropriate status code
      */
     @PUT
-    @Path("addguest/{id}")
+    @Path("addguest/{eventId}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     Response addGuestToEvent(@Context UriInfo uriInfo,
             @PathParam("eventId") int eventId,

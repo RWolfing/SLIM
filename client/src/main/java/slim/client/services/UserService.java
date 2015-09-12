@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package slim.client.services;
 
 import java.io.IOException;
@@ -21,8 +16,9 @@ import slim.core.model.User;
 import slim.core.model.UserList;
 
 /**
- *
- * @author Robert
+ * Service for all user related functionality
+ * 
+ * @author Robert Wolfinger
  */
 public class UserService extends SlimService {
 

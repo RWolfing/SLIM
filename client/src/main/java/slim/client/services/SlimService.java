@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package slim.client.services;
 
 import java.io.Reader;
@@ -16,27 +11,11 @@ import org.apache.commons.httpclient.HttpMethodBase;
 import org.eclipse.persistence.jaxb.MarshallerProperties;
 
 /**
+ * Base class for every service that communicates with the webservice
  *
- * @author Robert
+ * @author Robert Wolfinger
  */
 public class SlimService {
-
-    protected static final String ERROR_IO = "IO Exception while fetching: ";
-    protected static final String ERROR_JAXB = "Could not unmarshall: ";
-
-    protected final String mServiceBaseURI;
-    protected final HttpClient mHttpClient;
-    protected MediaType mMediaType = MediaType.XML;
-
-    public SlimService(String serviceUrl, MediaType type) {
-        mServiceBaseURI = serviceUrl;
-        mHttpClient = new HttpClient();
-        mMediaType = type;
-    }
-
-    public void setmMediaType(MediaType type) {
-        mMediaType = type;
-    }
 
     public enum MediaType {
 
@@ -53,8 +32,46 @@ public class SlimService {
         }
     }
 
+    protected static final String ERROR_IO = "IO Exception while fetching: ";
+    protected static final String ERROR_JAXB = "Could not unmarshall: ";
+
+    protected final String mServiceBaseURI;
+    protected final HttpClient mHttpClient;
+    protected MediaType mMediaType = MediaType.XML;
+    private boolean mLoggingEnabled = false;
+
+    /**
+     * Default constructor Creates the service from the given url, with the
+     * given media type
+     *
+     * @param serviceUrl base url of the service
+     * @param type media type
+     */
+    public SlimService(String serviceUrl, MediaType type) {
+        mServiceBaseURI = serviceUrl;
+        mHttpClient = new HttpClient();
+        mMediaType = type;
+    }
+
+    public void setMediaType(MediaType type) {
+        mMediaType = type;
+    }
+
+    public void setLoggingEnabled(boolean loggingEnabled) {
+        this.mLoggingEnabled = loggingEnabled;
+    }
+
+    /**
+     * Unmarshalls the given content to an object of the given clazz
+     *
+     * @param content content as a string
+     * @param clazz content class
+     * @return the unmarshalled object
+     * @throws JAXBException
+     */
     protected Object unmarshall(String content, Class clazz) throws JAXBException {
-        switch(mMediaType){
+        //Switch the unmarshaller depending on the content type
+        switch (mMediaType) {
             case XML:
                 return unmarshallFromXML(new StringReader(content), JAXBContext.newInstance(clazz));
             case JSON:
@@ -64,35 +81,62 @@ public class SlimService {
         }
     }
 
+    /**
+     * Unmarshalls an object from xml
+     *
+     * @param in in reader
+     * @param jaxbc jaxbc context
+     * @return the unmarshalled object
+     * @throws JAXBException
+     */
     private Object unmarshallFromXML(Reader in, JAXBContext jaxbc) throws JAXBException {
         Unmarshaller unmarshaller = jaxbc.createUnmarshaller();
         return unmarshaller.unmarshal(in);
     }
-    
-    private Object unmarshallFromJson(Reader in, JAXBContext jaxbc, Class clazz) throws JAXBException{
+
+    /**
+     * Unmarshalls the object from json
+     *
+     * @param in in reader
+     * @param jaxbc jaxbc context
+     * @param clazz clazz of the content object
+     * @return the unmarshalled object
+     * @throws JAXBException
+     */
+    private Object unmarshallFromJson(Reader in, JAXBContext jaxbc, Class clazz) throws JAXBException {
         Unmarshaller unmarshaller = jaxbc.createUnmarshaller();
         unmarshaller.setProperty(MarshallerProperties.MEDIA_TYPE, "application/json");
         unmarshaller.setProperty(MarshallerProperties.JSON_INCLUDE_ROOT, false);
         return unmarshaller.unmarshal(new StreamSource(in), clazz).getValue();
     }
 
+    /**
+     * Helper method to log the executed service method, with url, response
+     * etc...
+     *
+     * @param result the result of the executed service
+     * @param httpMethod the used httpmethod
+     */
     protected void whatAmIDoing(SlimResult result, HttpMethodBase httpMethod) {
-        if (httpMethod == null) {
-            System.out.println("I am doing nothing....");
-            return;
-        }
+        if (mLoggingEnabled) {
+            if (httpMethod == null) {
+                System.out.println("I am doing nothing....");
+                return;
+            }
 
-        System.out.println();
-        System.out.println("----------- SERVICE CALL -----------");
-        System.out.println("Executed " + httpMethod.getPath());
-        System.out.println("Type " + httpMethod.getName());
-        System.out.println("Mediatype: " + mMediaType);
-        if (result != null) {
-            System.out.println("Response: " + result.getmResultStatus());
-            System.out.println("Result: " + result.getmResultContent());
-        } else {
-            System.out.println("The result was null....");
+            System.out.println();
+            System.out.println("----------- SERVICE CALL -----------");
+            System.out.println("Executed " + httpMethod.getPath());
+            System.out.println("QueryParams " + httpMethod.getQueryString());
+            System.out.println("Type " + httpMethod.getName());
+            System.out.println("Mediatype: " + mMediaType);
+            if (result != null) {
+                System.out.println("Response: " + result.getResultStatus());
+                System.out.println("Result: " + result.getResultContent());
+            } else {
+                System.out.println("The result was null....");
+            }
+            System.out.println("--------- SERVICE CALL END ---------");
         }
-        System.out.println("--------- SERVICE CALL END ---------");
     }
 }

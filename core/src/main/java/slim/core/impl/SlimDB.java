@@ -64,10 +64,11 @@ public class SlimDB implements DatabaseConnection {
         String slimDB = System.getProperty("user.dir") + "/" + mDatabaseName;
         String sJdbc = "jdbc:sqlite";
         String sDbUrl = sJdbc + ":" + slimDB;
-
+       
         try {
             mConnectionSource = new JdbcConnectionSource(sDbUrl);
             setupDatabase(mConnectionSource);
+            Logger.getLogger(SlimDB.class.getName()).log(Level.INFO, "Created db" + sDbUrl);
             return true;
         } catch (SQLException ex) {
             Logger.getLogger(SlimDB.class.getName()).log(Level.SEVERE, "Could not open database connection!", ex);
