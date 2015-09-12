@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package slim.rest;
 
 import java.util.ArrayList;
@@ -19,14 +14,14 @@ import org.junit.Test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import slim.core.model.Event;
 import slim.core.model.EventList;
 import slim.rest.impl.EventResourceImpl;
 
 /**
+ * Class to test the functionality of the {@link EventRessource}
  *
- * @author Robert
+ * @author Robert Wolfinger
  */
 public class EventResourceImplTest extends RestBaseTest {
 
@@ -36,20 +31,14 @@ public class EventResourceImplTest extends RestBaseTest {
     @Before
     public void prepareResourcesTest() {
         mEventResource = new EventResourceImpl();
-        mEventResource.setmSlimService(mSlimService);
+        mEventResource.setSlimService(mSlimService);
     }
 
     @Before
     public void mockUriInfo() {
         mUriInfo = mock(UriInfo.class);
         final UriBuilder fromResource = UriBuilder.fromResource(EventResourceImpl.class);
-        when(mUriInfo.getAbsolutePathBuilder()).thenAnswer(new Answer<UriBuilder>() {
-
-            @Override
-            public UriBuilder answer(InvocationOnMock invocation) throws Throwable {
-                return fromResource;
-            }
-        });
+        when(mUriInfo.getAbsolutePathBuilder()).thenAnswer((InvocationOnMock invocation) -> fromResource);
     }
 
     @Test

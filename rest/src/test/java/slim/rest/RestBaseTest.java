@@ -1,13 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package slim.rest;
 
 import java.io.File;
 import javax.ws.rs.core.Context;
-import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.math.RandomUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -20,7 +14,9 @@ import slim.core.model.User;
 import slim.core.utils.Constants;
 
 /**
- *
+ * Abstract class to provide functionality that every resource test needs.
+ * It also provides some test objects.
+ * 
  * @author Robert
  */
 public abstract class RestBaseTest {
@@ -101,10 +97,6 @@ public abstract class RestBaseTest {
         } else {
             System.err.println(CLASS_NAME + " could not delete mockup database. File does not exist!");
         }
-    }
-
-    protected String getRandomName() {
-        return RandomStringUtils.randomAlphanumeric(RandomUtils.nextInt(10) + 1);
     }
 
     public SlimService getSlimService() {

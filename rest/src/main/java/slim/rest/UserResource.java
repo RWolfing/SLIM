@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package slim.rest;
 
 import javax.ws.rs.Consumes;
@@ -20,15 +15,27 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import slim.core.SlimService;
+import slim.core.model.User;
 
 /**
- *
- * @author Robert
+ * @author Robert Wolfinger
  */
 @Path("users")
 public interface UserResource {
 
+    /**
+     * Creates a {@link User} with the given parameters
+     *
+     * @param uriInfo uriInfo
+     * @param nickName nickname of the user
+     * @param firstName firstname of the user
+     * @param lastName lastname of the user
+     * @param birthday birthday of the user in timemillis
+     * @param about about of the user
+     * @param imageUrl imageurl of the user
+     * @return 201 CREATED If the user was created, 400 If there were missing
+     * invalid parameter, Else the appropriate status code
+     */
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @POST
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
@@ -40,6 +47,17 @@ public interface UserResource {
             @FormParam("about") String about,
             @FormParam("imageurl") String imageUrl);
 
+    /**
+     * Updates a {@link User} with the given id
+     *
+     * @param userId id of the user
+     * @param nickName new nickname of the user
+     * @param birthday new birthday of the user
+     * @param about new about of the user
+     * @param imageUrl new imageurl of the user
+     * @return 200 OK If the user was updated, 404 If the user was not found,
+     * Else the appropriate status code
+     */
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @PUT
     @Path("{id}")
@@ -51,24 +69,49 @@ public interface UserResource {
             @QueryParam("about") @DefaultValue("") String about,
             @QueryParam("imageurl") @DefaultValue("") String imageUrl);
 
+    /**
+     * Deletes a {@link User} with the given id
+     *
+     * @param id id of the user
+     * @return 200 OK If the user was deleted, 404 If the user was not found,
+     * Else the appropriate status code
+     */
     @DELETE
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     Response deleteUser(@PathParam("id") int id);
 
+    /**
+     * Fetches a {@link User} with the given id
+     *
+     * @param id id of the user
+     * @return 200 OK If the user was retrieved, 404 If the user was not found,
+     * Else the appropriate status code
+     */
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     Response fetchUserById(@PathParam("id") int id);
 
+    /**
+     * Retrieves a list of all {@link User}s
+     *
+     * @return 200 OK If the users were retrieved, 404 If no users exist
+     */
     @GET
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     Response fetchAllUsers();
-    
+
+    /**
+     * Check if the given {@link User}s are in one or more events together
+     *
+     * @param idUser1 id of one user
+     * @param idUser2 id of another user
+     * @return 200 OK if a result was retrieved, Else the appropriate status
+     * code
+     */
     @GET
     @Path("{idyou}/{idhim}")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     Response doesHePartyWithMe(@PathParam("idyou") int idUser1, @PathParam("idhim") int idUser2);
-    
-    void setService(SlimService service);
 }

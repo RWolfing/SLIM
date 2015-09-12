@@ -16,7 +16,6 @@ import slim.rest.impl.UserResourceImpl;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.Test;
@@ -29,26 +28,20 @@ import slim.core.model.UserList;
  */
 public class UserResourceImplTest extends RestBaseTest {
 
-    private UserResource mUserResource;
+    private UserResourceImpl mUserResource;
     private UriInfo mUriInfo;
 
     @Before
     public void prepareResourcesTest() {
         mUserResource = new UserResourceImpl();
-        mUserResource.setService(mSlimService);
+        mUserResource.setSlimService(mSlimService);
     }
 
     @Before
     public void mockUriInfo() {
         mUriInfo = mock(UriInfo.class);
-        final UriBuilder fromResource = UriBuilder.fromResource(UserResource.class);
-        when(mUriInfo.getAbsolutePathBuilder()).thenAnswer(new Answer<UriBuilder>() {
-
-            @Override
-            public UriBuilder answer(InvocationOnMock invocation) throws Throwable {
-                return fromResource;
-            }
-        });
+        final UriBuilder fromResource = UriBuilder.fromResource(UserResourceImpl.class);
+        when(mUriInfo.getAbsolutePathBuilder()).thenAnswer((InvocationOnMock invocation) -> fromResource);
     }
 
     @Test

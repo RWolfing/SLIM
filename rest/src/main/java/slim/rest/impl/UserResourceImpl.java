@@ -1,23 +1,20 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package slim.rest.impl;
 
 import java.util.List;
+import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
-import slim.core.SlimService;
 import slim.core.model.User;
 import slim.core.model.UserList;
 import slim.rest.UserResource;
 
 /**
- *
+ * Implementation of the {@link UserResource}
+ * 
  * @author Robert
  */
+@Path("users")
 public class UserResourceImpl extends SlimResource implements UserResource {
 
     @Override
@@ -26,6 +23,7 @@ public class UserResourceImpl extends SlimResource implements UserResource {
             return Response.status(Status.BAD_REQUEST).build();
         }
 
+        //Create user
         User createdUser = mSlimService.createUser(nickName, firstName, lastName, birthday, about, imageUrl);
         if (createdUser != null) {
             return Response.status(Status.CREATED).entity(createdUser).build();
@@ -40,13 +38,16 @@ public class UserResourceImpl extends SlimResource implements UserResource {
             return Response.status(Status.BAD_REQUEST).build();
         }
 
+        //Retrieve user
         User user = mSlimService.getUserById(userId);
+        //Does user exist
         if (user != null) {
             user.setmNickName(nickName);
             user.setmBirthday(birthday);
             user.setmAbout(about);
             user.setmImageUrl(imageUrl);
 
+            //Update user
             if (mSlimService.updateUser(user)) {
                 return Response.status(Status.OK).entity(user).build();
             } else {
@@ -57,13 +58,14 @@ public class UserResourceImpl extends SlimResource implements UserResource {
         }
     }
 
-    //TODO not found
     @Override
     public Response deleteUser(int id) {
         if (id < 0) {
             return Response.status(Status.BAD_REQUEST).build();
         }
+        //Fetch user
         if (mSlimService.getUserById(id) != null) {
+            //Delete user
             mSlimService.deleteUser(id);
             return Response.status(Status.OK).build();
         } else {
@@ -77,6 +79,7 @@ public class UserResourceImpl extends SlimResource implements UserResource {
         if (id < 0) {
             return Response.status(Status.BAD_REQUEST).build();
         }
+        //Fetch user
         User user = mSlimService.getUserById(id);
         if (user != null) {
             return Response.status(Status.OK).entity(user).build();
@@ -89,6 +92,7 @@ public class UserResourceImpl extends SlimResource implements UserResource {
     public Response fetchAllUsers() {
         List<User> users = mSlimService.getUsers();
 
+        //Check if there are multiple users
         if (users != null && users.size() > 0) {
             UserList userList = new UserList();
             userList.setUsers(users);
@@ -100,19 +104,14 @@ public class UserResourceImpl extends SlimResource implements UserResource {
 
     @Override
     public Response doesHePartyWithMe(int idUser1, int idUser2) {
-       if(idUser1 < 0 || idUser2 < 0){
-           return Response.status(Status.BAD_REQUEST).build();
-       }
-       
-       if(mSlimService.doesHePartyWithMe(idUser1, idUser2)){
-           return Response.status(Status.OK).entity(true).build();
-       } else {
-           return Response.status(Status.OK).entity(false).build();
-       }
-    }
+        if (idUser1 < 0 || idUser2 < 0) {
+            return Response.status(Status.BAD_REQUEST).build();
+        }
 
-    @Override
-    public void setService(SlimService service) {
-       mSlimService = service;
+        if (mSlimService.doesHePartyWithMe(idUser1, idUser2)) {
+            return Response.status(Status.OK).entity(true).build();
+        } else {
+            return Response.status(Status.OK).entity(false).build();
+        }
     }
 }

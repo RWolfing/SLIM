@@ -38,6 +38,25 @@ public class LocationResourceImpl extends SlimResource implements LocationResour
     }
 
     @Override
+    public Response updateLocation(int locationId, String name) {
+        if (name == null || name.equals("")) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        Location location = mSlimService.getLocationById(locationId);
+        if (location != null) {
+            location.setName(name);
+            if (mSlimService.updateLocation(location)) {
+                return Response.ok(location).build();
+            } else {
+                return Response.serverError().build();
+            }
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+    }
+
+    @Override
     public Response deleteLocation(int id) {
         if (mSlimService.deleteLocation(id)) {
             return Response.status(Response.Status.OK).build();
@@ -63,25 +82,6 @@ public class LocationResourceImpl extends SlimResource implements LocationResour
             return Response.ok(location).build();
         } else {
             return Response.status(Status.NOT_FOUND).build();
-        }
-    }
-
-    @Override
-    public Response updateLocation(int locationId, String name) {
-        if (name == null || name.equals("")) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-
-        Location location = mSlimService.getLocationById(locationId);
-        if (location != null) {
-            location.setName(name);
-            if (mSlimService.updateLocation(location)) {
-                return Response.ok(location).build();
-            } else {
-                return Response.serverError().build();
-            }
-        } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
         }
     }
 }

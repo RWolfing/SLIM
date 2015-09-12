@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package slim.rest;
 
 import javax.ws.rs.core.Response;
@@ -15,13 +10,13 @@ import org.junit.Before;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import slim.core.model.Location;
 import slim.rest.impl.LocationResourceImpl;
 
 /**
- *
- * @author Robert
+ * Class to test the functionality of the {@link LocationResource}
+ * 
+ * @author Robert Wolfinger
  */
 public class LocationResourceImplTest extends RestBaseTest {
 
@@ -31,7 +26,7 @@ public class LocationResourceImplTest extends RestBaseTest {
     @Before
     public void prepareResourcesTest() {
         mLocationResource = new LocationResourceImpl();
-        mLocationResource.setmSlimService(mSlimService);
+        mLocationResource.setSlimService(mSlimService);
     }
 
     @Before
@@ -42,17 +37,22 @@ public class LocationResourceImplTest extends RestBaseTest {
     }
 
     public void createLocationTest() {
+        //Create location
         Response response = mLocationResource.createLocation(mUriInfo, "location", 50000, 50000);
         assertThat(response.getStatus(), is(Response.Status.CREATED.getStatusCode()));
 
+        //Check response
         Location location = (Location) response.getEntity();
         assertThat(location, notNullValue());
+        
+        //Check if location really exists
         response = mLocationResource.fetchLocationById(location.getID());
         assertThat(response.getStatus(), is(Response.Status.CREATED.getStatusCode()));
         assertThat(location.getID(), is(((Location) response.getEntity()).getID()));
     }
 
     public void deleteLocationTest() {
+        //Delete location & check response
         Response response = mLocationResource.deleteLocation(mTestLocation.getID());
         assertThat(response.getStatus(), is(Response.Status.OK.getStatusCode()));
     }
@@ -65,12 +65,13 @@ public class LocationResourceImplTest extends RestBaseTest {
         assertThat(response.getStatus(), is(Response.Status.OK.getStatusCode()));
 
         mLocationResource.deleteLocation(mTestLocation.getID());
-        //test not found
+        //Test not found
         response = mLocationResource.fetchLocationByLongLat(lattitude, longitude);
         assertThat(response.getStatus(), is(Response.Status.NOT_FOUND.getStatusCode()));
     }
 
     public void updateLocation() {
+        //Update location & check response
         Response response = mLocationResource.deleteLocation(mTestLocation.getID());
         assertThat(response.getStatus(), is(Response.Status.OK.getStatusCode()));
     }
