@@ -58,7 +58,7 @@ public class UserService extends SlimService {
     public SlimResult<User> updateUser(int userId, String nickName, long birthday, String about, String imageUrl) {
         SlimResult result = new SlimResult(null);
         PutMethod putMethod = new PutMethod(mServiceBaseURI + "/" + userId);
-        NameValuePair pairNick = new NameValuePair("nickName", nickName);
+        NameValuePair pairNick = new NameValuePair("nickname", nickName);
         NameValuePair pairBDay = new NameValuePair("birthday", String.valueOf(birthday));
         NameValuePair pairAbout = new NameValuePair("about", about);
         NameValuePair pairImageUrl = new NameValuePair("imageurl", imageUrl);

@@ -26,7 +26,7 @@ public class UserTest extends BaseTest {
         String userLastname = getRandomName();
         String userAbout = getRandomName();
         User createdUser = mSlimService.createUser(nickName, userName, userLastname, 0, userAbout, "www.test.de");
-        mTestUserID = createdUser.getmID();
+        mTestUserID = createdUser.getID();
     }
 
     @Test
@@ -47,13 +47,13 @@ public class UserTest extends BaseTest {
         /**
          * Compare saved values
          */
-        User fetchedUser = mSlimService.getUserById(createdUser.getmID());
-        assertThat(fetchedUser.getmNickName(), is(equalTo(createdUser.getmNickName())));
-        assertThat(fetchedUser.getmFirstName(), is(equalTo(createdUser.getmFirstName())));
-        assertThat(fetchedUser.getmLastName(), is(equalTo(createdUser.getmLastName())));
-        assertThat(fetchedUser.getmAbout(), is(equalTo(createdUser.getmAbout())));
-        assertThat(fetchedUser.getmBirthday(), is((createdUser.getmBirthday())));
-        assertThat(fetchedUser.getmImageUrl(), is(equalTo(createdUser.getmImageUrl())));
+        User fetchedUser = mSlimService.getUserById(createdUser.getID());
+        assertThat(fetchedUser.getNickName(), is(equalTo(createdUser.getNickName())));
+        assertThat(fetchedUser.getFirstName(), is(equalTo(createdUser.getFirstName())));
+        assertThat(fetchedUser.getLastName(), is(equalTo(createdUser.getLastName())));
+        assertThat(fetchedUser.getAbout(), is(equalTo(createdUser.getAbout())));
+        assertThat(fetchedUser.getBirthday(), is((createdUser.getBirthday())));
+        assertThat(fetchedUser.getImageUrl(), is(equalTo(createdUser.getImageUrl())));
     }
 
     @Test
@@ -81,27 +81,27 @@ public class UserTest extends BaseTest {
         String newUserAbout = getRandomName();
         String newImageUrl = "www.test2.de";
 
-        User user = mSlimDatabase.getUserById(createdUser.getmID());
+        User user = mSlimDatabase.getUserById(createdUser.getID());
         assertThat(user, notNullValue());
 
-        user.setmNickName(newNickName);
-        user.setmFirstName(newUserName);
-        user.setmLastName(newUserLastName);
-        user.setmBirthday(newUserBday);
-        user.setmAbout(newUserAbout);
-        user.setmImageUrl(newImageUrl);
+        user.setNickName(newNickName);
+        user.setFirstName(newUserName);
+        user.setLastName(newUserLastName);
+        user.setBirthday(newUserBday);
+        user.setAbout(newUserAbout);
+        user.setImageUrl(newImageUrl);
 
         boolean success = mSlimService.updateUser(user);
         assertThat(success, is(true));
 
         //Retrieve the user and compare fields
-        user = mSlimDatabase.getUserById(createdUser.getmID());
-        assertThat(newNickName, is(equalTo(user.getmNickName())));
-        assertThat(newUserName, is(equalTo(user.getmFirstName())));
-        assertThat(newUserLastName, is(equalTo(user.getmLastName())));
-        assertThat(newUserAbout, is(equalTo(user.getmAbout())));
-        assertThat(newUserBday, is((user.getmBirthday())));
-        assertThat(newImageUrl, is(equalTo(user.getmImageUrl())));
+        user = mSlimDatabase.getUserById(createdUser.getID());
+        assertThat(newNickName, is(equalTo(user.getNickName())));
+        assertThat(newUserName, is(equalTo(user.getFirstName())));
+        assertThat(newUserLastName, is(equalTo(user.getLastName())));
+        assertThat(newUserAbout, is(equalTo(user.getAbout())));
+        assertThat(newUserBday, is((user.getBirthday())));
+        assertThat(newImageUrl, is(equalTo(user.getImageUrl())));
     }
 
     @Test
@@ -109,9 +109,9 @@ public class UserTest extends BaseTest {
         User user = mSlimDatabase.getUserById(mTestUserID);
         assertThat(user, notNullValue());
         //Delete the testuser
-        mSlimService.deleteUser(user.getmID());
+        mSlimService.deleteUser(user.getID());
         //Check if it really was deleted
-        user = mSlimService.getUserById(user.getmID());
+        user = mSlimService.getUserById(user.getID());
         assertThat(user, is(nullValue()));
     }
 

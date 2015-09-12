@@ -44,21 +44,21 @@ public class EventResourceImplTest extends RestBaseTest {
     @Test
     public void createEventTest() {
         //Test success
-        Response response = mEventResource.createEvent(mUriInfo, "TestEvent", RandomUtils.nextLong(), RandomUtils.nextLong(), 1000, 10000, "event description", mTestUser.getmID());
+        Response response = mEventResource.createEvent(mUriInfo, "TestEvent", RandomUtils.nextLong(), RandomUtils.nextLong(), 1000, 10000, "event description", mTestUser.getID());
         assertThat(response.getStatus(), is(Response.Status.CREATED.getStatusCode()));
 
         Event event = (Event) response.getEntity();
-        response = mEventResource.fetchEventById(event.getmID());
+        response = mEventResource.fetchEventById(event.getID());
         assertThat(response.getStatus(), is(Response.Status.OK.getStatusCode()));
         assertThat(event, notNullValue());
-        assertThat(event.getmID(), is(((Event) response.getEntity()).getmID()));
+        assertThat(event.getID(), is(((Event) response.getEntity()).getID()));
 
         //Test failure name missing
-        response = mEventResource.createEvent(mUriInfo, null, RandomUtils.nextLong(), RandomUtils.nextLong(), 1000, 10000, "event description", mTestUser.getmID());
+        response = mEventResource.createEvent(mUriInfo, null, RandomUtils.nextLong(), RandomUtils.nextLong(), 1000, 10000, "event description", mTestUser.getID());
         assertThat(response.getStatus(), is(Response.Status.BAD_REQUEST.getStatusCode()));
 
         //Test failure bad time
-        response = mEventResource.createEvent(mUriInfo, "TestEvent", RandomUtils.nextLong(), RandomUtils.nextLong(), 5000, 1000, "event description", mTestUser.getmID());
+        response = mEventResource.createEvent(mUriInfo, "TestEvent", RandomUtils.nextLong(), RandomUtils.nextLong(), 5000, 1000, "event description", mTestUser.getID());
         assertThat(response.getStatus(), is(Response.Status.BAD_REQUEST.getStatusCode()));
 
         //Test failure organizer does not exist
@@ -69,28 +69,28 @@ public class EventResourceImplTest extends RestBaseTest {
     @Test
     public void updateEventTest() {
         //Test success
-        Response response = mEventResource.updateEvent(mUriInfo, mTestEvent.getmID(), "updated name", 2000, 3000, "new description");
+        Response response = mEventResource.updateEvent(mUriInfo, mTestEvent.getID(), "updated name", 2000, 3000, "new description");
         assertThat(response.getStatus(), is(Response.Status.OK.getStatusCode()));
 
         Event event = (Event) response.getEntity();
-        assertThat(event.getmID(), is(mTestEvent.getmID()));
-        assertThat(event.getmName(), is("updated name"));
-        assertThat(event.getmEventBegin(), is(2000L));
-        assertThat(event.getmEventEnd(), is(3000L));
-        assertThat(event.getmDescription(), is("new description"));
+        assertThat(event.getID(), is(mTestEvent.getID()));
+        assertThat(event.getName(), is("updated name"));
+        assertThat(event.getEventBegin(), is(2000L));
+        assertThat(event.getEventEnd(), is(3000L));
+        assertThat(event.getDescription(), is("new description"));
 
         //Test failure bad request name null
-        response = mEventResource.updateEvent(mUriInfo, mTestEvent.getmID(), null, 2000, 3000, "new description");
+        response = mEventResource.updateEvent(mUriInfo, mTestEvent.getID(), null, 2000, 3000, "new description");
         assertThat(response.getStatus(), is(Response.Status.BAD_REQUEST.getStatusCode()));
 
         //Test failure bad request bad time
-        response = mEventResource.updateEvent(mUriInfo, mTestEvent.getmID(), "name", 3000, 2000, "new description");
+        response = mEventResource.updateEvent(mUriInfo, mTestEvent.getID(), "name", 3000, 2000, "new description");
         assertThat(response.getStatus(), is(Response.Status.BAD_REQUEST.getStatusCode()));
     }
 
     @Test
     public void deleteEventTest() {
-        Response response = mEventResource.deleteEvent(mTestEvent.getmID());
+        Response response = mEventResource.deleteEvent(mTestEvent.getID());
         assertThat(response.getStatus(), is(Response.Status.OK.getStatusCode()));
     }
 
@@ -105,7 +105,7 @@ public class EventResourceImplTest extends RestBaseTest {
     @Test
     public void getEventsWithUserTest() {
         //Test success
-        Response response = mEventResource.getEventsWithUser(mTestUser.getmID());
+        Response response = mEventResource.getEventsWithUser(mTestUser.getID());
         assertThat(response.getStatus(), is(Response.Status.OK.getStatusCode()));
         List<Event> result = ((EventList) response.getEntity()).getEvents();
         assertThat(result.size(), is(TEST_USER_SUM_EVENTS_JOINED));
@@ -118,7 +118,7 @@ public class EventResourceImplTest extends RestBaseTest {
     @Test
     public void getEventsFromUserTest() {
         //Test success
-        Response response = mEventResource.getEventsFromUser(mTestUser.getmID());
+        Response response = mEventResource.getEventsFromUser(mTestUser.getID());
         assertThat(response.getStatus(), is(Response.Status.OK.getStatusCode()));
         List<Event> result = ((EventList) response.getEntity()).getEvents();
         assertThat(result.size(), is(TEST_USER_SUM_EVENTS_CREATED));
@@ -143,33 +143,33 @@ public class EventResourceImplTest extends RestBaseTest {
     @Test
     public void changeGuestTest() {
         //First add guest to event 
-        Response response = mEventResource.addGuestToEvent(mUriInfo, mTestEvent.getmID(), mTestUser.getmID());
+        Response response = mEventResource.addGuestToEvent(mUriInfo, mTestEvent.getID(), mTestUser.getID());
         assertThat(response.getStatus(), is(Response.Status.OK.getStatusCode()));
 
         Event event = (Event) response.getEntity();
         assertThat(event.getGuests().contains(mTestUser), is(true));
 
         //Remove guest from event
-        response = mEventResource.removeGuestFromEvent(mUriInfo, mTestEvent.getmID(), mTestUser.getmID());
+        response = mEventResource.removeGuestFromEvent(mUriInfo, mTestEvent.getID(), mTestUser.getID());
         assertThat(response.getStatus(), is(Response.Status.OK.getStatusCode()));
 
         event = (Event) response.getEntity();
         assertThat(event.getGuests().contains(mTestUser), is(false));
 
         //Test add failure event not found
-        response = mEventResource.addGuestToEvent(mUriInfo, 100, mTestUser.getmID());
+        response = mEventResource.addGuestToEvent(mUriInfo, 100, mTestUser.getID());
         assertThat(response.getStatus(), is(Response.Status.NOT_FOUND.getStatusCode()));
 
         //Test add failure user not found
-        response = mEventResource.addGuestToEvent(mUriInfo, mTestEvent.getmID(), 100);
+        response = mEventResource.addGuestToEvent(mUriInfo, mTestEvent.getID(), 100);
         assertThat(response.getStatus(), is(Response.Status.NOT_FOUND.getStatusCode()));
 
         //Test add failure event not found
-        response = mEventResource.removeGuestFromEvent(mUriInfo, 100, mTestUser.getmID());
+        response = mEventResource.removeGuestFromEvent(mUriInfo, 100, mTestUser.getID());
         assertThat(response.getStatus(), is(Response.Status.NOT_FOUND.getStatusCode()));
 
         //Test add failure event not found
-        response = mEventResource.removeGuestFromEvent(mUriInfo, mTestEvent.getmID(), 100);
+        response = mEventResource.removeGuestFromEvent(mUriInfo, mTestEvent.getID(), 100);
         assertThat(response.getStatus(), is(Response.Status.NOT_FOUND.getStatusCode()));
     }
 
@@ -178,10 +178,10 @@ public class EventResourceImplTest extends RestBaseTest {
         //Add guests klaus & max to event
         final int prevGuestSize = mTestEvent.getGuests().size();
         List<Integer> userIds = new ArrayList<>();
-        userIds.add(mTestUser.getmID());
-        userIds.add(mTestUser2.getmID());
+        userIds.add(mTestUser.getID());
+        userIds.add(mTestUser2.getID());
         userIds.add(1000);
-        Response response = mEventResource.addGuestsToEvent(mUriInfo, mTestEvent.getmID(), userIds);
+        Response response = mEventResource.addGuestsToEvent(mUriInfo, mTestEvent.getID(), userIds);
         assertThat(response.getStatus(), is(Response.Status.OK.getStatusCode()));
 
         Event event = (Event) response.getEntity();
@@ -190,7 +190,7 @@ public class EventResourceImplTest extends RestBaseTest {
         assertThat(event.getGuests().size(), is(prevGuestSize + 2));
 
         //Remove klaus & max from event
-        response = mEventResource.removeGuestsFromEvent(mUriInfo, mTestEvent.getmID(), userIds);
+        response = mEventResource.removeGuestsFromEvent(mUriInfo, mTestEvent.getID(), userIds);
         assertThat(response.getStatus(), is(Response.Status.OK.getStatusCode()));
 
         event = (Event) response.getEntity();
@@ -203,7 +203,7 @@ public class EventResourceImplTest extends RestBaseTest {
         assertThat(response.getStatus(), is(Response.Status.NOT_FOUND.getStatusCode()));
 
         //Test failure if no user ids are given - add
-        response = mEventResource.addGuestsToEvent(mUriInfo, mTestEvent.getmID(), null);
+        response = mEventResource.addGuestsToEvent(mUriInfo, mTestEvent.getID(), null);
         assertThat(response.getStatus(), is(Response.Status.BAD_REQUEST.getStatusCode()));
 
         //Test failure if event does not exist - remove
@@ -211,7 +211,7 @@ public class EventResourceImplTest extends RestBaseTest {
         assertThat(response.getStatus(), is(Response.Status.NOT_FOUND.getStatusCode()));
 
         //Test failure if no user ids are given -remove
-        response = mEventResource.removeGuestsFromEvent(mUriInfo, mTestEvent.getmID(), null);
+        response = mEventResource.removeGuestsFromEvent(mUriInfo, mTestEvent.getID(), null);
         assertThat(response.getStatus(), is(Response.Status.BAD_REQUEST.getStatusCode()));
     }
 }

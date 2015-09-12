@@ -100,13 +100,13 @@ public class JSONMappingTest {
 
         //Check if everything worked
         assertThat(desUser, is(not(sameInstance(user))));
-        assertThat(desUser.getmID(), is(user.getmID()));
-        assertThat(desUser.getmNickName(), equalTo(user.getmNickName()));
-        assertThat(desUser.getmFirstName(), equalTo(user.getmFirstName()));
-        assertThat(desUser.getmLastName(), equalTo(user.getmLastName()));
-        assertThat(desUser.getmAbout(), equalTo(user.getmAbout()));
-        assertThat(desUser.getmBirthday(), is(user.getmBirthday()));
-        assertThat(desUser.getmImageUrl(), is(user.getmImageUrl()));
+        assertThat(desUser.getID(), is(user.getID()));
+        assertThat(desUser.getNickName(), equalTo(user.getNickName()));
+        assertThat(desUser.getFirstName(), equalTo(user.getFirstName()));
+        assertThat(desUser.getLastName(), equalTo(user.getLastName()));
+        assertThat(desUser.getAbout(), equalTo(user.getAbout()));
+        assertThat(desUser.getBirthday(), is(user.getBirthday()));
+        assertThat(desUser.getImageUrl(), is(user.getImageUrl()));
     }
 
     @Test
@@ -144,58 +144,58 @@ public class JSONMappingTest {
 
         //Check if everything worked
         assertThat(desEvent, is(not(sameInstance(event))));
-        assertThat(desEvent.getmID(), is(event.getmID()));
-        assertThat(desEvent.getmName(), equalTo(event.getmName()));
-        assertThat(desEvent.getmLocation(), notNullValue());
-        assertThat(desEvent.getmLocation().getID(), is(event.getmLocation().getID()));
-        assertThat(desEvent.getmLocation().getName(), equalTo(event.getmLocation().getName()));
-        assertThat(desEvent.getmLocation().getLattitude(), is(event.getmLocation().getLattitude()));
-        assertThat(desEvent.getmLocation().getLongitude(), is(event.getmLocation().getLongitude()));
-        assertThat(desEvent.getmEventBegin(), is(event.getmEventBegin()));
-        assertThat(desEvent.getmEventEnd(), is(event.getmEventEnd()));
-        assertThat(desEvent.getmDescription(), is(event.getmDescription()));
+        assertThat(desEvent.getID(), is(event.getID()));
+        assertThat(desEvent.getName(), equalTo(event.getName()));
+        assertThat(desEvent.getLocation(), notNullValue());
+        assertThat(desEvent.getLocation().getID(), is(event.getLocation().getID()));
+        assertThat(desEvent.getLocation().getName(), equalTo(event.getLocation().getName()));
+        assertThat(desEvent.getLocation().getLattitude(), is(event.getLocation().getLattitude()));
+        assertThat(desEvent.getLocation().getLongitude(), is(event.getLocation().getLongitude()));
+        assertThat(desEvent.getEventBegin(), is(event.getEventBegin()));
+        assertThat(desEvent.getEventEnd(), is(event.getEventEnd()));
+        assertThat(desEvent.getDescription(), is(event.getDescription()));
         assertThat(desEvent.getGuests(), notNullValue());
         assertThat(desEvent.getGuests().size(), is(2));
         assertThat(desEvent.getGuests().contains(guest1), is(true));
         assertThat(desEvent.getGuests().contains(guest2), is(true));
-        assertThat(desEvent.getmOrganizer(), notNullValue());
-        assertThat(desEvent.getmOrganizer().getmID(), is(event.getmOrganizer().getmID()));
+        assertThat(desEvent.getOrganizer(), notNullValue());
+        assertThat(desEvent.getOrganizer().getID(), is(event.getOrganizer().getID()));
     }
 
     @Test
     public void loadUserFromJsonFile() throws JAXBException, FileNotFoundException {
         User user = (User) mUnmarshaller.unmarshal(new StreamSource(mUserTestFileRead), User.class).getValue();
 
-        assertThat(user.getmID(), is(mReadUserId));
-        assertThat(user.getmNickName(), equalTo(mReadNickName));
-        assertThat(user.getmFirstName(), equalTo(mReadFirstName));
-        assertThat(user.getmLastName(), equalTo(mReadLastName));
-        assertThat(user.getmBirthday(), is(mReadBirthday));
-        assertThat(user.getmAbout(), equalTo(mReadAbout));
-        assertThat(user.getmImageUrl(), equalTo(mReadImageUrl));
+        assertThat(user.getID(), is(mReadUserId));
+        assertThat(user.getNickName(), equalTo(mReadNickName));
+        assertThat(user.getFirstName(), equalTo(mReadFirstName));
+        assertThat(user.getLastName(), equalTo(mReadLastName));
+        assertThat(user.getBirthday(), is(mReadBirthday));
+        assertThat(user.getAbout(), equalTo(mReadAbout));
+        assertThat(user.getImageUrl(), equalTo(mReadImageUrl));
     }
 
     @Test
     public void loadEventFromJsonFile() throws JAXBException, FileNotFoundException {
         Event event = (Event) mUnmarshaller.unmarshal(new StreamSource(mEventTestFileRead), Event.class).getValue();
 
-        assertThat(event.getmID(), is(mReadEventID));
-        assertThat(event.getmName(), equalTo(mReadName));
-        assertThat(event.getmLocation(), notNullValue());
-        assertThat(event.getmLocation().getID(), is(mReadLocID));
-        assertThat(event.getmLocation().getName(), equalTo(mReadLocName));
-        assertThat(event.getmLocation().getLattitude(), is(mReadLattitude));
-        assertThat(event.getmLocation().getLongitude(), is(mReadLongitude));
-        assertThat(event.getmEventBegin(), is(mReadEventBegin));
-        assertThat(event.getmEventEnd(), is(mReadEventEnd));
-        assertThat(event.getmOrganizer(), notNullValue());
-        assertThat(event.getmOrganizer().getmID(), is(mReadUserId));
-        assertThat(event.getmOrganizer().getmNickName(), equalTo(mReadNickName));
-        assertThat(event.getmOrganizer().getmFirstName(), equalTo(mReadFirstName));
-        assertThat(event.getmOrganizer().getmLastName(), equalTo(mReadLastName));
-        assertThat(event.getmOrganizer().getmBirthday(), is(mReadBirthday));
-        assertThat(event.getmOrganizer().getmAbout(), equalTo(mReadAbout));
-        assertThat(event.getmOrganizer().getmImageUrl(), equalTo(mReadImageUrl));
+        assertThat(event.getID(), is(mReadEventID));
+        assertThat(event.getName(), equalTo(mReadName));
+        assertThat(event.getLocation(), notNullValue());
+        assertThat(event.getLocation().getID(), is(mReadLocID));
+        assertThat(event.getLocation().getName(), equalTo(mReadLocName));
+        assertThat(event.getLocation().getLattitude(), is(mReadLattitude));
+        assertThat(event.getLocation().getLongitude(), is(mReadLongitude));
+        assertThat(event.getEventBegin(), is(mReadEventBegin));
+        assertThat(event.getEventEnd(), is(mReadEventEnd));
+        assertThat(event.getOrganizer(), notNullValue());
+        assertThat(event.getOrganizer().getID(), is(mReadUserId));
+        assertThat(event.getOrganizer().getNickName(), equalTo(mReadNickName));
+        assertThat(event.getOrganizer().getFirstName(), equalTo(mReadFirstName));
+        assertThat(event.getOrganizer().getLastName(), equalTo(mReadLastName));
+        assertThat(event.getOrganizer().getBirthday(), is(mReadBirthday));
+        assertThat(event.getOrganizer().getAbout(), equalTo(mReadAbout));
+        assertThat(event.getOrganizer().getImageUrl(), equalTo(mReadImageUrl));
         assertThat(event.getGuests(), notNullValue());
         assertThat(event.getGuests().size(), is(2));
     }

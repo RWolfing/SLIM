@@ -48,7 +48,7 @@ public class SlimServiceTest extends BaseTest {
         Event event4 = createRandomEvent(guestListWithoutUser, null);
 
         //Retrieve all events with the user and check the result
-        List<Event> result = mSlimService.getEventsWithUser(searchedUser.getmID());
+        List<Event> result = mSlimService.getEventsWithUser(searchedUser.getID());
         assertThat(result.contains(event1), is(true));
         assertThat(result.contains(event2), is(false));
         assertThat(result.contains(event3), is(true));
@@ -124,12 +124,12 @@ public class SlimServiceTest extends BaseTest {
         createRandomEvent(guestListFailure, user3);
 
         //Fetch result doesHePartyWithMe
-        boolean yesNo = mSlimService.doesHePartyWithMe(userMe.getmID(), userHim.getmID());
+        boolean yesNo = mSlimService.doesHePartyWithMe(userMe.getID(), userHim.getID());
         assertThat(yesNo, is(true));
 
         //Delete event for success & check again
-        mSlimService.deleteEvent(eventWithUsers.getmID());
-        yesNo = mSlimService.doesHePartyWithMe(userMe.getmID(), userHim.getmID());
+        mSlimService.deleteEvent(eventWithUsers.getID());
+        yesNo = mSlimService.doesHePartyWithMe(userMe.getID(), userHim.getID());
         assertThat(yesNo, is(false));
     }
 }

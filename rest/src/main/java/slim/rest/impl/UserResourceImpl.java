@@ -42,10 +42,10 @@ public class UserResourceImpl extends SlimResource implements UserResource {
         User user = mSlimService.getUserById(userId);
         //Does user exist
         if (user != null) {
-            user.setmNickName(nickName);
-            user.setmBirthday(birthday);
-            user.setmAbout(about);
-            user.setmImageUrl(imageUrl);
+            user.setNickName(nickName);
+            user.setBirthday(birthday);
+            user.setAbout(about);
+            user.setImageUrl(imageUrl);
 
             //Update user
             if (mSlimService.updateUser(user)) {

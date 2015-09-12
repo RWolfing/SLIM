@@ -38,15 +38,15 @@ public class GuestEntry {
         mGuest = user;
     }
 
-    public int getmID() {
+    public int getID() {
         return mID;
     }
 
-    public User getmGuest() {
+    public User getGuest() {
         return mGuest;
     }
 
-    public Event getmEvent() {
+    public Event getEvent() {
         return mEvent;
     }
 }

@@ -100,7 +100,7 @@ public class LocationTest extends BaseTest {
 
         //With event
         Event event = createRandomEvent(null, null);
-        success = mSlimDatabase.deleteLocation(event.getmLocation().getID());
+        success = mSlimDatabase.deleteLocation(event.getLocation().getID());
         assertThat(success, is(false));
     }
 

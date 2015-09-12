@@ -28,23 +28,23 @@ public class EventTest extends BaseTest {
          */
         Event event = createRandomEvent(null, organzier);
         assertThat(event, notNullValue());
-        assertThat(event.getmLocation(), notNullValue());
-        assertThat(event.getmOrganizer(), notNullValue());
+        assertThat(event.getLocation(), notNullValue());
+        assertThat(event.getOrganizer(), notNullValue());
 
         /**
          * Read the event from the db & check every field
          */
-        Event fetchedEvent = mSlimDatabase.getEventById(event.getmID());
-        assertThat(fetchedEvent.getmName(), is(equalTo(event.getmName())));
-        assertThat(fetchedEvent.getmLocation(), notNullValue());
-        assertThat(fetchedEvent.getmLocation().getID(), is(event.getmLocation().getID()));
-        assertThat(fetchedEvent.getmEventBegin(), is(event.getmEventBegin()));
-        assertThat(fetchedEvent.getmEventEnd(), is(event.getmEventEnd()));
+        Event fetchedEvent = mSlimDatabase.getEventById(event.getID());
+        assertThat(fetchedEvent.getName(), is(equalTo(event.getName())));
+        assertThat(fetchedEvent.getLocation(), notNullValue());
+        assertThat(fetchedEvent.getLocation().getID(), is(event.getLocation().getID()));
+        assertThat(fetchedEvent.getEventBegin(), is(event.getEventBegin()));
+        assertThat(fetchedEvent.getEventEnd(), is(event.getEventEnd()));
         assertThat(fetchedEvent.getGuests(), notNullValue());
         assertThat(fetchedEvent.getGuests().size(), is(0));
-        assertThat(fetchedEvent.getmDescription(), is(equalTo(event.getmDescription())));
-        assertThat(fetchedEvent.getmOrganizer(), notNullValue());
-        assertThat(fetchedEvent.getmOrganizer().getmID(), is(event.getmOrganizer().getmID()));
+        assertThat(fetchedEvent.getDescription(), is(equalTo(event.getDescription())));
+        assertThat(fetchedEvent.getOrganizer(), notNullValue());
+        assertThat(fetchedEvent.getOrganizer().getID(), is(event.getOrganizer().getID()));
     }
 
     @Test
@@ -64,11 +64,11 @@ public class EventTest extends BaseTest {
         long newEventBegin = 1000;
         long newEventEnd = 500000000;
 
-        Event event = mSlimService.getEventById(createdEvent.getmID());
-        event.setmDescription(newDescription);
-        event.setmEventBegin(newEventBegin);
-        event.setmEventEnd(newEventEnd);
-        event.setmName(newName);
+        Event event = mSlimService.getEventById(createdEvent.getID());
+        event.setDescription(newDescription);
+        event.setEventBegin(newEventBegin);
+        event.setEventEnd(newEventEnd);
+        event.setName(newName);
         event.addGuest(guest);
 
         /**
@@ -94,7 +94,7 @@ public class EventTest extends BaseTest {
         assertThat(success, is(true));
 
         //Fetch event from db and check if guests match
-        event = mSlimDatabase.getEventById(event.getmID());
+        event = mSlimDatabase.getEventById(event.getID());
         assertThat(event.getGuests().contains(guest1), is(true));
         assertThat(event.getGuests().contains(guest2), is(true));
         assertThat(event.getGuests().size(), is(2));
@@ -105,7 +105,7 @@ public class EventTest extends BaseTest {
         assertThat(success, is(true));
 
         //Fetch event from db and check if guests match
-        event = mSlimDatabase.getEventById(event.getmID());
+        event = mSlimDatabase.getEventById(event.getID());
         assertThat(event.getGuests().contains(guest1), is(false));
         assertThat(event.getGuests().contains(guest2), is(true));
     }
@@ -120,8 +120,8 @@ public class EventTest extends BaseTest {
         assertThat(event, notNullValue());
 
         //Delete event
-        mSlimService.deleteEvent(event.getmID());
-        event = mSlimService.getEventById(event.getmID());
+        mSlimService.deleteEvent(event.getID());
+        event = mSlimService.getEventById(event.getID());
         assertThat(event, nullValue());
     }
 

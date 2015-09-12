@@ -48,10 +48,10 @@ public class EventResourceImpl extends SlimResource implements EventRessource {
         Event event = mSlimService.getEventById(eventId);
         //Check if event exists
         if (event != null) {
-            event.setmName(name);
-            event.setmEventBegin(eventBegin);
-            event.setmEventEnd(eventEnd);
-            event.setmDescription(description);
+            event.setName(name);
+            event.setEventBegin(eventBegin);
+            event.setEventEnd(eventEnd);
+            event.setDescription(description);
             //Update event
             if (mSlimService.updateEvent(event)) {
                 return Response.ok(event).build();

@@ -43,7 +43,7 @@ public class Event {
     @DatabaseField
     private String mDescription;
     @XmlElement(name = "organizer")
-    @DatabaseField(foreign = true, columnName = ORGANIZER_FIELD_NAME)
+    @DatabaseField(foreign = true, foreignAutoRefresh = true, columnName = ORGANIZER_FIELD_NAME)
     private User mOrganizer;
 
     @XmlElement(name = "guests")
@@ -62,52 +62,48 @@ public class Event {
         mGuests = new ArrayList();
         mOrganizer = organizer;
     }
-    
-    public void setmID(int id){
-        mID = id;
-    }
 
-    public int getmID() {
+    public int getID() {
         return mID;
     }
 
-    public String getmName() {
+    public String getName() {
         return mName;
     }
 
-    public void setmName(String mName) {
+    public void setName(String mName) {
         this.mName = mName;
     }
 
-    public Location getmLocation() {
+    public Location getLocation() {
         return mLocation;
     }
 
-    public long getmEventBegin() {
+    public long getEventBegin() {
         return mEventBegin;
     }
 
-    public void setmEventBegin(long mEventBegin) {
+    public void setEventBegin(long mEventBegin) {
         this.mEventBegin = mEventBegin;
     }
 
-    public long getmEventEnd() {
+    public long getEventEnd() {
         return mEventEnd;
     }
 
-    public void setmEventEnd(long mEventEnd) {
+    public void setEventEnd(long mEventEnd) {
         this.mEventEnd = mEventEnd;
     }
 
-    public String getmDescription() {
+    public String getDescription() {
         return mDescription;
     }
 
-    public void setmDescription(String mDescription) {
+    public void setDescription(String mDescription) {
         this.mDescription = mDescription;
     }
 
-    public User getmOrganizer() {
+    public User getOrganizer() {
         return mOrganizer;
     }
 
@@ -145,6 +141,6 @@ public class Event {
         if (obj == null || obj.getClass() != getClass()) {
             return false;
         }
-        return ((Event) obj).getmID() == mID;
+        return ((Event) obj).getID() == mID;
     }
 }

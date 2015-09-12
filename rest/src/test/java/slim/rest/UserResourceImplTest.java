@@ -50,9 +50,9 @@ public class UserResourceImplTest extends RestBaseTest {
         assertThat(response.getStatus(), is(Response.Status.CREATED.getStatusCode()));
 
         User user = (User) response.getEntity();
-        response = mUserResource.fetchUserById(user.getmID());
+        response = mUserResource.fetchUserById(user.getID());
         assertThat(response.getStatus(), is(Response.Status.OK.getStatusCode()));
-        assertThat(user.getmID(), is(((User) response.getEntity()).getmID()));
+        assertThat(user.getID(), is(((User) response.getEntity()).getID()));
     }
 
     @Test
@@ -64,9 +64,9 @@ public class UserResourceImplTest extends RestBaseTest {
     @Test
     public void fetchUserById() {
         //Existing
-        Response response = mUserResource.fetchUserById(mTestUser.getmID());
+        Response response = mUserResource.fetchUserById(mTestUser.getID());
         assertThat(response.getStatus(), is(Response.Status.OK.getStatusCode()));
-        assertThat(mTestUser.getmID(), is(((User) response.getEntity()).getmID()));
+        assertThat(mTestUser.getID(), is(((User) response.getEntity()).getID()));
 
         //Bad id
         response = mUserResource.fetchUserById(-10);
@@ -88,44 +88,44 @@ public class UserResourceImplTest extends RestBaseTest {
     @Test
     public void updateUser() {
         //Test success
-        Response response = mUserResource.updateUser(mTestUser.getmID(), "maxi", mTestUser.getmBirthday(), "new description", mTestUser.getmImageUrl());
+        Response response = mUserResource.updateUser(mTestUser.getID(), "maxi", mTestUser.getBirthday(), "new description", mTestUser.getImageUrl());
         assertThat(response.getStatus(), is(Response.Status.OK.getStatusCode()));
 
         User user = (User) response.getEntity();
-        assertThat(user.getmID(), is(mTestUser.getmID()));
-        assertThat(user.getmNickName(), is("maxi"));
-        assertThat(user.getmAbout(), is("new description"));
+        assertThat(user.getID(), is(mTestUser.getID()));
+        assertThat(user.getNickName(), is("maxi"));
+        assertThat(user.getAbout(), is("new description"));
 
         //Test failure bad id
-        response = mUserResource.updateUser(-100, "maxi", mTestUser.getmBirthday(), "new description", mTestUser.getmImageUrl());
+        response = mUserResource.updateUser(-100, "maxi", mTestUser.getBirthday(), "new description", mTestUser.getImageUrl());
         assertThat(response.getStatus(), is(Response.Status.BAD_REQUEST.getStatusCode()));
 
         //Test failure not found
-        response = mUserResource.updateUser(100, "maxi", mTestUser.getmBirthday(), "new description", mTestUser.getmImageUrl());
+        response = mUserResource.updateUser(100, "maxi", mTestUser.getBirthday(), "new description", mTestUser.getImageUrl());
         assertThat(response.getStatus(), is(Response.Status.NOT_FOUND.getStatusCode()));
     }
 
     @Test
     public void doesHePartyWithMe() {
         //Anna parties with gustav
-        Response response = mUserResource.doesHePartyWithMe(mPartyFriend1.getmID(), mPartyFriend2.getmID());
+        Response response = mUserResource.doesHePartyWithMe(mPartyFriend1.getID(), mPartyFriend2.getID());
         assertThat(response.getStatus(), is(Response.Status.OK.getStatusCode()));
         assertThat(response.getEntity(), is(true));
         
         //Anna does not party with max
-        response = mUserResource.doesHePartyWithMe(mPartyFriend1.getmID(), mTestUser.getmID());
+        response = mUserResource.doesHePartyWithMe(mPartyFriend1.getID(), mTestUser.getID());
         assertThat(response.getStatus(), is(Response.Status.OK.getStatusCode()));
         assertThat(response.getEntity(), is(false));
         
         //Failure invalid ids
-        response = mUserResource.doesHePartyWithMe(-100, mTestUser.getmID());
+        response = mUserResource.doesHePartyWithMe(-100, mTestUser.getID());
         assertThat(response.getStatus(), is(Response.Status.BAD_REQUEST.getStatusCode()));
     }
 
     @Test
     public void deleteUser() {
         //Test success
-        Response response = mUserResource.deleteUser(mTestUser.getmID());
+        Response response = mUserResource.deleteUser(mTestUser.getID());
         assertThat(response.getStatus(), is(Response.Status.OK.getStatusCode()));
 
         //Test bad id
@@ -133,7 +133,7 @@ public class UserResourceImplTest extends RestBaseTest {
         assertThat(response.getStatus(), is(Response.Status.BAD_REQUEST.getStatusCode()));
 
         //Test not existing
-        response = mUserResource.deleteUser(mTestUser.getmID());
+        response = mUserResource.deleteUser(mTestUser.getID());
         assertThat(response.getStatus(), is(Response.Status.NOT_FOUND.getStatusCode()));
     }
 }

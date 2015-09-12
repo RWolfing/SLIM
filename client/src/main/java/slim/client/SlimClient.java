@@ -67,6 +67,13 @@ public class SlimClient {
                     setLoggingEnabled(true);
                     testUserFetchAll();
                     break;
+                case 4:
+                    cleanupDatabase();
+                    break;
+                case 5:
+                    setLoggingEnabled(true);
+                    testEventFunctionality();
+                    break;
                 default:
                     System.out.println("No valid option!");
             }
@@ -90,7 +97,9 @@ public class SlimClient {
         System.out.println("|------- Available options --------|");
         System.out.println("| 0: To Exit programm.. |");
         System.out.println("| 1: Setup Datapool |");
+        System.out.println("| 4: Cleanup Datapool |");
         System.out.println("| 2: Show User create->update->retrieve->delete->retrieve |");
+         System.out.println("| 5: Show Evemt create->update->retrieve |");
         System.out.println("| 3: Fetch all users |");
     }
 
@@ -113,11 +122,11 @@ public class SlimClient {
         mLocationWithEvents = mLocationService.createLocation("Event Location", 4091509090l, -490815090l).getResultContent();
 
         //Setup events
-        mEventStandard = mEventService.createEvent("Standard Event", 4091509090l, -490815090l, 98795161l, 121059019100l, "Das ist ein Standard event", mUserMaxMuster.getmID()).getResultContent();
-        mEventWithGuests = mEventService.createEvent("Guest Event", 4091509090l, -490815090l, 98795161l, 121059019100l, "Das ist ein Event mit Gaesten", mUserMaxMuster.getmID()).getResultContent();
-        mEventService.addGuestToEvent(mEventWithGuests.getmID(), mUserABranco.getmID());
-        mEventService.addGuestToEvent(mEventWithGuests.getmID(), mUserLKopfer.getmID());
-        mEventService.addGuestToEvent(mEventWithGuests.getmID(), mUserMMueller.getmID());
+        mEventStandard = mEventService.createEvent("Standard Event", 4091509090l, -490815090l, 98795161l, 121059019100l, "Das ist ein Standard event", mUserMaxMuster.getID()).getResultContent();
+        mEventWithGuests = mEventService.createEvent("Guest Event", 4091509090l, -490815090l, 98795161l, 121059019100l, "Das ist ein Event mit Gaesten", mUserMaxMuster.getID()).getResultContent();
+        mEventService.addGuestToEvent(mEventWithGuests.getID(), mUserABranco.getID());
+        mEventService.addGuestToEvent(mEventWithGuests.getID(), mUserLKopfer.getID());
+        mEventService.addGuestToEvent(mEventWithGuests.getID(), mUserMMueller.getID());
 
         if (mUserABranco != null && mUserGSchulze != null && mUserLKopfer != null && mUserMMueller != null && mUserMaxMuster != null && mEventStandard != null && mEventWithGuests != null && mLocationSingle != null && mLocationWithEvents != null) {
             System.out.println("Setting up data pool succeeded!");
@@ -140,22 +149,28 @@ public class SlimClient {
 
         System.out.println();
         System.out.println("---- UPDATING USER ----");
-        mUserService.updateUser(userMax.getmID(), "maxi", userMax.getmBirthday() + 10000000l, "Läuft immer besser", "www.nettebilder.de");
+        mUserService.updateUser(userMax.getID(), "maxi", userMax.getBirthday() + 10000000l, "Läuft immer besser", "www.nettebilder.de");
 
         System.out.println();
         System.out.println("---- RETRIEVING USER ----");
-        mUserService.fetchUserById(userMax.getmID());
+        mUserService.fetchUserById(userMax.getID());
+    }
+    
+    public void testEventFunctionality(){
+        printMessage("creating event");    
+        Event event = mEventService.createEvent("CreatedEvent", 100, 500, 4560540l, 987985109510l, "Ein neu erzeugter Event", mUserGSchulze.getID()).getResultContent();
+        printMessage("updating event");
+        mEventService.updateEvent(event.getID(), "UpdatedEvent", 10, 100, "Ein geupdateter Event").getResultContent();
+        printMessage("retrieving event");
+        mEventService.fetchEventById(event.getID());
+    }
+    
+    private void printMessage(String message){
+        System.out.println("----" + message.toUpperCase() + "----");
     }
 
     public void testUserFetchAll() {
         mUserService.fetchAllUsers();
-    }
-
-    public void testEventFunctionality() {
-        User userMax = mUserService.createUser("mmuster", "Max", "Mustermann", 5910591000l, "Super läufts", "www.geilesaeue.de").getResultContent();
-        Event event = mEventService.createEvent("test", 5000, 5000, 500, 5000, "description", userMax.getmID()).getResultContent();
-
-        List<Event> events = mEventService.fetchAllEvents().getResultContent();
     }
     
     public void setLoggingEnabled(boolean enabled){

@@ -51,60 +51,56 @@ public class User {
         mAbout = about;
         mImageUrl = imageUrl;
     }
-    
-    public void setmID(int id){
-        mID = id;
-    }
 
-    public int getmID() {
+    public int getID() {
         return mID;
     }
 
-    public String getmNickName() {
+    public String getNickName() {
         return mNickName;
     }
 
-    public void setmNickName(String mNickName) {
+    public void setNickName(String mNickName) {
         this.mNickName = mNickName;
     }
 
-    public String getmFirstName() {
+    public String getFirstName() {
         return mFirstName;
     }
 
-    public void setmFirstName(String mFirstName) {
+    public void setFirstName(String mFirstName) {
         this.mFirstName = mFirstName;
     }
 
-    public String getmLastName() {
+    public String getLastName() {
         return mLastName;
     }
 
-    public void setmLastName(String mLastName) {
+    public void setLastName(String mLastName) {
         this.mLastName = mLastName;
     }
 
-    public long getmBirthday() {
+    public long getBirthday() {
         return mBirthday;
     }
 
-    public void setmBirthday(long mBirthday) {
+    public void setBirthday(long mBirthday) {
         this.mBirthday = mBirthday;
     }
 
-    public String getmAbout() {
+    public String getAbout() {
         return mAbout;
     }
 
-    public void setmAbout(String mAbout) {
+    public void setAbout(String mAbout) {
         this.mAbout = mAbout;
     }
 
-    public String getmImageUrl() {
+    public String getImageUrl() {
         return mImageUrl;
     }
 
-    public void setmImageUrl(String mImageUrl) {
+    public void setImageUrl(String mImageUrl) {
         this.mImageUrl = mImageUrl;
     }
     
@@ -118,7 +114,7 @@ public class User {
         if (obj == null || obj.getClass() != getClass()) {
             return false;
         }
-        return ((User) obj).getmID() == mID;
+        return ((User) obj).getID() == mID;
     }
 
     @Override
