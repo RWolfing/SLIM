@@ -1,6 +1,6 @@
 apply plugin: 'application'
 
-mainClassName = 'slim.client.SlimClient'
+mainClassName = 'slim.client.Main'
 
 dependencies{
     compile project(':core')
