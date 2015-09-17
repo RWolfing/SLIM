@@ -1,10 +1,12 @@
 package slim.client;
 
-import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileSystem;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import slim.client.services.EventService;
 import slim.client.services.LocationService;
 import slim.client.services.SlimService;
@@ -20,11 +22,11 @@ import slim.core.model.User;
  */
 public class SlimClient {
 
-    private static final String serviceBaseURI = "http://localhost:8080";
+    private final String mServiceBaseURI;
 
-    private UserService mUserService = new UserService(serviceBaseURI, SlimService.MediaType.JSON);
-    private EventService mEventService = new EventService(serviceBaseURI, SlimService.MediaType.JSON);
-    private LocationService mLocationService = new LocationService(serviceBaseURI, SlimService.MediaType.JSON);
+    private UserService mUserService;
+    private EventService mEventService;
+    private LocationService mLocationService;
 
     private Calendar mCalendar = Calendar.getInstance();
     private User mUserMaxMuster;
@@ -40,14 +42,20 @@ public class SlimClient {
     private Location mLocationWithEvents;
 
     private Scanner mScanner;
-    private BufferedReader mReader;
 
     private SlimService.MediaType mMediaType = SlimService.MediaType.JSON;
 
-    public SlimClient() {
+    public SlimClient(String baseURI) {
+        mServiceBaseURI = baseURI;
         mScanner = new Scanner(System.in);
+        mUserService = new UserService(mServiceBaseURI, SlimService.MediaType.JSON);
+        mEventService = new EventService(mServiceBaseURI, SlimService.MediaType.JSON);
+        mLocationService = new LocationService(mServiceBaseURI, SlimService.MediaType.JSON);
     }
 
+    /**
+     * Starts the client
+     */
     public void start() {
         boolean nextRound = true;
         while (nextRound) {
@@ -87,6 +95,30 @@ public class SlimClient {
                 case 8:
                     switchMediaType();
                     break;
+                case 9:
+                    setLoggingEnabled(true);
+                    testLocationInvalidDelete();
+                    break;
+                case 10:
+                    setLoggingEnabled(true);
+                    testDoesHePary();
+                    break;
+                case 11:
+                    setLoggingEnabled(true);
+                    testFetchAllEvents();
+                    break;
+                case 12:
+                    setLoggingEnabled(true);
+                    testFetchEventsWithOrganizer();
+                    break;
+                case 13:
+                    setLoggingEnabled(true);
+                    testFetchEventsWithinBounds();
+                    break;
+                case 14:
+                    setLoggingEnabled(true);
+                    testFetchEventsWithGuestrange();
+                    break;
                 default:
                     System.out.println("No valid option!");
             }
@@ -94,18 +126,32 @@ public class SlimClient {
 
     }
 
+    /**
+     * Deletes the database
+     */
     public void cleanupDatabase() {
         File coreModul = new File(System.getProperty("user.dir"));
-        File dbFile = new File(coreModul.getParent() + "/slim.db");
+        File dbFile = new File(coreModul.getParent() + File.separator + "slim.db");
         if (dbFile.exists()) {
             if (dbFile.delete()) {
                 System.out.println("Deleted database! " + dbFile.getAbsolutePath());
+                try {
+                    dbFile.createNewFile();
+                } catch (IOException ex) {
+                   System.err.println("Could not recreate the database after deleting, weird stuff may now happen...");
+                   System.err.println("It would be best if you create stop the client & the webservice and recreate the db by hand :S");
+                }
             } else {
                 System.err.println("Could not delete database! " + dbFile.getAbsolutePath());
             }
+        } else {
+            System.err.println("Could not delete database! File not found... Is the database located in : " + dbFile.getAbsolutePath() + "?");
         }
     }
 
+    /**
+     * Prints the available options
+     */
     public void showAvailableOptions() {
         System.out.println("|------- Available options --------|");
         System.out.println("| 0: To Exit programm.. |");
@@ -117,8 +163,20 @@ public class SlimClient {
         System.out.println("| 6: Test Location Lifecycle |");
         System.out.println("| 7: Test Guest Lifecycle |");
         System.out.println("| 3: Fetch all users |");
+        System.out.println("| 9: Delete a event location (should fail) |");
+
+        System.out.println("| 10: Does he party with me (should be true)|");
+        System.out.println("| 11: Fetch all events |");
+        System.out.println("| 12: Get Events with User as Organizer |");
+        System.out.println("| 13: Fetch Events in Bounds |");
+        System.out.println("| 14: Fetch Events with Guestrange |");
     }
 
+    /**
+     * Creates a datapool on which some functionality can be tested
+     *
+     * @return success
+     */
     public boolean setupDataPool() {
         cleanupDatabase();
         System.out.println("Setting up data pool.....");
@@ -155,6 +213,10 @@ public class SlimClient {
         }
     }
 
+    /**
+     * Tests the user "lifecycle" by testing the methods create, update, fetch &
+     * delete
+     */
     public void testUserSimpleLifeCycle() {
         printMessage("creating user");
         Calendar cal = Calendar.getInstance();
@@ -170,6 +232,10 @@ public class SlimClient {
         mUserService.fetchUserById(userMax.getID());
     }
 
+    /**
+     * Tests the event "lifecycle" by testing the methods create, update, fetch
+     * & delete
+     */
     public void testEventSimpleLifeCycle() {
         if (mUserGSchulze == null) {
             System.err.println("Needed User is missing, pls setup datapool first!");
@@ -187,6 +253,10 @@ public class SlimClient {
         mEventService.fetchEventById(event.getID());
     }
 
+    /**
+     * Tests the location "lifecycle" by testing the methods create, update,
+     * fetchByID, fetchByLatLong & delete
+     */
     public void testLocationSimpleLifeCycle() {
         printMessage("creating location");
         Location location = mLocationService.createLocation("Max Location", Long.MAX_VALUE, Long.MAX_VALUE).getResultContent();
@@ -195,20 +265,37 @@ public class SlimClient {
         printMessage("retrieving location by id");
         mLocationService.fetchLocationById(location.getID());
         printMessage("retrieving location by lat/long (SUCCESS)");
-        mLocationService.fetchLocationLongLat(location.getLattitude(), location.getLongitude());
+        mLocationService.fetchLocationLatLong(location.getLattitude(), location.getLongitude());
         printMessage("retrieving location by lat/long (NOT FOUND)");
-        mLocationService.fetchLocationLongLat(Long.MIN_VALUE, Long.MIN_VALUE);
+        mLocationService.fetchLocationLatLong(Long.MIN_VALUE, Long.MIN_VALUE);
         printMessage("deleting location");
         mLocationService.deleteLocation(location.getID());
         printMessage("retrieving location");
         mLocationService.fetchLocationById(location.getID());
     }
 
+    /**
+     * Tests if a location referenced in a event can be deleted
+     */
+    private void testLocationInvalidDelete() {
+        if (mLocationWithEvents == null) {
+            System.err.println("Needed event is missing, pls setup datapool first!");
+            return;
+        }
+        printMessage("Trying to delete a event location");
+        mLocationService.deleteLocation(mLocationWithEvents.getID());
+    }
+
+    /**
+     * Tests the guest "lifecycle" by testing add guest, retrieve event, remove
+     * guest, retrieve event
+     */
     public void testGuestLifeCycle() {
         if (mUserABranco == null) {
             System.err.println("Needed Users & Events are missing, pls setup datapool first!");
             return;
         }
+
         printMessage("adding guest " + mUserABranco.getID() + " to event " + mEventStandard.getID());
         mEventService.addGuestToEvent(mEventStandard.getID(), mUserABranco.getID());
 
@@ -231,20 +318,76 @@ public class SlimClient {
         mEventService.fetchEventById(mEventStandard.getID());
     }
 
-    private void printMessage(String message) {
-        System.out.println("----" + message.toUpperCase() + "----");
-    }
-
     public void testUserFetchAll() {
         mUserService.fetchAllUsers();
     }
 
+    /**
+     * Tests if abranco parties with lkopfer
+     */
+    public void testDoesHePary() {
+        boolean doesHePartyWithMe = mUserService.doesHePartyWitheMe(mUserABranco.getID(), mUserLKopfer.getID()).getResultContent();
+    }
+
+    /**
+     * Retrieves all existing events
+     */
+    public void testFetchAllEvents() {
+        printMessage("Fetching all existing events");
+        mEventService.fetchAllEvents();
+    }
+
+    /**
+     * Retrieves all events where max muster is the organizer
+     */
+    public void testFetchEventsWithOrganizer() {
+        if (mUserMaxMuster == null) {
+            System.err.println("Missing Organizer, pls setup Datapool!");
+            return;
+        }
+        printMessage("fetching all events with " + mUserMaxMuster.getID() + " as Organizer");
+        mEventService.getEventsFromUser(mUserMaxMuster.getID());
+    }
+
+    /**
+     * Retrievies all events with maximum bounds
+     */
+    public void testFetchEventsWithinBounds() {
+        printMessage("Fetching all events in maximum bound");
+        mEventService.getEventsWithinLocation(Long.MIN_VALUE, Long.MAX_VALUE, Long.MIN_VALUE, Long.MAX_VALUE);
+    }
+
+    /**
+     * Retrieves all events in the guest range 1 - 10
+     */
+    public void testFetchEventsWithGuestrange() {
+        printMessage("Fetching all events with guestrange 1 - 10");
+        mEventService.getEventsWithinGuestRange(1, 10);
+    }
+
+    /**
+     * Helper method to print a message
+     *
+     * @param message the message
+     */
+    private void printMessage(String message) {
+        System.out.println("----" + message.toUpperCase() + "----");
+    }
+
+    /**
+     * Sets the logging enabled
+     *
+     * @param enabled is logging enabled
+     */
     public void setLoggingEnabled(boolean enabled) {
         mUserService.setLoggingEnabled(enabled);
         mEventService.setLoggingEnabled(enabled);
         mLocationService.setLoggingEnabled(enabled);
     }
 
+    /**
+     * Switches the mediatype
+     */
     public void switchMediaType() {
         switch (mMediaType) {
             case JSON:

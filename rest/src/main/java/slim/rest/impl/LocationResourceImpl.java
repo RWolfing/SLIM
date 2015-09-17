@@ -61,7 +61,7 @@ public class LocationResourceImpl extends SlimResource implements LocationResour
         if (mSlimService.deleteLocation(id)) {
             return Response.status(Response.Status.OK).build();
         } else {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
 

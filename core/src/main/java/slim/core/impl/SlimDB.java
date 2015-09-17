@@ -5,6 +5,7 @@ import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
+import java.io.File;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -61,14 +62,14 @@ public class SlimDB implements DatabaseConnection {
             return true;
         }
         //Else setup the connection
-        String slimDB = System.getProperty("user.dir") + "/" + mDatabaseName;
+        String slimDB = System.getProperty("user.dir") + File.pathSeparator + mDatabaseName;
         String sJdbc = "jdbc:sqlite";
         String sDbUrl = sJdbc + ":" + slimDB;
        
         try {
             mConnectionSource = new JdbcConnectionSource(sDbUrl);
             setupDatabase(mConnectionSource);
-            Logger.getLogger(SlimDB.class.getName()).log(Level.INFO, "Created db" + sDbUrl);
+            Logger.getLogger(SlimDB.class.getName()).log(Level.INFO, "Created db", sDbUrl);
             return true;
         } catch (SQLException ex) {
             Logger.getLogger(SlimDB.class.getName()).log(Level.SEVERE, "Could not open database connection!", ex);

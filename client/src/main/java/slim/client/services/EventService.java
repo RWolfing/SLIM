@@ -17,7 +17,13 @@ import slim.core.model.Event;
 import slim.core.model.EventList;
 
 /**
- * Service for all event related functionality
+ * Service for all event related communication
+ * The methods are almost exactly the same as the API from the webservice so no extra documentation will be added.
+ * For more @see EventResourceImpl
+ * 
+ * Every Method builds the appropriate HttpMethod with the given parameters and executes it.
+ * The response is going to be wrapped in a {@link SlimResult} which contains the status code
+ * and also the response object if one exists.
  * 
  * @author Robert Wolfinger
  */
@@ -283,6 +289,7 @@ public class EventService extends SlimService {
         DeleteMethod deleteMethod = new DeleteMethod(mServiceBaseURI + "/" + "removeguest" + "/" + eventId);
         NameValuePair userIdPair = new NameValuePair("userId", String.valueOf(userId));
         deleteMethod.setQueryString(new NameValuePair[]{userIdPair});
+        deleteMethod.setRequestHeader("Accept", mMediaType.getValue());
         try {
             int status = mHttpClient.executeMethod(deleteMethod);
             result.setStatus(status);

@@ -109,9 +109,9 @@ public class UserResourceImpl extends SlimResource implements UserResource {
         }
 
         if (mSlimService.doesHePartyWithMe(idUser1, idUser2)) {
-            return Response.status(Status.OK).entity(true).build();
+            return Response.status(Status.OK).build();
         } else {
-            return Response.status(Status.OK).entity(false).build();
+            return Response.status(Status.NOT_FOUND).build();
         }
     }
 }

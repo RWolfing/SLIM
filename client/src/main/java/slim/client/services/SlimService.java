@@ -3,8 +3,6 @@ package slim.client.services;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;

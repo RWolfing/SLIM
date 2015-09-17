@@ -13,8 +13,13 @@ import org.apache.commons.httpclient.methods.PutMethod;
 import slim.core.model.Location;
 
 /**
- *
- * Service for all location related functionality
+ * Service for all location related communication
+ * The methods are almost exactly the same as the API from the webservice so no extra documentation will be added.
+ * For more @see LocationResourceImpl
+ * 
+ * Every Method builds the appropriate HttpMethod with the given parameters and executes it.
+ * The response is going to be wrapped in a {@link SlimResult} which contains the status code
+ * and also the response object if one exists.
  * 
  * @author Robert Wolfinger
  */
@@ -106,7 +111,7 @@ public class LocationService extends SlimService {
         return result;
     }
 
-    public SlimResult<Location> fetchLocationLongLat(long lattitude, long longitude) {
+    public SlimResult<Location> fetchLocationLatLong(long lattitude, long longitude) {
         SlimResult result = new SlimResult(null);
         GetMethod getMethod = new GetMethod(mServiceBaseURI);
         NameValuePair pairLatt = new NameValuePair("lattitude", String.valueOf(lattitude));

@@ -17,20 +17,22 @@
       <about>about</about>
       <imageUrl>imageurl</imageUrl>
    </organizer>
-   <guests id="1">
-      <nickname>guest</nickname>
-      <firstname>guest</firstname>
-      <lastname>guest</lastname>
-      <birthday>0</birthday>
-      <about>about</about>
-      <imageUrl>imageurl</imageUrl>
-   </guests>
-   <guests id="2">
-      <nickname>guest2</nickname>
-      <firstname>guest2</firstname>
-      <lastname>guest2</lastname>
-      <birthday>0</birthday>
-      <about>about</about>
-      <imageUrl>imageurl</imageUrl>
+   <guests>
+      <user id="1">
+         <nickname>guest</nickname>
+         <firstname>guest</firstname>
+         <lastname>guest</lastname>
+         <birthday>0</birthday>
+         <about>about</about>
+         <imageUrl>imageurl</imageUrl>
+      </user>
+      <user id="2">
+         <nickname>guest2</nickname>
+         <firstname>guest2</firstname>
+         <lastname>guest2</lastname>
+         <birthday>0</birthday>
+         <about>about</about>
+         <imageUrl>imageurl</imageUrl>
+      </user>
    </guests>
 </event>

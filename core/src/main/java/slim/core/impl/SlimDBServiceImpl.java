@@ -5,7 +5,6 @@
  */
 package slim.core.impl;
 
-import com.j256.ormlite.stmt.UpdateBuilder;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;

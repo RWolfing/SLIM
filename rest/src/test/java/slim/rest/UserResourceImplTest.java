@@ -110,12 +110,10 @@ public class UserResourceImplTest extends RestBaseTest {
         //Anna parties with gustav
         Response response = mUserResource.doesHePartyWithMe(mPartyFriend1.getID(), mPartyFriend2.getID());
         assertThat(response.getStatus(), is(Response.Status.OK.getStatusCode()));
-        assertThat(response.getEntity(), is(true));
         
         //Anna does not party with max
         response = mUserResource.doesHePartyWithMe(mPartyFriend1.getID(), mTestUser.getID());
-        assertThat(response.getStatus(), is(Response.Status.OK.getStatusCode()));
-        assertThat(response.getEntity(), is(false));
+        assertThat(response.getStatus(), is(Response.Status.NOT_FOUND.getStatusCode()));
         
         //Failure invalid ids
         response = mUserResource.doesHePartyWithMe(-100, mTestUser.getID());

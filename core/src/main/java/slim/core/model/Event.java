@@ -2,7 +2,6 @@ package slim.core.model;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
-import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -47,10 +46,10 @@ public class Event {
     private User mOrganizer;
 
     @XmlElement(name = "guests")
-    private List<User> mGuests;
+    private UserList mGuests;
 
     public Event() {
-        mGuests = new ArrayList<>();
+        mGuests = new UserList();
     }
 
     public Event(String name, Location location, long eventBegin, long eventEnd, String description, User organizer) {
@@ -59,7 +58,7 @@ public class Event {
         mEventBegin = eventBegin;
         mEventEnd = eventEnd;
         mDescription = description;
-        mGuests = new ArrayList();
+        mGuests = new UserList();
         mOrganizer = organizer;
     }
 
@@ -108,14 +107,11 @@ public class Event {
     }
 
     public void setGuests(List<User> guests) {
-        mGuests.clear();
-        mGuests.addAll(guests);
+        mGuests.setUsers(guests);
     }
 
     public void addGuest(User guest) {
-        if (!mGuests.contains(guest)) {
-            mGuests.add(guest);
-        }
+        mGuests.add(guest);
     }
 
     public void removeGuest(User guest) {
@@ -123,7 +119,7 @@ public class Event {
     }
 
     public List<User> getGuests() {
-        return mGuests;
+        return mGuests.getUsers();
     }
 
     @Override

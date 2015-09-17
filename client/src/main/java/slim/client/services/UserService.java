@@ -16,7 +16,13 @@ import slim.core.model.User;
 import slim.core.model.UserList;
 
 /**
- * Service for all user related functionality
+ * Service for all user related communication
+ * The methods are almost exactly the same as the API from the webservice so no extra documentation will be added.
+ * For more @see UserResourceImpl
+ * 
+ * Every Method builds the appropriate HttpMethod with the given parameters and executes it.
+ * The response is going to be wrapped in a {@link SlimResult} which contains the status code
+ * and also the response object if one exists.
  * 
  * @author Robert Wolfinger
  */
@@ -143,13 +149,12 @@ public class UserService extends SlimService {
             int status = mHttpClient.executeMethod(getMethod);
             result.setStatus(status);
             if (status == HttpStatus.SC_OK) {
-                Boolean isTrue = (Boolean) unmarshall(getMethod.getResponseBodyAsString(), User.class);
-                result.setResultContent(isTrue);
+                result.setResultContent(true);
+            } else {
+                result.setResultContent(false);
             }
         } catch (IOException ex) {
             Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, ERROR_IO + "does he party with me", ex);
-        } catch (JAXBException ex) {
-            Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, ERROR_JAXB_USER, ex);
         }
         whatAmIDoing(result, getMethod);
         return result;

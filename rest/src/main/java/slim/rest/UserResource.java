@@ -107,7 +107,7 @@ public interface UserResource {
      *
      * @param idUser1 id of one user
      * @param idUser2 id of another user
-     * @return 200 OK if a result was retrieved, Else the appropriate status
+     * @return 200 OK if the result is true, 404 if the result is false
      * code
      */
     @GET
