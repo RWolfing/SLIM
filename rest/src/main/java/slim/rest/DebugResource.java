@@ -10,7 +10,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import slim.core.model.Event;
 import slim.rest.impl.SlimResource;
 
 /**
@@ -21,10 +20,11 @@ import slim.rest.impl.SlimResource;
  */
 @Path("debug")
 public class DebugResource extends SlimResource{
+  
     /**
-     * Deletes the {@link Event} with the given id
+     * Drops all tables of the database
      *
-     * @return 200 OK if the user was deleted Else appropriate status code
+     * @return 200 OK if tables could be cleared
      */
     @DELETE
     @Path("/dropall")
