@@ -2,13 +2,15 @@ package slim.client;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileSystem;
 import java.util.Calendar;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.DeleteMethod;
 import slim.client.services.EventService;
 import slim.client.services.LocationService;
+import slim.client.services.SlimResult;
 import slim.client.services.SlimService;
 import slim.client.services.UserService;
 import slim.core.model.Event;
@@ -43,14 +45,18 @@ public class SlimClient {
 
     private Scanner mScanner;
 
-    private SlimService.MediaType mMediaType = SlimService.MediaType.JSON;
+    private SlimService.MediaType mMediaType = SlimService.MediaType.XML;
 
+    /**
+     * Constructor to create a SlimClient with the given baseURI
+     * @param baseURI the base uri of the webservice
+     */
     public SlimClient(String baseURI) {
         mServiceBaseURI = baseURI;
         mScanner = new Scanner(System.in);
-        mUserService = new UserService(mServiceBaseURI, SlimService.MediaType.JSON);
-        mEventService = new EventService(mServiceBaseURI, SlimService.MediaType.JSON);
-        mLocationService = new LocationService(mServiceBaseURI, SlimService.MediaType.JSON);
+        mUserService = new UserService(mServiceBaseURI, mMediaType);
+        mEventService = new EventService(mServiceBaseURI, mMediaType);
+        mLocationService = new LocationService(mServiceBaseURI, mMediaType);
     }
 
     /**
@@ -70,30 +76,29 @@ public class SlimClient {
                     setupDataPool();
                     break;
                 case 2:
-                    setLoggingEnabled(true);
-                    testUserSimpleLifeCycle();
+                    switchMediaType();
                     break;
                 case 3:
                     setLoggingEnabled(true);
-                    testUserFetchAll();
+                    testUserSimpleLifeCycle();
                     break;
                 case 4:
-                    cleanupDatabase();
+                    testLocationSimpleLifeCycle();
                     break;
                 case 5:
                     setLoggingEnabled(true);
-                    testEventSimpleLifeCycle();
+                    testLocationSimpleLifeCycle();
                     break;
                 case 6:
                     setLoggingEnabled(true);
-                    testLocationSimpleLifeCycle();
+                    testGuestLifeCycle();
                     break;
                 case 7:
                     setLoggingEnabled(true);
-                    testGuestLifeCycle();
+                    testUserFetchAll();
                     break;
                 case 8:
-                    switchMediaType();
+                    testFetchAllEvents();
                     break;
                 case 9:
                     setLoggingEnabled(true);
@@ -105,47 +110,41 @@ public class SlimClient {
                     break;
                 case 11:
                     setLoggingEnabled(true);
-                    testFetchAllEvents();
+                    testFetchEventsWithOrganizer();
                     break;
                 case 12:
                     setLoggingEnabled(true);
-                    testFetchEventsWithOrganizer();
+                    testFetchEventsWithinBounds();
                     break;
                 case 13:
                     setLoggingEnabled(true);
-                    testFetchEventsWithinBounds();
+                    testFetchEventsWithGuestrange();
                     break;
                 case 14:
-                    setLoggingEnabled(true);
-                    testFetchEventsWithGuestrange();
+                    setLoggingEnabled(false);
+                    cleanupDatabase();
                     break;
                 default:
                     System.out.println("No valid option!");
             }
         }
-
     }
 
     /**
      * Deletes the database
      */
     public void cleanupDatabase() {
-        File coreModul = new File(System.getProperty("user.dir"));
-        File dbFile = new File(coreModul.getParent() + File.separator + "slim.db");
-        if (dbFile.exists()) {
-            if (dbFile.delete()) {
-                System.out.println("Deleted database! " + dbFile.getAbsolutePath());
-                try {
-                    dbFile.createNewFile();
-                } catch (IOException ex) {
-                   System.err.println("Could not recreate the database after deleting, weird stuff may now happen...");
-                   System.err.println("It would be best if you create stop the client & the webservice and recreate the db by hand :S");
-                }
+        DeleteMethod dropTables = new DeleteMethod(mServiceBaseURI + "/debug/dropall/");
+        try {
+            HttpClient client = new HttpClient();
+            int status = client.executeMethod(dropTables);
+            if(status == 200){
+                System.out.println("Database successfully cleared!");
             } else {
-                System.err.println("Could not delete database! " + dbFile.getAbsolutePath());
+                System.err.println("Database could not be cleared");
             }
-        } else {
-            System.err.println("Could not delete database! File not found... Is the database located in : " + dbFile.getAbsolutePath() + "?");
+        } catch (IOException ex) {
+            Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, "Could not clear database, IO Exception", ex);
         }
     }
 
@@ -153,23 +152,24 @@ public class SlimClient {
      * Prints the available options
      */
     public void showAvailableOptions() {
+        System.out.println("|----------------INFO------------|");
+        System.out.println("| Some methods need a filled databool, so if you run into 404s -> Press 1");
         System.out.println("|------- Available options --------|");
         System.out.println("| 0: To Exit programm.. |");
         System.out.println("| 1: Setup Datapool |");
-        System.out.println("| 4: Cleanup Datapool |");
-        System.out.println("| 8: Switch MediaType, Active: " + mMediaType);
-        System.out.println("| 2: Test User Lifecylce |");
-        System.out.println("| 5: Test Event Lifecylce |");
-        System.out.println("| 6: Test Location Lifecycle |");
-        System.out.println("| 7: Test Guest Lifecycle |");
-        System.out.println("| 3: Fetch all users |");
+        System.out.println("| 2: Switch MediaType, Active: " + mMediaType);
+        System.out.println("| 3: Test User Lifecylce |");
+        System.out.println("| 4: Test Event Lifecylce |");
+        System.out.println("| 5: Test Location Lifecycle |");
+        System.out.println("| 6: Test Guest Lifecycle |");
+        System.out.println("| 7: Fetch all users |");
+        System.out.println("| 8: Fetch all events |");
         System.out.println("| 9: Delete a event location (should fail) |");
-
         System.out.println("| 10: Does he party with me (should be true)|");
-        System.out.println("| 11: Fetch all events |");
-        System.out.println("| 12: Get Events with User as Organizer |");
-        System.out.println("| 13: Fetch Events in Bounds |");
-        System.out.println("| 14: Fetch Events with Guestrange |");
+        System.out.println("| 11: Get Events with User as Organizer |");
+        System.out.println("| 12: Fetch Events in Bounds |");
+        System.out.println("| 13: Fetch Events with Guestrange |");
+        System.out.println("| 14: Cleanup Datapool |");
     }
 
     /**

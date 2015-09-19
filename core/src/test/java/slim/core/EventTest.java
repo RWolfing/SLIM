@@ -127,6 +127,7 @@ public class EventTest extends BaseTest {
 
     @Test
     public void getAllEvents() throws SQLException {
+        mSlimDatabase.clearAllTables();
         //Create organizer
         User organzier = createRandomUser();
 

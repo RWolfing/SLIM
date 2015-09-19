@@ -1,6 +1,7 @@
 package slim.core;
 
 import java.io.File;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import slim.core.impl.SlimServiceInMemory;
@@ -27,11 +28,13 @@ public abstract class BaseTest {
 
     /**
      * Prepare the initial setup before testing
+     * @throws SQLException if the tables could not be cleared
      */
     @Before
-    public void buildService() {
+    public void buildService() throws SQLException {
         mSlimService = new SlimServiceInMemory();
         mSlimDatabase = new SlimDBServiceImpl(Constants.MOCK_DB_NAME);
+        mSlimDatabase.clearAllTables();
         mSlimService.setDatabase(mSlimDatabase);
     }
 

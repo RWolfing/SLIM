@@ -1,7 +1,10 @@
 package slim.core.impl;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import slim.core.model.Event;
 import slim.core.SlimService;
 import slim.core.model.Location;
@@ -315,5 +318,21 @@ public class SlimServiceInMemory implements SlimService {
     @Override
     public void setDatabase(SlimDBServiceImpl slimDatabase) {
         mSlimDatabase = slimDatabase;
+    }
+    
+    /**
+     * Helper method for debug purposes only, to drop the database
+     * 
+     * @return success
+     */
+    @Override
+    public boolean dropAllTables() {
+        try {
+            mSlimDatabase.clearAllTables();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(SlimServiceInMemory.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
     }
 }

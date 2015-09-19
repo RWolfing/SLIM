@@ -17,6 +17,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 /**
+ * REST Resource for a event
+ * 
  * @author Robert Wolfinger
  */
 @Path("events")

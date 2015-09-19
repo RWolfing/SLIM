@@ -13,7 +13,8 @@ import slim.core.model.Location;
 import slim.rest.LocationResource;
 
 /**
- *
+ * Implementation of the {@link LocationResource}
+ * 
  * @author Robert
  */
 @Path("locations")

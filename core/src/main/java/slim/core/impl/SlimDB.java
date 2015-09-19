@@ -103,12 +103,14 @@ public class SlimDB implements DatabaseConnection {
      * @throws SQLException sql error
      */
     public void clearAllTables() throws SQLException {
+        open();
         if (mConnectionSource != null) {
             TableUtils.clearTable(mConnectionSource, Event.class);
             TableUtils.clearTable(mConnectionSource, GuestEntry.class);
             TableUtils.clearTable(mConnectionSource, Location.class);
             TableUtils.clearTable(mConnectionSource, User.class);
         }
+        close();
     }
 
     /**

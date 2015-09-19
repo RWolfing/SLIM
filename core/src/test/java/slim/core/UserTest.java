@@ -9,7 +9,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.Before;
 
 /**
- *
+ * Class to test the functionality of the user model and all connected service
+ * write & reads
+ * 
  * @author Robert Wolfinger
  */
 public class UserTest extends BaseTest {

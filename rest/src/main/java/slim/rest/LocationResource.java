@@ -17,6 +17,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 /**
+ * REST Resource for a location
+ * 
  * @author Robert
  */
 @Path("locations")

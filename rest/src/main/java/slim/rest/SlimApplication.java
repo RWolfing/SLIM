@@ -21,6 +21,7 @@ public class SlimApplication extends ResourceConfig {
         register(UserResourceImpl.class);
         register(EventResourceImpl.class);
         register(LocationResourceImpl.class);
+        register(DebugResource.class);
 
         register(new AbstractBinder() {
 

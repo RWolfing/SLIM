@@ -1,6 +1,7 @@
 package slim.rest;
 
 import java.io.File;
+import java.sql.SQLException;
 import javax.ws.rs.core.Context;
 import org.apache.commons.lang.math.RandomUtils;
 import org.junit.After;
@@ -41,11 +42,13 @@ public abstract class RestBaseTest {
 
     /**
      * Prepare the initial setup before testing
+     * @throws SQLException if the tables could not be cleared
      */
     @Before
-    public void buildService() {
+    public void buildService() throws SQLException {
         mSlimService = new SlimServiceInMemory();
         mSlimDatabase = new SlimDBServiceImpl(Constants.MOCK_DB_NAME);
+        mSlimDatabase.clearAllTables();
         mSlimService.setDatabase(mSlimDatabase);
 
         User max = new User("Partyloewe", "Max", "Mustermann", 500000, "Spiel mit mir", "www.bilder.de/bild1");
@@ -68,7 +71,7 @@ public abstract class RestBaseTest {
         location1 = mSlimDatabase.createLocation(location1);
         location2 = mSlimDatabase.createLocation(location2);
 
-        Event event0 = new Event("Event0", location0, 8000, 90000, "Event 0 ist toll", max);
+        Event event0 = new Event("Event0", location1, 8000, 90000, "Event 0 ist toll", max);
         event0.addGuest(gustav);
         event0.addGuest(anna);
         mTestEvent = mSlimDatabase.createEvent(event0);
@@ -91,7 +94,7 @@ public abstract class RestBaseTest {
     public void tearDownService() {
         // Cleanup the mock database
         mSlimDatabase.close();
-        File file = new File(System.getProperty("user.dir") + "/" + Constants.MOCK_DB_NAME);
+        File file = new File(System.getProperty("user.dir") + File.pathSeparator + Constants.MOCK_DB_NAME);
         if (file.exists()) {
             file.delete();
         } else {

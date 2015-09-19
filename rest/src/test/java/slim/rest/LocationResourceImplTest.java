@@ -7,6 +7,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.Before;
+import org.junit.Test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import org.mockito.invocation.InvocationOnMock;
@@ -36,6 +37,7 @@ public class LocationResourceImplTest extends RestBaseTest {
         when(mUriInfo.getAbsolutePathBuilder()).thenAnswer((InvocationOnMock invocation) -> fromResource);
     }
 
+    @Test
     public void createLocationTest() {
         //Create location
         Response response = mLocationResource.createLocation(mUriInfo, "location", 50000, 50000);
@@ -47,16 +49,18 @@ public class LocationResourceImplTest extends RestBaseTest {
         
         //Check if location really exists
         response = mLocationResource.fetchLocationById(location.getID());
-        assertThat(response.getStatus(), is(Response.Status.CREATED.getStatusCode()));
+        assertThat(response.getStatus(), is(Response.Status.OK.getStatusCode()));
         assertThat(location.getID(), is(((Location) response.getEntity()).getID()));
     }
-
+    
+    @Test
     public void deleteLocationTest() {
         //Delete location & check response
         Response response = mLocationResource.deleteLocation(mTestLocation.getID());
         assertThat(response.getStatus(), is(Response.Status.OK.getStatusCode()));
     }
 
+    @Test
     public void fetchLocationByLongLat() {
         //Test found
         final long lattitude = mTestLocation.getLattitude();
@@ -70,9 +74,10 @@ public class LocationResourceImplTest extends RestBaseTest {
         assertThat(response.getStatus(), is(Response.Status.NOT_FOUND.getStatusCode()));
     }
 
+    @Test
     public void updateLocation() {
         //Update location & check response
-        Response response = mLocationResource.deleteLocation(mTestLocation.getID());
+        Response response = mLocationResource.updateLocation(mTestLocation.getID(), "updated-location");
         assertThat(response.getStatus(), is(Response.Status.OK.getStatusCode()));
     }
 

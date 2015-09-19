@@ -18,6 +18,8 @@ import javax.ws.rs.core.UriInfo;
 import slim.core.model.User;
 
 /**
+ * REST Resource for a user
+ * 
  * @author Robert Wolfinger
  */
 @Path("users")
