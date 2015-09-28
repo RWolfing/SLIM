@@ -1,6 +1,5 @@
 package slim.client;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Scanner;
@@ -10,7 +9,6 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.DeleteMethod;
 import slim.client.services.EventService;
 import slim.client.services.LocationService;
-import slim.client.services.SlimResult;
 import slim.client.services.SlimService;
 import slim.client.services.UserService;
 import slim.core.model.Event;

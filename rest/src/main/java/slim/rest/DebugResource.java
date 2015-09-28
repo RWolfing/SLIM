@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package slim.rest;
 
 import javax.ws.rs.DELETE;
@@ -16,7 +11,7 @@ import slim.rest.impl.SlimResource;
  * Only for debugging purposes.
  * Function to clear the database
  * 
- * @author Robert
+ * @author Robert Wolfinger
  */
 @Path("debug")
 public class DebugResource extends SlimResource{

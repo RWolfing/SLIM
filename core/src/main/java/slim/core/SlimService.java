@@ -1,6 +1,5 @@
 package slim.core;
 
-import java.sql.SQLException;
 import slim.core.model.User;
 import slim.core.model.Event;
 import java.util.List;
